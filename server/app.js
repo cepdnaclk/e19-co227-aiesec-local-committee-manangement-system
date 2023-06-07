@@ -3,11 +3,21 @@ const bodyParser = require('body-parser')
 const app = express()
 const port = 8081
 
+// const cors = require('cors');
+// app.use(cors)
+
+// Enable CORS for all routes
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 // parse application/x-www-form-urlencoded
 //If the users send POST requests by submitting a form, 
 //it will use application/x-www-form-urlencoded as the content-type to send the data. To parse that from the request body, we need to use the urlencoded() method
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // parse application/json
 app.use(bodyParser.json())
@@ -54,7 +64,7 @@ app.get('/', (req, res) => {
 //   })
 // })
 
-app.get('/login', (req, res) => {
+app.post('/login', (req, res) => {
     try {
         const email = req.body.email 
         const password = req.body.password
