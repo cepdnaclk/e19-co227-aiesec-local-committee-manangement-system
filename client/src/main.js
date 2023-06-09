@@ -1,18 +1,22 @@
+// Create Vue App 
 import { createApp } from 'vue'
 import App from './App.vue'
+// const app = createApp(App)
+
+// Page routing
 import router from './router'
+// app.use(router)
+
+// Global Data 
 import store from './store'
-import './styles/reset.css'
+// app.use(store)
 
-// Vuetify
-import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
+// Form Validation
+// import Vuelidate from 'vuelidate'
+// app.use(Vuelidate)
 
-const vuetify = createVuetify({
-  components,
-  directives,
-})
+// Boostrap Styling
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap';
 
-createApp(App).use(store).use(router).use(vuetify).mount('#app')
+createApp(App).use(router).use(store).mount('#app')
