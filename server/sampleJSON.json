@@ -1,0 +1,28 @@
+{
+"personalEmail" :   "rcavinash.d@gmail.com",
+"userPassword  " :  "Abc@123",
+    
+"fullName" :        "Katudampe Thanthrige Dinuka Avinash", 
+"preferredName" :   "Dinuka Avinash",
+"functionID" :      "01",
+"deptId" :          "001",
+"dateOfJoin" :      "2022-02-27",
+"positionID" :      "002",
+"contactNumber" :   "+94775486820",
+"aiesecEmail  " :   "dinuka.avinash@aiesec.net",
+"gender" :          "M", 
+"nicNumber" :       "200009104270",
+"birthDate" :       "2000-03-31", 
+"facebookLink " :   "facebook.com",
+"linkedInLink" :    "linkedin.com",
+"instagramLink" :   "instagram.com",
+"facultyID" :       "E",
+"batch" :           "19", 
+"uniRegNo" :        "E/19/029",
+"schoolName" :      "Royal College", 
+"homeAddress" :     "24r, Kandy, Penideniya",
+"homeContactNumber":  "+94775486820",
+"district"  :       "Gampaha",
+"photoLink" :       "drive.google.com",
+"boardingAddress" : "Address1"
+}

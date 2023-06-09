@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS MEMBERS_MAIN (
     Member_ID       INT(5) AUTO_INCREMENT PRIMARY KEY,
 
     #login details
-    Personal_email  VARCHAR(255) NOT NULL,
-    Userpassword    VARCHAR(20),
+    Personal_email  VARCHAR(255) UNIQUE NOT NULL,
+    User_password   VARCHAR(20)  NOT NULL,
 
     #member details
     Full_Name       VARCHAR(100),
@@ -18,23 +18,23 @@ CREATE TABLE IF NOT EXISTS MEMBERS_MAIN (
     Dept_id         INT(3),
     Date_of_join    DATE,
     Position_id     INT(3),
+    Contact_num     VARCHAR(12),
     AIESEC_email    VARCHAR(255),
+    Gender          CHAR(1),
+    NIC_Number      INT(12),
+    Birth_date      DATE,
     Facebook_link   VARCHAR(255),
     LinkedIN_link   VARCHAR(255),
     Instagram_link  VARCHAR(255),
-    Contact_num     VARCHAR(12),
-    Gender          CHAR(1),
-    Birth_date      DATE,
     Faculty_id      CHAR(2),
     Batch           INT(2),
-    UniRegNo        VARCHAR(12), #try to implement auto filling relevant fields when registering
+    UniRegNo        VARCHAR(12) UNIQUE, #try to implement auto filling relevant fields when registering
     School_name     VARCHAR(50),
     Home_address    VARCHAR(100),
-    District        VARCHAR(20),
-    NIC_Number      INT(12),
-    Boarding_addres VARCHAR(100),
     Home_contact    VARCHAR(12),
-    Photo_link      VARCHAR(255)
+    District        VARCHAR(20),
+    Photo_link      VARCHAR(255),
+    Boarding_address VARCHAR(100)
 
 );
 

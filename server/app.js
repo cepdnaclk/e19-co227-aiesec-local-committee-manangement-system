@@ -64,13 +64,16 @@ app.get('/', (req, res) => {
 //   })
 // })
 
+// login API
 app.post('/login', (req, res) => {
     try {
-        const email = req.body.email 
-        const password = req.body.password
+        const email     = req.body.email 
+        const password  = req.body.password
         console.log(email, password)
 
-        const queryFindUser = 'SELECT * FROM users WHERE email = ?;'
+        const queryFindUser =`SELECT User_password 
+                              FROM MEMBERS_MAIN 
+                              WHERE Personal_email = ?;`
 
         connection.query(queryFindUser, [email], (err, result) => {
             if (err) {
@@ -80,9 +83,9 @@ app.post('/login', (req, res) => {
             if (result.length === 0) {
                 return res.status(404).json({ message: 'User not found' });
             }
-            const user = result[0];
+            //const user = result[0];
 
-            if (password != user.password) {
+            if (password != result) {
                 return res.status(401).json({ message: 'Invalid password' });
             }
 
@@ -98,6 +101,124 @@ app.post('/login', (req, res) => {
     }
 })
 
+//Member registration API
+app.post('/memberRegistration',(req, res) => {
+
+  try {
+
+      //login details
+      const personalEmail     = req.body.personalEmail
+      const userPassword      = req.body.userPassword
+      
+      //user details
+      const fullName          = req.body.fullName
+      const preferredName     = req.body.preferredName
+      const functionID        = req.body.functionID
+      const deptID            = req.body.deptID
+      const dateOfJoin        = req.body.dateOfJoin
+      const positionID        = req.body.positionID
+      const contactNumber     = req.body.contactNumber
+      const aiesecEmail       = req.body.aiesecEmail
+      const gender            = req.body.gender
+      const nicNumber         = req.body.nicNumber
+      const birthdate         = req.body.birthdate
+      const facebookLink      = req.body.facebookLink
+      const linkedInLink      = req.body.linkedInLink
+      const instagramLink     = req.body.instagramLink
+      const facultyID         = req.body.facultyID
+      const batch             = req.body.batch
+      const uniRegNo          = req.body.uniRegNo
+      const schoolName        = req.body.schoolName
+      const homeAddress       = req.body.homeAddress
+      const homeContactNumber = req.body.homeContactNumber
+      const district          = req.body.district
+      const photoLink         = req.body.photoLink
+      const boardingAddress   = req.body.boardingAddress
+      
+      const userDetailEntry = [ 
+
+        personalEmail,
+        userPassword,
+        fullName,
+        preferredName,
+        functionID,
+        deptID,
+        dateOfJoin,
+        positionID,
+        contactNumber,
+        aiesecEmail,
+        gender,
+        nicNumber,
+        birthdate,
+        facebookLink,
+        linkedInLink,
+        instagramLink,
+        facultyID,
+        batch,
+        uniRegNo,
+        schoolName,
+        homeAddress,
+        homeContactNumber,
+        district,
+        photoLink,
+        boardingAddress
+
+       ]
+
+      const memberRegistrationQuery = `
+      
+      INSERT INTO MEMBERS_MAIN (
+        Personal_email,
+        User_password
+
+        Full_Name,
+        Preferred_Name,
+        Function_id,
+        Dept_id,
+        Date_of_join,
+        Position_id,
+        Contact_num,
+        AIESEC_email,
+        Gender,
+        NIC_Number,
+        Birth_date,
+        Facebook_link,
+        LinkedIN_link,
+        Instagram_link,
+        Faculty_id,
+        Batch,
+        UniRegNo,
+        School_name,
+        Home_address,
+        Home_contact,
+        District,
+        Photo_link,
+        Boarding_address,
+
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        
+        )`
+
+        connection.query(memberRegistrationQuery, [userDetailEntry], (err, result) => {
+          //errors handling
+          if (err) {
+            console.error('Error during member registration:', err);
+            return res.json({ message: 'Internal Server Error' });
+          }
+
+
+          //for successful registrations
+          res.json({message : "Member Registered Successfully"})
+
+        });
+          
+  } catch (error) {
+    
+  }
+
+})
+
+//start listening to the port - start the app
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
