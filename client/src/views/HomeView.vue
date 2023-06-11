@@ -9,11 +9,27 @@
           </span>
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
+          <!-- <ul class="navbar-nav mr-auto">
             <li class="nav-item active" v-if="isAdmin">
               <router-link class="nav-link" to="/users">Users</router-link>
             </li>
-          </ul>
+          </ul> -->
+          <div class="dropdown mr-auto" v-if="isAdmin">
+            <button
+              class="btn btn-primary dropdown-toggle"
+              type="button"
+              id="dropdownMenuButtonUsers"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Users
+            </button>
+            <ul class="dropdown-menu bg-primary" aria-labelledby="dropdownMenuButtonProfile">
+              <li>
+                <router-link class="nav-link" to="/usersview">View Users</router-link>
+              </li>
+            </ul>
+          </div>
           <!-- <ul class="navbar-nav ml-auto"> -->
           <ul class="navbar-nav ms-auto" v-if="!isLoggedIn">
             <li class="nav-item active">
@@ -65,5 +81,6 @@ export default {
 <style scoped>
 .nav-link {
   color: white;
+  margin: 10px;
 }
 </style>

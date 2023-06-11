@@ -48,11 +48,12 @@ process.exit(1);
 
 app.get('/', (req, res) => {
 //   res.send('Hello World!')
-  connection.query('SELECT * FROM users', (err, rows, fields) => {
-    if (err) throw err
-  
-    res.send(JSON.stringify(rows))
-  })
+  // connection.query('SELECT * FROM users', (err, rows, fields) => {
+  //   // if (err) throw err
+  //   if (err) ;
+
+  //   res.send(JSON.stringify(rows))
+  // })
 })
 
 // app.get('/insert', (req, res) => {
@@ -216,6 +217,21 @@ app.post('/memberRegistration',(req, res) => {
     
   }
 
+})
+
+app.get('/users/view/all', (req, res) => {
+  const queryViewAllUsers = "SELECT Member_ID AS id, Personal_email AS email FROM MEMBERS_MAIN";
+
+  connection.query(queryViewAllUsers, (err, result) => {
+    //errors handling
+    if (err) {
+      console.error('Error during member retrieval:', err);
+      return res.json({ message: 'Internal Server Error' });
+    }
+    //for successful registrations
+    console.log(result)
+    res.json(result)
+  });
 })
 
 //start listening to the port - start the app
