@@ -28,7 +28,7 @@ const connection = mysql.createConnection({
 host: "localhost",
 user: 'root',
 password: 'SfF9B76*',
-database: 'aisec_testdb',
+database: 'LC_KANDY',
 // port: 3000
 });
 
@@ -83,9 +83,9 @@ app.post('/login', (req, res) => {
             if (result.length === 0) {
                 return res.status(404).json({ message: 'User not found' });
             }
-            //const user = result[0];
+            const user = result[0];
 
-            if (password != result) {
+            if (password != user.User_password) {
                 return res.status(401).json({ message: 'Invalid password' });
             }
 

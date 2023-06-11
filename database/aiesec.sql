@@ -1,6 +1,6 @@
-CREATE DATABASE IF NOT EXISTS LC_KANDY
+CREATE DATABASE IF NOT EXISTS LC_KANDY;
 
-USE LC_KANDY
+USE LC_KANDY;
 
 #Members master table
 CREATE TABLE IF NOT EXISTS MEMBERS_MAIN (
@@ -37,6 +37,10 @@ CREATE TABLE IF NOT EXISTS MEMBERS_MAIN (
     Boarding_address VARCHAR(100)
 
 );
+
+# Insert Dummy Data
+INSERT INTO MEMBERS_MAIN (Personal_email, User_password)
+VALUES ("john@example.com", 123);
 
 #Functions id and name
 CREATE TABLE IF NOT EXISTS A_FUNCTION (
