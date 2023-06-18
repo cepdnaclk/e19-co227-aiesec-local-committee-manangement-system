@@ -22,8 +22,19 @@ export default function Login() {
     setErrMsg("");
   }, [email, password]);
 
+  //   function isValidEmail(email) {
+  //     return /\S+@\S+\.\S+/.test(email);
+  //   }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // // prevent form submission if email is invalid
+    // if (!isValidEmail(email)) {
+    //   setErrMsg("Invalid Email");
+    //   errRef.current.focus();
+    //   return;
+    // }
 
     try {
       const response = await axios.post(
