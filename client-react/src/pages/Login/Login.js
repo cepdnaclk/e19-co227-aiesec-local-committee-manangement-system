@@ -35,9 +35,24 @@ export default function Login() {
         }
       );
       console.log(JSON.stringify(response.data));
+
+      const accessToken = response?.data?.accessToken;
+      const roles = response?.data?.roles;
+      setAuth({ email, password, roles, accessToken });
       setEmail("");
       setPassword("");
-    } catch (err) {}
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 404) {
+        setErrMsg("Missing User");
+      } else if (err.response?.status === 401) {
+        setErrMsg("Password Mismatch");
+      } else {
+        setErrMsg("Login Failed");
+      }
+      errRef.current.focus();
+    }
   };
 
   return (

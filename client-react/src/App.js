@@ -1,9 +1,10 @@
-import Login from "./pages/Login/Login";
+// import Login from "./pages/Login/Login";
+import UsersView from "./pages/Users/UsersView";
 
 function App() {
   return (
     <div className="App">
-      <Login />
+      <UsersView />
     </div>
   );
 }
