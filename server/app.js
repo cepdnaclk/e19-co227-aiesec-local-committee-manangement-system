@@ -8,9 +8,9 @@ const port = 8081
 
 // Enable CORS for all routes
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Authorization, Accept');
   next();
 });
 
@@ -102,8 +102,13 @@ app.post('/login', (req, res) => {
     }
 })
 
+// /users/add
+// /users/update
+// /users/delete
 //Member registration API
-app.post('/memberRegistration',(req, res) => {
+app.post('/users/add',(req, res) => {
+
+  // TODO - check if user with email already exists and send response with 403 status code
 
   try {
 
@@ -219,6 +224,9 @@ app.post('/memberRegistration',(req, res) => {
 
 })
 
+// TODO: /users/view/ - single user view
+
+
 app.get('/users/view/all', (req, res) => {
   const queryViewAllUsers = "SELECT Member_ID AS id, Personal_email AS email FROM MEMBERS_MAIN";
 
@@ -233,6 +241,11 @@ app.get('/users/view/all', (req, res) => {
     res.json(result)
   });
 })
+
+// TODO: /users/info/dept
+// /users/info/func
+// /users/info/pos
+
 
 //start listening to the port - start the app
 app.listen(port, () => {

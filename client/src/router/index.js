@@ -8,6 +8,10 @@ const routes = [
     name: 'home',
     component: HomeView,
     children: [
+      // {
+      //   paths: 'users',
+      //   name: 'users'
+      // },
       {
         path: 'usersview',
         name: 'usersview',

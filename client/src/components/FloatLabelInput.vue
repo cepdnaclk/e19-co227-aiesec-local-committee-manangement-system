@@ -1,9 +1,17 @@
 <template>
-  <div class="body-container">
-    <div class="input-box">
+  <div class="form-floating my-3">
+    <input
+      :type="type"
+      label="floatingInput"
+      class="form-control"
+      :placeholder="placeholder"
+      v-model="data"
+    />
+    <label for="floatingInput">{{  }}</label>
+    <!-- <div class="input-box">
       <input :id="id" :type="type" v-model="value" :placeholder="label" />
       <span>{{ label }}</span>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -11,23 +19,26 @@
 export default {
   name: "FloatLabelInput",
   props: {
-    id: {
-      type: String,
-      required: true,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
     type: {
       type: String,
+      required: false,
       default: "text",
     },
+    placeholder: {
+      type: String,
+      required: false,
+      default: "",
+    },    
   },
   data() {
     return {
       value: "",
     };
+  },
+  data () {
+    return {
+      data: ""
+    }
   },
 };
 </script>
