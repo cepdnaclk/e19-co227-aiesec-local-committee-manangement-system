@@ -6,6 +6,10 @@ const port = 8081
 // const cors = require('cors');
 // app.use(cors)
 
+const usersRoute = require('./routes/users');
+app.use('/users', usersRoute);
+
+
 // Enable CORS for all routes
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -22,27 +26,19 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // parse application/json
 app.use(bodyParser.json())
 
-// Create connection to DB
-const mysql = require('mysql') 
-const connection = mysql.createConnection({
-host: "localhost",
-user: 'root',
-password: 'SfF9B76*',
-database: 'LC_KANDY',
-// port: 3000
-});
+const connection = require('./database/database') 
 
 // Connect to DB
-connection.connect(function(err) {
-if (!err) {
-console.log('Connected to the MySQL server.');
-}
-else if (err)
-{
-console.log('Timeout: ' + err.message);
-process.exit(1);
-}
-});
+// connection.connect(function(err) {
+// if (!err) {
+// console.log('Connected to the MySQL server.');
+// }
+// else if (err)
+// {
+// console.log('Timeout: ' + err.message);
+// process.exit(1);
+// }
+// });
 
 // API ENDPOINTS
 
@@ -228,18 +224,7 @@ app.post('/users/add',(req, res) => {
 
 
 app.get('/users/view/all', (req, res) => {
-  const queryViewAllUsers = "SELECT Member_ID AS id, Personal_email AS email FROM MEMBERS_MAIN";
 
-  connection.query(queryViewAllUsers, (err, result) => {
-    //errors handling
-    if (err) {
-      console.error('Error during member retrieval:', err);
-      return res.json({ message: 'Internal Server Error' });
-    }
-    //for successful registrations
-    console.log(result)
-    res.json(result)
-  });
 })
 
 // TODO: /users/info/dept
