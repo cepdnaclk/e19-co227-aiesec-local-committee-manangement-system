@@ -24,12 +24,26 @@ connection.connect((err => {
 // create database schema
 const schemaPath = path.join(__dirname, 'schema.sql');
 const schemaScript = fs.readFileSync(schemaPath, 'utf8');
+
+// log last time the schema file was modified
+fs.stat (schemaPath, (err, stats) => {
+    console.log(`${stats.mtime}`)
+});
+
 connection.query(schemaScript, (err) =>{
     if (err) {
         console.log(err);
         exit(1)
     }
     console.log('Created DB Schema');
+
+    // write the time schema file was last executed
+    const filePath = path.join(__dirname, 'meta.json');
+    const fileData = fs.readFileSync(filePath, "utf8");
+    const jsonData = JSON.parse(fileData);
+    // TODO: (new Date).toUTCString()
+    jsonData["schema-last-run"] = Date.now();
+    fs.writeFileSync(filePath, JSON.stringify(jsonData));
 });
 
 // populate database

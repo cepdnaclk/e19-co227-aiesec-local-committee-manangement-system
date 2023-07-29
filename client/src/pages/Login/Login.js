@@ -3,6 +3,7 @@ import AuthContext from "../../context/AuthProvider";
 import axios from "../../api/axios";
 import { Formik, Form, Field } from "formik";
 import { TextField, Button, Typography, Grid, Paper, Box } from "@mui/material";
+import { sizing } from "@mui/system";
 import * as yup from "yup";
 import loginBanner from "../../assets/login-banner.jpg";
 const LOGIN_URL = "/login";
@@ -66,80 +67,86 @@ export default function Login() {
 
   return (
     <>
-      <Grid container component="main" sx={{ height: "100vh" }}>
         <Grid
-          item
-          xs={false}
-          sm={6}
-          md={7}
-          sx={{
-            backgroundImage: `url(${loginBanner})`,
-            backgroundRepeat: "no-repeat",
-            bgcolor: "background.default",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-        <Grid item xs={12} sm={6} md={5} component={Paper} square>
-          <Box
+          container
+          component="main"
+          justifyContent="center"
+          my={24}
+        >
+          {/* <Grid
+            item
+            sm={false}
+            md={4}
+            lg={3}
+            xl={3}
             sx={{
-              my: 8,
-              mx: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              // borderRadius: "px",
+              backgroundImage: `url(${loginBanner})`,
+              backgroundRepeat: "no-repeat",
+              bgcolor: "background.default",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}
-          >
-            <Typography component="h1" variant="h5">
-              Login
-            </Typography>
-            <p ref={errRef}>{errMsg}</p>
-            <Formik
-              initialValues={initialState}
-              onSubmit={handleSubmit}
-              validationSchema={loginSchema}
+          /> */}
+          <Grid item sm={6} md={5} lg={4} xl={3} component={Paper} sx={{ borderRadius: '16px' }}>
+            <Box
+              sx={{
+                my: 8,
+                mx: 4,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center"
+              }}
             >
-              {({ values, errors, touched, isSubmitting }) => (
-                <Form as={Box} sx={{ mt: 1 }}>
-                  <Field
-                    name="email"
-                    type="email"
-                    as={TextField}
-                    label="Email"
-                    variant="outlined"
-                    error={touched.email && Boolean(errors.email)}
-                    helperText={touched.email && errors.email}
-                    margin="normal"
-                    fullWidth
-                    autoFocus
-                  />
-                  <Field
-                    name="password"
-                    type="password"
-                    as={TextField}
-                    label="Password"
-                    variant="outlined"
-                    error={touched.password && Boolean(errors.password)}
-                    helperText={touched.password && errors.password}
-                    margin="normal"
-                    fullWidth
-                  />
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    variant="contained"
-                    fullWidth
-                    sx={{ mt: 3, mb: 2 }}
-                  >
-                    Submit
-                  </Button>
-                </Form>
-              )}
-            </Formik>
-          </Box>
+              <Typography component="h1" variant="h5">
+                Login
+              </Typography>
+              <p ref={errRef}>{errMsg}</p>
+              <Formik
+                initialValues={initialState}
+                onSubmit={handleSubmit}
+                validationSchema={loginSchema}
+              >
+                {({ values, errors, touched, isSubmitting }) => (
+                  <Form as={Box}>
+                    <Field
+                      name="email"
+                      type="email"
+                      as={TextField}
+                      label="Email"
+                      variant="outlined"
+                      error={touched.email && Boolean(errors.email)}
+                      helperText={touched.email && errors.email}
+                      margin="normal"
+                      fullWidth
+                      autoFocus
+                    />
+                    <Field
+                      name="password"
+                      type="password"
+                      as={TextField}
+                      label="Password"
+                      variant="outlined"
+                      error={touched.password && Boolean(errors.password)}
+                      helperText={touched.password && errors.password}
+                      margin="normal"
+                      fullWidth
+                    />
+                    <Box textAlign='center'>
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      variant="contained"
+                      sx={{ mt: 3}}
+                    >
+                      Submit
+                    </Button>
+                    </Box>
+                  </Form>
+                )}
+              </Formik>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
     </>
   );
 }
