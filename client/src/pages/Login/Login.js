@@ -1,11 +1,11 @@
 import React, { useContext, useRef, useState } from "react";
-import AuthContext from "../../context/AuthProvider";
+import { UserContext } from "../../context/UserContext";
 import axios from "../../api/axios";
 import { Formik, Form, Field } from "formik";
 import { TextField, Button, Typography, Grid, Paper, Box } from "@mui/material";
-import { sizing } from "@mui/system";
 import * as yup from "yup";
-import loginBanner from "../../assets/login-banner.jpg";
+import { useLocation, useNavigate } from "react-router-dom";
+// import loginBanner from "../../assets/login-banner.jpg";
 const LOGIN_URL = "/login";
 
 /* TODO
@@ -13,13 +13,19 @@ const LOGIN_URL = "/login";
  * [x] Define validation scheme using Yup
  * [ ] Handle errors after form submission using hooks
  * [ ] JWT Authorization
- * [ ] Redirect to homepage after login
- * [ ] Show "You are already logged in" with homepage link or logout if ever redirected to this page after login
+ * [x] Redirect to homepage after login
+ * [x] Show "You are already logged in" with homepage link or logout if ever redirected to this page after login
  * [ ] Complete page design with MUI
  */
 
 export default function Login() {
   // const { setAuth } = useContext(AuthContext);
+
+  const {
+    user,
+    setUser,
+    // token, setToken
+  } = useContext(UserContext);
 
   // Define initial state of login
   const initialState = {
@@ -37,6 +43,8 @@ export default function Login() {
 
   const [errMsg, setErrMsg] = useState("");
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (credentials, { setSubmitting, resetForm }) => {
     setSubmitting(true);
     try {
@@ -46,9 +54,15 @@ export default function Login() {
       });
       console.log(JSON.stringify(response.data));
 
+      setUser({
+        email: credentials.email,
+      });
       // const accessToken = response?.data?.accessToken;
       // const roles = response?.data?.roles;
       // setAuth({ response.data.email, response.data,password, roles, accessToken });
+
+      // redirect to homepage
+      navigate("/");
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
@@ -62,17 +76,56 @@ export default function Login() {
       errRef.current.focus();
     }
     setSubmitting(false);
-    // resetForm();
+  };
+
+  const handleLogout = (event) => {
+    localStorage.clear();
+    window.location.reload();
   };
 
   return (
     <>
-        <Grid
-          container
-          component="main"
-          justifyContent="center"
-          my={24}
-        >
+      {user ? (
+        <Grid container component="main" justifyContent="center" my={24}>
+          <Grid
+            item
+            sm={6}
+            md={5}
+            lg={4}
+            xl={3}
+            component={Paper}
+            sx={{ borderRadius: "16px" }}
+          >
+            <Box
+              sx={{
+                my: 8,
+                mx: 4,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Typography component="h1" variant="h5">
+                Logout
+              </Typography>
+              <Typography mt={3} variant="p">
+                Are you sure you want to logout?
+              </Typography>
+              <Box textAlign="center">
+                <Button
+                  type="submit"
+                  onClick={handleLogout}
+                  variant="contained"
+                  sx={{ mt: 3 }}
+                >
+                  Logout
+                </Button>
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
+      ) : (
+        <Grid container component="main" justifyContent="center" my={24}>
           {/* <Grid
             item
             sm={false}
@@ -87,20 +140,30 @@ export default function Login() {
               backgroundPosition: "center",
             }}
           /> */}
-          <Grid item sm={6} md={5} lg={4} xl={3} component={Paper} sx={{ borderRadius: '16px' }}>
+          <Grid
+            item
+            sm={6}
+            md={5}
+            lg={4}
+            xl={3}
+            component={Paper}
+            sx={{ borderRadius: "16px" }}
+          >
             <Box
               sx={{
                 my: 8,
                 mx: 4,
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <Typography component="h1" variant="h5">
                 Login
               </Typography>
-              <p ref={errRef}>{errMsg}</p>
+              <Typography component="p" ref={errRef} color="error">
+                {errMsg}
+              </Typography>
               <Formik
                 initialValues={initialState}
                 onSubmit={handleSubmit}
@@ -131,15 +194,15 @@ export default function Login() {
                       margin="normal"
                       fullWidth
                     />
-                    <Box textAlign='center'>
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      variant="contained"
-                      sx={{ mt: 3}}
-                    >
-                      Submit
-                    </Button>
+                    <Box textAlign="center">
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        variant="contained"
+                        sx={{ mt: 3 }}
+                      >
+                        Submit
+                      </Button>
                     </Box>
                   </Form>
                 )}
@@ -147,97 +210,7 @@ export default function Login() {
             </Box>
           </Grid>
         </Grid>
+      )}
     </>
   );
 }
-
-// export default function Login() {
-//   const { setAuth } = useContext(AuthContext);
-
-//   const userRef = useRef();
-//   const errRef = useRef();
-
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [errMsg, setErrMsg] = useState("");
-
-//   useEffect(() => {
-//     userRef.current.focus();
-//   }, []);
-
-//   useEffect(() => {
-//     setErrMsg("");
-//   }, [email, password]);
-
-//   //   function isValidEmail(email) {
-//   //     return /\S+@\S+\.\S+/.test(email);
-//   //   }
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     // // prevent form submission if email is invalid
-//     // if (!isValidEmail(email)) {
-//     //   setErrMsg("Invalid Email");
-//     //   errRef.current.focus();
-//     //   return;
-//     // }
-
-//     try {
-//       const response = await axios.post(
-//         LOGIN_URL,
-//         JSON.stringify({ email, password }),
-//         {
-//           headers: { "Content-Type": "application/json" },
-//           //   withCredentials: true,
-//         }
-//       );
-//       console.log(JSON.stringify(response.data));
-
-//       const accessToken = response?.data?.accessToken;
-//       const roles = response?.data?.roles;
-//       setAuth({ email, password, roles, accessToken });
-//       setEmail("");
-//       setPassword("");
-//     } catch (err) {
-//       if (!err?.response) {
-//         setErrMsg("No Server Response");
-//       } else if (err.response?.status === 404) {
-//         setErrMsg("Missing User");
-//       } else if (err.response?.status === 401) {
-//         setErrMsg("Password Mismatch");
-//       } else {
-//         setErrMsg("Login Failed");
-//       }
-//       errRef.current.focus();
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h1>Login</h1>
-//       <form onSubmit={handleSubmit}>
-//         <p ref={errRef}>{errMsg}</p>
-//         <label htmlFor="email">Email</label>
-//         <input
-//           id="email"
-//           type="email"
-//           ref={userRef}
-//           onChange={(e) => setEmail(e.target.value)}
-//           value={email}
-//           required
-//         />
-//         <label htmlFor="password">Password</label>
-//         <input
-//           id="password"
-//           type="password"
-//           ref={userRef}
-//           onChange={(e) => setPassword(e.target.value)}
-//           value={password}
-//           required
-//         />
-//         <button type="submit">Submit</button>
-//       </form>
-//     </div>
-//   );
-// }

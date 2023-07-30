@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { AuthProvider } from "./context/AuthProvider";
+import { UserProvider } from "./context/UserContext";
 import { BrowserRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
 
@@ -18,12 +18,12 @@ const theme = createTheme({
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <AuthProvider>
+    <UserProvider>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <App />
         </BrowserRouter>
       </ThemeProvider>
-    </AuthProvider>
+    </UserProvider>
   </React.StrictMode>
 );
