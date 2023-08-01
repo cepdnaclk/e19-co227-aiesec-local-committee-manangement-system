@@ -1,10 +1,10 @@
 import Login from "./pages/Login/Login";
-import UsersView from "./pages/Users/UsersView";
-// import UserAdd from "./pages/Users/UserAdd";
+import Users from "./pages/Users/Users";
 
 import { UserContext } from "./context/UserContext";
 
 import { Routes, Route, Link } from "react-router-dom";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
 
 import { useContext, useState } from "react";
 
@@ -17,6 +17,8 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
+import AdminRoutes from "./utils/AdminRoutes";
+import Terms from "./pages/Terms/Terms";
 
 function App() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -48,6 +50,14 @@ function App() {
               disableElevation
             >
               Users
+            </Button>
+            <Button
+              component={Link}
+              to="/terms"
+              variant="text"
+              disableElevation
+            >
+              Terms
             </Button>
             {/* Selectively render login or profile dashboard */}
             {user ? (
@@ -90,9 +100,13 @@ function App() {
         </Toolbar>
       </AppBar>
       <Routes>
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/users" element={<Users />} />
+          <Route path="/terms" element={<Terms />} />
+        </Route>
+        <Route element={<AdminRoutes />}></Route>
         <Route path="/" element={<h1>{"Home"}</h1>} />
         <Route path="/login" element={<Login />} />
-        <Route path="/users" element={<UsersView />} />
       </Routes>
     </div>
   );

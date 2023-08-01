@@ -19,13 +19,7 @@ const LOGIN_URL = "/login";
  */
 
 export default function Login() {
-  // const { setAuth } = useContext(AuthContext);
-
-  const {
-    user,
-    setUser,
-    // token, setToken
-  } = useContext(UserContext);
+  const { user, setUser, setToken } = useContext(UserContext);
 
   // Define initial state of login
   const initialState = {
@@ -57,7 +51,7 @@ export default function Login() {
       setUser({
         email: credentials.email,
       });
-      // const accessToken = response?.data?.accessToken;
+      setToken(response?.data?.accessToken);
       // const roles = response?.data?.roles;
       // setAuth({ response.data.email, response.data,password, roles, accessToken });
 
@@ -170,7 +164,7 @@ export default function Login() {
                 validationSchema={loginSchema}
               >
                 {({ values, errors, touched, isSubmitting }) => (
-                  <Form as={Box}>
+                  <Form>
                     <Field
                       name="email"
                       type="email"

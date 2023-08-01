@@ -33,17 +33,19 @@ app.use((req, res, next) => {
 //     next();
 //   });
 // };
+// parse application/json
+app.use(bodyParser.json());
 
-const usersRoute = require("./routes/users");
-app.use("/users", usersRoute);
+const userRoute = require("./routes/user");
+app.use("/users", userRoute);
+
+const termRoute = require("./routes/term");
+app.use("/terms", termRoute);
 
 // parse application/x-www-form-urlencoded
 //If the users send POST requests by submitting a form,
 //it will use application/x-www-form-urlencoded as the content-type to send the data. To parse that from the request body, we need to use the urlencoded() method
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// parse application/json
-app.use(bodyParser.json());
 
 const connection = require("./database/database");
 
@@ -90,10 +92,6 @@ app.post("/users/add", (req, res) => {
   // TODO - check if user with email already exists and send response with 403 status code
 
   try {
-    //login details
-    const personalEmail = req.body.personalEmail;
-    const userPassword = req.body.userPassword;
-
     //user details
     const fullName = req.body.fullName;
     const preferredName = req.body.preferredName;
@@ -146,40 +144,6 @@ app.post("/users/add", (req, res) => {
       photoLink,
       boardingAddress,
     ];
-
-    const memberRegistrationQuery = `
-      
-      INSERT INTO MEMBERS_MAIN (
-        Personal_email,
-        User_password
-
-        Full_Name,
-        Preferred_Name,
-        Function_id,
-        Dept_id,
-        Date_of_join,
-        Position_id,
-        Contact_num,
-        AIESEC_email,
-        Gender,
-        NIC_Number,
-        Birth_date,
-        Facebook_link,
-        LinkedIN_link,
-        Instagram_link,
-        Faculty_id,
-        Batch,
-        UniRegNo,
-        School_name,
-        Home_address,
-        Home_contact,
-        District,
-        Photo_link,
-        Boarding_address,
-
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-        
-        )`;
 
     connection.query(
       memberRegistrationQuery,
