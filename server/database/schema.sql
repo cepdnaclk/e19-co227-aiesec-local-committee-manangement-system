@@ -1,3 +1,18 @@
+/* Naming Conventions
+   Adapted from: https://github.com/RootSoft/Database-Naming-Convention
+    tables, views, columns
+        => singular
+        => lowercase
+        => seperated by _ (snake_case)
+        => AVOID QUOTED IDENTIFIERS ("date", "First Name")
+        => full words, no abbreviations unless they are common (like id)
+        => no reserved words
+    primary keys
+        => single column primary key fields should be named id
+    foreign keys
+        => should be a combination of the name of the referenced table and the name of the referenced fields
+*/
+
 DROP DATABASE IF EXISTS LC_KANDY;
 
 CREATE DATABASE LC_KANDY;
@@ -5,74 +20,75 @@ CREATE DATABASE LC_KANDY;
 USE LC_KANDY;
 
 /* =============== MEMEBERS MASTER TABLE =============== */
-CREATE TABLE MEMBERS_MAIN (
+CREATE TABLE member (
 
-    Member_ID       INT(5) AUTO_INCREMENT PRIMARY KEY,
+    id       INT(5) AUTO_INCREMENT PRIMARY KEY,
 
     #login details
-    Personal_email  VARCHAR(255) UNIQUE NOT NULL,
-    User_password   VARCHAR(20)  NOT NULL,
+    email  VARCHAR(255) UNIQUE NOT NULL,
+    passphrase   VARCHAR(20)  NOT NULL,
 
     #member details
-    Full_Name       VARCHAR(100),
-    Preferred_Name  VARCHAR(30),
-    Function_id     INT(2),
-    Dept_id         INT(3),
-    Date_of_join    DATE,
-    Position_id     INT(3),
-    Contact_num     VARCHAR(12),
-    AIESEC_email    VARCHAR(255),
-    Gender          CHAR(1),
-    NIC_Number      INT(12),
-    Birth_date      DATE,
-    Facebook_link   VARCHAR(255),
-    LinkedIN_link   VARCHAR(255),
-    Instagram_link  VARCHAR(255),
-    Faculty_id      CHAR(2),
-    Batch           INT(2),
+    full_name       VARCHAR(100),
+    preferred_name  VARCHAR(30),
+    function_id     INT(2),
+    department_id         INT(3),
+    joined_date    DATE,
+    position_id     INT(3),
+    contact_no     VARCHAR(12),
+    aisec_email    VARCHAR(255),
+    gender          CHAR(1),
+    nic             INT(12),
+    birth_date      DATE,
+    facebook_link   VARCHAR(255),
+    linkedin_link   VARCHAR(255),
+    instagram_link  VARCHAR(255),
+    faculty_id      CHAR(2),
+    batch           INT(2),
     #try to implement auto filling relevant fields when registering
-    UniRegNo        VARCHAR(12) UNIQUE,
-    School_name     VARCHAR(50),
-    Home_address    VARCHAR(100),
-    Home_contact    VARCHAR(12),
-    District        VARCHAR(20),
-    Photo_link      VARCHAR(255),
-    Boarding_address VARCHAR(100)
+    register_no        VARCHAR(12) UNIQUE,
+    school_name     VARCHAR(50),
+    home_address    VARCHAR(100),
+    home_contact    VARCHAR(12),
+    district        VARCHAR(20),
+    photo_link      VARCHAR(255),
+    boarding_address VARCHAR(100)
 );
 
 /* =============== FUNCTIONS TABLE =============== */
-CREATE TABLE A_FUNCTION (
-    Name          VARCHAR(50),
-    Abbreviation    VARCHAR(4),
-    Func_ID         INT(2) AUTO_INCREMENT PRIMARY KEY
+/* function is a reserved keyword hence renamed to functional_area */
+CREATE TABLE functional_area (
+    id         INT(2) AUTO_INCREMENT PRIMARY KEY,
+    title          VARCHAR(50),
+    abbreviation    VARCHAR(4)
 );
 
 /* =============== DEPARTMENTS TABLE =============== */
-CREATE TABLE DEPARTMENT (
-    Dept_ID         INT(2) AUTO_INCREMENT PRIMARY KEY,
-    DName           VARCHAR(25),
-    Abbreviation    VARCHAR(10)
+CREATE TABLE department (
+    id         INT(2) AUTO_INCREMENT PRIMARY KEY,
+    title           VARCHAR(25),
+    abbreviation    VARCHAR(10)
 );
 
 /* =============== VALID PAIRS (FUNCTS-DEPTS) TABLE =============== */
-CREATE TABLE VALIDPAIRS (
-    Func_ID INT(2),
-    Dept_ID INT(2),
+CREATE TABLE valid_pair (
+    functional_area_id INT(2),
+    department_id INT(2),
 
-    FOREIGN KEY (Func_ID) REFERENCES A_FUNCTION(Func_ID),
-    FOREIGN KEY (Dept_ID) REFERENCES DEPARTMENT(Dept_ID)
+    FOREIGN KEY (functional_area_id) REFERENCES functional_area(id),
+    FOREIGN KEY (department_id) REFERENCES department(id)
 );
 
 /* =============== TERMS TABLE =============== */
 # new term details must be added manually at the start of every new term (hardcoding)
-CREATE TABLE TERMS (
-    Term_id                 INT(3) AUTO_INCREMENT PRIMARY KEY,
-    Term_name               VARCHAR(10), #Only Summer or winter
-    T_Year                  INT,    #T_Year and Term_name creates the full name of the term
+CREATE TABLE term (
+    id                 INT(3) AUTO_INCREMENT PRIMARY KEY,
+    title               VARCHAR(10), #yyyy_Summer/Winter
+    # year                  INT,    #T_Year and Term_name creates the full name of the term
 
-    Start_date              DATE,
-    End_date                DATE,
-    Newbie_Recruitment_date DATE
+    start_date              DATE,
+    end_date                DATE,
+    newbie_recruitment_date DATE
 
 );
 
