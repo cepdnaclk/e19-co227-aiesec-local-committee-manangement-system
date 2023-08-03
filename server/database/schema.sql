@@ -13,14 +13,15 @@
         => should be a combination of the name of the referenced table and the name of the referenced fields
 */
 
-DROP DATABASE IF EXISTS LC_KANDY;
+/*DROP DATABASE IF EXISTS LC_KANDY;*/
 
 CREATE DATABASE LC_KANDY;
 
 USE LC_KANDY;
 
 CREATE TABLE faculty (
-    id INT(2) AUTO_INCREMENT PRIMARY KEY,
+    
+    id VARCHAR(3) UNIQUE PRIMARY KEY,
     title VARCHAR(100)
 );
 
@@ -30,21 +31,28 @@ CREATE TABLE district (
 );
 
 CREATE TABLE role (
-    id INT(2) AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(50)
+    id INT(2) PRIMARY KEY,
+    title VARCHAR(50),
+    abbreviation VARCHAR(4)
 );
 
-/* =============== FUNCTIONS TABLE =============== */
-/* function is a reserved keyword hence renamed to functional_area */
-CREATE TABLE functional_area (
-    id         INT(2) AUTO_INCREMENT PRIMARY KEY,
+/* =============== FRONT OFFICE TABLE =============== */
+CREATE TABLE fo (
+    id         INT(2) PRIMARY KEY,
+    title          VARCHAR(50),
+    abbreviation    VARCHAR(4)
+);
+
+/* =============== BACK OFFICE TABLE =============== */
+CREATE TABLE bo (
+    id         INT(2) PRIMARY KEY,
     title          VARCHAR(50),
     abbreviation    VARCHAR(4)
 );
 
 /* =============== DEPARTMENTS TABLE =============== */
 CREATE TABLE department (
-    id         INT(2) AUTO_INCREMENT PRIMARY KEY,
+    id         INT(2) PRIMARY KEY,
     title           VARCHAR(25),
     abbreviation    VARCHAR(10)
 );
@@ -76,7 +84,7 @@ CREATE TABLE member (
     joined_date    DATE,
     role_id     INT(2),
     contact_no     VARCHAR(12),
-    aisec_email    VARCHAR(255),
+    aiesec_email    VARCHAR(255),
     gender          CHAR(1),
     nic             INT(12),
     birth_date      DATE,
