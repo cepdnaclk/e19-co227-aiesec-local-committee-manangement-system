@@ -97,9 +97,7 @@ INSERT INTO roles (id, title, abbreviation) VALUES
 ,(6, "Coordinator", "CDN")
 ;
 
-INSERT INTO term (title) VALUES
-('2021-Summer')
-,('2021-Winter')
-,('2022-Summer')
-,('2022-Winter')
+INSERT INTO term VALUES
+('22-Summer', '2022-01-01', '2022-05-01', '2022-03-01')
+,('22-Winter', '2022-06-01', '2022-12-01', '2022-07-01')
 ;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "../../api/axios";
-// import UserProfile from "./UserProfile";
+import { Formik, Form, Field } from "formik";
+import * as yup from "yup";
 import {
   Paper,
   Box,
@@ -12,17 +13,19 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Modal,
-  Typography,
 } from "@mui/material";
+import TermProfile from "./TermProfile";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import CloseIcon from "@mui/icons-material/Close";
 import { UserContext } from "../../context/UserContext";
 
-const TERM_URL = "/terms";
+const TERM_URL = "/term";
 
 export default function Terms() {
   const { token } = useContext(UserContext);
+
+  const [opt, setOpt] = useState("");
+  const [currTerm, setCurrTerm] = useState({});
 
   const [terms, setTerms] = useState([]);
 
@@ -34,6 +37,14 @@ export default function Terms() {
   };
 
   const handleAddTermClick = () => {
+    setOpt("add");
+    toggleTermProfileEnabled();
+  };
+
+  const handleViewTermClick = (term) => {
+    setOpt("edit");
+    console.log(term);
+    setCurrTerm(() => term);
     toggleTermProfileEnabled();
   };
 
@@ -66,7 +77,12 @@ export default function Terms() {
           <Box mr={2} textAlign="right">
             {isTermProfileEnabled ? (
               <>
-                <IconButton onClick={toggleTermProfileEnabled}>
+                <IconButton
+                  onClick={() => {
+                    loadTerms();
+                    toggleTermProfileEnabled();
+                  }}
+                >
                   <CloseIcon />
                 </IconButton>
               </>
@@ -80,7 +96,7 @@ export default function Terms() {
             )}
           </Box>
           {isTermProfileEnabled ? (
-            <p>TODO</p>
+            <TermProfile opt={opt} term={currTerm} />
           ) : (
             <TableContainer>
               <Table>
@@ -89,21 +105,19 @@ export default function Terms() {
                     <TableCell>Name</TableCell>
                     <TableCell>Start Date</TableCell>
                     <TableCell>End Date</TableCell>
+                    <TableCell>Newbie Recruitment Date</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {terms.map((term, index) => (
-                    <TableRow key={index}>
-                      {/* <TableCell>{user.id}</TableCell> */}
-                      <TableCell>
-                        <a href="/">{term.title}</a>
-                      </TableCell>
-                      <TableCell>
-                        <a href="/">{term.start_date}</a>
-                      </TableCell>
-                      <TableCell>
-                        <a href="/">{term.end_date}</a>
-                      </TableCell>
+                  {terms?.map((term, index) => (
+                    <TableRow
+                      key={index}
+                      onClick={() => handleViewTermClick(term)}
+                    >
+                      <TableCell>{term.title}</TableCell>
+                      <TableCell>{term.startDate}</TableCell>
+                      <TableCell>{term.endDate}</TableCell>
+                      <TableCell>{term.newbieRecruitmentDate}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

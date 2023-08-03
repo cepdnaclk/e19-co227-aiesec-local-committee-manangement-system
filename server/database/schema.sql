@@ -91,7 +91,6 @@ CREATE TABLE member (
     facebook_link   VARCHAR(255),
     linkedin_link   VARCHAR(255),
     instagram_link  VARCHAR(255),
-    #try to implement auto filling relevant fields when registering
     register_no        VARCHAR(12) UNIQUE,
     school_name     VARCHAR(50),
     home_address    VARCHAR(100),
@@ -101,23 +100,17 @@ CREATE TABLE member (
     boarding_address VARCHAR(100),
     FOREIGN KEY (functional_area_id) REFERENCES functional_area(id),
     FOREIGN KEY (department_id) REFERENCES department(id),
-    FOREIGN KEY (faculty_id) REFERENCES faculty(id),
     FOREIGN KEY (district_id) REFERENCES district(id),
     FOREIGN KEY (role_id) REFERENCES role(id)
 );
 
 
 /* =============== TERMS TABLE =============== */
-# new term details must be added manually at the start of every new term (hardcoding)
 CREATE TABLE term (
-    id                 INT(3) AUTO_INCREMENT PRIMARY KEY,
-    title               VARCHAR(20), #yyyy_Summer/Winter
-    # year                  INT,    #T_Year and Term_name creates the full name of the term
-
-    start_date              DATE,
-    end_date                DATE,
-    newbie_recruitment_date DATE
-
+    title VARCHAR(10) PRIMARY KEY NOT NULL, #yy-Summer/Winter
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    newbie_recruitment_date DATE NOT NULL
 );
 
 /* =============== TEAMS TABLE =============== */

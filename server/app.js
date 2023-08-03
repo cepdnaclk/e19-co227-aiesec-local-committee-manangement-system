@@ -40,7 +40,10 @@ const userRoute = require("./routes/user");
 app.use("/users", userRoute);
 
 const termRoute = require("./routes/term");
-app.use("/terms", termRoute);
+app.use("/term", termRoute);
+
+const resourceRoute = require("./routes/resource");
+app.use("/resource", resourceRoute);
 
 // parse application/x-www-form-urlencoded
 //If the users send POST requests by submitting a form,

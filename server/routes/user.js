@@ -24,42 +24,45 @@ router.get("", authenticateToken, (req, res) => {
 
 // view functional areas
 router.get("/functional_area", authenticateToken, (req, res) => {
-  const queryGetAllFunctionalAreas = "SELECT * FROM functional_area;";
-
-  connection.query(queryGetAllFunctionalAreas, (err, result) => {
-    //errors handling
-    if (err) {
-      console.error("Error during functional area retrieval:", err);
-      return res.json({ message: "Internal Server Error" });
+  const queryGetAllFunctionalAreas = connection.query(
+    "CALL GetFunctionalArea()",
+    (err, result) => {
+      //errors handling
+      if (err) {
+        console.error("Error during functional area retrieval:", err);
+        return res.json({ message: "Internal Server Error" });
+      }
+      // for successful registrations
+      // result is not similar to executing a query where only the data is returned
+      // TODO data is the first item of the result (Why?)
+      console.log(result[0]);
+      res.json(result[0]);
     }
-    //for successful registrations
-    console.log(result);
-    res.json(result);
-  });
+  );
 });
 
-// view departments
-router.get("/department", authenticateToken, (req, res) => {
-  const queryGetAllDepartments =
-    "SELECT d.id, d.title, d.abbreviation FROM department as d " +
-    "INNER JOIN valid_pair as v ON v.department_id = d.id " +
-    "WHERE v.functional_area_id = '" +
-    req.query.functionalAreaId +
-    "';";
-  console.log(JSON.stringify(req.query.functionalAreaId));
-  // const queryGetAllFunctionalAreas = "SELECT * FROM functional_area;";
+// // view departments
+// router.get("/department", authenticateToken, (req, res) => {
+//   const queryGetAllDepartments =
+//     "SELECT d.id, d.title, d.abbreviation FROM department as d " +
+//     "INNER JOIN valid_pair as v ON v.department_id = d.id " +
+//     "WHERE v.functional_area_id = '" +
+//     req.query.functionalAreaId +
+//     "';";
+//   console.log(JSON.stringify(req.query.functionalAreaId));
+//   // const queryGetAllFunctionalAreas = "SELECT * FROM functional_area;";
 
-  connection.query(queryGetAllDepartments, (err, result) => {
-    //errors handling
-    if (err) {
-      console.error("Error during functional area retrieval:", err);
-      return res.json({ message: "Internal Server Error" });
-    }
-    //for successful registrations
-    console.log(result);
-    res.json(result);
-  });
-});
+//   connection.query(queryGetAllDepartments, (err, result) => {
+//     //errors handling
+//     if (err) {
+//       console.error("Error during functional area retrieval:", err);
+//       return res.json({ message: "Internal Server Error" });
+//     }
+//     //for successful registrations
+//     console.log(result);
+//     res.json(result);
+//   });
+// });
 
 // view user specified by id
 router.get(":id", (req, res) => {
