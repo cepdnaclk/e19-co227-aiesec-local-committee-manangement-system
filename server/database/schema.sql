@@ -19,6 +19,21 @@ CREATE DATABASE LC_KANDY;
 
 USE LC_KANDY;
 
+CREATE TABLE faculty (
+    id INT(2) AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100)
+);
+
+CREATE TABLE district (
+    id INT(2) AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(50)
+);
+
+CREATE TABLE role (
+    id INT(2) AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(50)
+);
+
 /* =============== FUNCTIONS TABLE =============== */
 /* function is a reserved keyword hence renamed to functional_area */
 CREATE TABLE functional_area (
@@ -57,8 +72,9 @@ CREATE TABLE member (
     preferred_name  VARCHAR(30),
     functional_area_id     INT(2),
     department_id         INT(3),
+    # find term
     joined_date    DATE,
-    position_id     INT(3),
+    role_id     INT(2),
     contact_no     VARCHAR(12),
     aisec_email    VARCHAR(255),
     gender          CHAR(1),
@@ -67,18 +83,19 @@ CREATE TABLE member (
     facebook_link   VARCHAR(255),
     linkedin_link   VARCHAR(255),
     instagram_link  VARCHAR(255),
-    faculty_id      CHAR(2),
-    batch           INT(2),
     #try to implement auto filling relevant fields when registering
     register_no        VARCHAR(12) UNIQUE,
     school_name     VARCHAR(50),
     home_address    VARCHAR(100),
     home_contact    VARCHAR(12),
-    district        VARCHAR(20),
+    district_id        INT(2),
     photo_link      VARCHAR(255),
     boarding_address VARCHAR(100),
-     FOREIGN KEY (functional_area_id) REFERENCES functional_area(id),
-    FOREIGN KEY (department_id) REFERENCES department(id)
+    FOREIGN KEY (functional_area_id) REFERENCES functional_area(id),
+    FOREIGN KEY (department_id) REFERENCES department(id),
+    FOREIGN KEY (faculty_id) REFERENCES faculty(id),
+    FOREIGN KEY (district_id) REFERENCES district(id),
+    FOREIGN KEY (role_id) REFERENCES role(id)
 );
 
 

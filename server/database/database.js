@@ -57,4 +57,15 @@ connection.query(dataScript, (err) => {
   console.log("Populated DB");
 });
 
+// create procedures
+const procedurePath = path.join(__dirname, "procedure.sql");
+const procedureScript = fs.readFileSync(procedurePath, "utf8");
+connection.query(procedureScript, (err) => {
+  if (err) {
+    console.log(err);
+    exit(1);
+  }
+  console.log("Added Procedures");
+});
+
 module.exports = connection;
