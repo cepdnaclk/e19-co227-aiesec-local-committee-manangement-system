@@ -68,4 +68,13 @@ connection.query(procedureScript, (err) => {
   console.log("Added Procedures");
 });
 
-module.exports = connection;
+const execQuery = (queryString) => {
+  return new Promise((resolve, reject) => {
+    connection.query(queryString, (err, rows, fields) => {
+      if (err) return reject(err);
+      resolve(rows);
+    });
+  });
+};
+
+module.exports = { connection, execQuery };

@@ -13,20 +13,19 @@
         => should be a combination of the name of the referenced table and the name of the referenced fields
 */
 
-/*DROP DATABASE IF EXISTS LC_KANDY;*/
+DROP DATABASE IF EXISTS LC_KANDY;
 
 CREATE DATABASE LC_KANDY;
 
 USE LC_KANDY;
 
 CREATE TABLE faculty (
-    
-    id VARCHAR(3) UNIQUE PRIMARY KEY,
+    id VARCHAR(3) PRIMARY KEY,
     title VARCHAR(100)
 );
 
 CREATE TABLE district (
-    id INT(2) AUTO_INCREMENT PRIMARY KEY,
+    id INT(2) PRIMARY KEY,
     title VARCHAR(50)
 );
 
@@ -37,14 +36,14 @@ CREATE TABLE role (
 );
 
 /* =============== FRONT OFFICE TABLE =============== */
-CREATE TABLE fo (
+CREATE TABLE front_office (
     id         INT(2) PRIMARY KEY,
     title          VARCHAR(50),
     abbreviation    VARCHAR(4)
 );
 
 /* =============== BACK OFFICE TABLE =============== */
-CREATE TABLE bo (
+CREATE TABLE back_office (
     id         INT(2) PRIMARY KEY,
     title          VARCHAR(50),
     abbreviation    VARCHAR(4)
@@ -59,10 +58,10 @@ CREATE TABLE department (
 
 /* =============== VALID PAIRS (FUNCTS-DEPTS) TABLE =============== */
 CREATE TABLE valid_pair (
-    functional_area_id INT(2),
+    office_id INT(2),
     department_id INT(2),
 
-    FOREIGN KEY (functional_area_id) REFERENCES functional_area(id),
+    FOREIGN KEY (office_id) REFERENCES front_office(id),
     FOREIGN KEY (department_id) REFERENCES department(id)
 );
 
@@ -71,16 +70,17 @@ CREATE TABLE member (
 
     id       INT(5) AUTO_INCREMENT PRIMARY KEY,
 
-    #login details
+    -- login details
     email  VARCHAR(255) UNIQUE NOT NULL,
     passphrase   VARCHAR(20)  NOT NULL,
 
-    #member details
+    -- member details
     full_name       VARCHAR(100),
     preferred_name  VARCHAR(30),
-    functional_area_id     INT(2),
-    department_id         INT(3),
-    # find term
+    front_office_id     INT(2),
+    department_id         INT(2),
+    back_office_id INT(2),
+    -- TODO Find term using joined date
     joined_date    DATE,
     role_id     INT(2),
     contact_no     VARCHAR(12),
@@ -98,7 +98,8 @@ CREATE TABLE member (
     district_id        INT(2),
     photo_link      VARCHAR(255),
     boarding_address VARCHAR(100),
-    FOREIGN KEY (functional_area_id) REFERENCES functional_area(id),
+    FOREIGN KEY (front_office_id) REFERENCES front_office(id),
+    FOREIGN KEY (back_office_id) REFERENCES back_office(id),
     FOREIGN KEY (department_id) REFERENCES department(id),
     FOREIGN KEY (district_id) REFERENCES district(id),
     FOREIGN KEY (role_id) REFERENCES role(id)

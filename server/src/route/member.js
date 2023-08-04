@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const authenticateToken = require("../authVerify");
 const requestBodyToFieldsAndValues = require("../utils/parse");
 
 const connection = require("../database/database");
 
 // view all users
-router.get("", authenticateToken, (req, res) => {
+router.get("", (req, res) => {
   const queryViewAllUsers = "SELECT id, email FROM member";
 
   connection.query(queryViewAllUsers, (err, result) => {
@@ -23,7 +22,7 @@ router.get("", authenticateToken, (req, res) => {
 });
 
 // view functional areas
-router.get("/functional_area", authenticateToken, (req, res) => {
+router.get("/functional_area", (req, res) => {
   const queryGetAllFunctionalAreas = connection.query(
     "CALL GetFunctionalArea()",
     (err, result) => {
@@ -81,7 +80,7 @@ router.get(":id", (req, res) => {
   console.log(req.params.id);
 });
 
-router.post("", authenticateToken, (req, res) => {
+router.post("", (req, res) => {
   try {
     const [fields, values] = requestBodyToFieldsAndValues(req.body);
     const memberRegistrationQuery = `INSERT INTO member (${fields.toString()}) VALUES (${values.toString()})`;

@@ -3,45 +3,31 @@ const requestBodyToFieldsAndValues = require("../utils/parse");
 const express = require("express");
 const router = express.Router();
 
-const authenticateToken = require("../authVerify");
-
-const connection = require("../database/database");
+const { execQuery } = require("../database/database");
+const { getQuery } = require("../utils/sql");
 
 router.get("", (req, res) => {
-  connection.query("CALL GetAllTerms()", (err, result) => {
-    if (err) {
-      console.error("Terms Rertieval Failed: ", err, message);
-      return res.status(500).json("Internal Server Error");
-    }
-    //for successful retrievals
-    console.log(result[0]);
-    res.json(result[0]);
-  });
+  execQuery("CALL GetAllTerms()")
+    .then((rows) => {
+      res.status(200).json(rows[0]);
+    })
+    .catch((err) => {
+      next(err);
+    });
 });
 
-router.post("", (req, res) => {
+router.post("", (req, res, next) => {
   try {
-    console.log(req.body);
-
-    // check for null requests
-    if (!req?.body) {
-      return res.status(422).json({ message: "Unprocessable Entity" });
-    }
-
     const [fields, values] = requestBodyToFieldsAndValues(req.body);
     const addTermQuery = `INSERT INTO term (${fields.toString()}) VALUES (${values.toString()})`;
 
-    connection.query(addTermQuery, (err, result) => {
-      if (err?.code == "ER_DUP_ENTRY") {
-        return res.status(409).json({ message: "Conflict" });
-      } else if (err) {
-        return res.status(400).json({ message: "Bad Request" });
-      } else {
-        return res.status(200).json({ message: "Ok" });
-      }
-    });
+    execQuery(addTermQuery)
+      .then(() => {})
+      .catch((err) => {
+        next(err);
+      });
   } catch (err) {
-    return res.status(500).json("Internal Server Error");
+    next(err);
   }
 });
 
