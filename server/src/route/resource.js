@@ -15,9 +15,9 @@ router.get("/faculty", (req, res) => {
 });
 
 router.get("/district", (req, res) => {
-  const queryGetFaculties = "SELECT * FROM district;";
+  const queryGetDistricts = "SELECT * FROM district;";
 
-  connection.query(queryGetFaculties, (err, result) => {
+  connection.query(queryGetDistricts, (err, result) => {
     if (err) {
       return res.status(500).json("Internal Server Error");
     }
