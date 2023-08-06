@@ -97,10 +97,60 @@ INSERT INTO igv_application_status (status_id, status_name) VALUES
 (9,"Finished"),(10, "Completed");
 
 /* =============== DUMMY DATA =============== */
-INSERT INTO member (email, passphrase)
+INSERT INTO member 
+(
+    email, 
+    passphrase,
+    full_name,
+    preferred_name,
+    front_office_id,
+    department_id,
+    back_office_id,
+    joined_date,
+    role_id,
+    contact_no,
+    aiesec_email,
+    gender,
+    nic,
+    birth_date,
+    facebook_link,
+    linkedin_link,
+    instagram_link,
+    register_no,
+    school_name,
+    home_address,
+    home_contact,
+    district_id,
+    photo_link,
+    boarding_address
+)
 VALUES 
-("john@example.com", 123), 
-("admin", "admin")
+(
+    "john@example.com", 
+    123,
+    "John Doe",
+    "John",
+    "1",
+    "1",
+    "1",
+    "2019-01-01",
+    "4",
+    "1234567890",
+    "john@example.com",
+    "M",
+    "1234567890",
+    "2002-01-01",
+    "john@facebook.com",
+    "john@linkedin.com",
+    "john@instagram.com",
+    "E/02/002",
+    "School",
+    "No.2 Kings Street, Kandy",
+    "1234567890",
+    "1",
+    "john.photo.com",
+    "No.3 Kings Street, Kandy"
+)
 ;
 
 INSERT INTO term VALUES
@@ -108,7 +158,7 @@ INSERT INTO term VALUES
 ,('22-Winter', '2022-06-01', '2022-12-01', '2022-07-01')
 ;
 
-INSERT INTO igv_projects (expa_id, project_name, sdg, jd, opp_provider, food, transportation, accommodation, notes) VALUES
+INSERT INTO igv_project (expa_id, project_name, sdg, jd, opp_provider, food, transportation, accommodation, notes) VALUES
 (1234567, "Global Classroom - Kandy", 4, 
 "1. Participate in activites to teach English to children. 
 2. Conduct practical activites", "Britshway English Acadamy", "Provided", "Covered", "Provided and Covered", "Only for europeans" );

@@ -1,5 +1,6 @@
 import Login from "./pages/Login/Login";
-import Member from "./pages/Member/Member";
+import MemberView from "./pages/Member/MemberView";
+import ProjectView from "./pages/Project/ProjectView";
 
 import { UserContext } from "./context/UserContext";
 
@@ -50,6 +51,40 @@ function App() {
           mode: prefersDarkMode ? "dark" : "light",
           // primary: { main: "#037ef3" },
         },
+        components: {
+          MuiCssBaseline: {
+            styleOverrides: {
+              body: {
+                scrollbarColor: "#6b6b6b #2b2b2b",
+                "&::-webkit-scrollbar, & *::-webkit-scrollbar": {
+                  // backgroundColor: "#2b2b2b",
+                  backgroundColor: "rgba(0,0,0,0)",
+                },
+                "&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb": {
+                  borderRadius: 24,
+                  backgroundColor: "#B5B5B5",
+                  minHeight: 24,
+                  // border: "3px solid #2b2b2b",
+                },
+                "&::-webkit-scrollbar-thumb:focus, & *::-webkit-scrollbar-thumb:focus":
+                  {
+                    backgroundColor: "#959595",
+                  },
+                "&::-webkit-scrollbar-thumb:active, & *::-webkit-scrollbar-thumb:active":
+                  {
+                    backgroundColor: "#959595",
+                  },
+                "&::-webkit-scrollbar-thumb:hover, & *::-webkit-scrollbar-thumb:hover":
+                  {
+                    backgroundColor: "#959595",
+                  },
+                "&::-webkit-scrollbar-corner, & *::-webkit-scrollbar-corner": {
+                  backgroundColor: "#2b2b2b",
+                },
+              },
+            },
+          },
+        },
       }),
     [prefersDarkMode]
   );
@@ -79,6 +114,14 @@ function App() {
                   disableElevation
                 >
                   Users
+                </Button>
+                <Button
+                  component={Link}
+                  to="/projects"
+                  variant="text"
+                  disableElevation
+                >
+                  Projects
                 </Button>
                 <Button
                   component={Link}
@@ -148,7 +191,8 @@ function App() {
           <Paper sx={{ p: 0.5, borderRadius: "10px" }}>
             <Routes>
               <Route element={<ProtectedRoutes />}>
-                <Route path="/users" element={<Member />} />
+                <Route path="/users" element={<MemberView />} />
+                <Route path="/projects" element={<ProjectView />} />
                 <Route path="/terms" element={<Terms />} />
               </Route>
               <Route element={<AdminRoutes />}></Route>

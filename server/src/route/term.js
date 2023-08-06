@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 
 const { execQuery } = require("../database/database");
-const { getQuery } = require("../utils/sql");
+// const { getQuery } = require("../utils/sql");
 
 router.get("", (req, res) => {
   execQuery("CALL GetAllTerms()")

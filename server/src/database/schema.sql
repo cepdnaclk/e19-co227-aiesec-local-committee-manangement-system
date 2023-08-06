@@ -119,16 +119,17 @@ CREATE TABLE term (
 
 /* ============== iGV PROJECTS =============== */
 
+/* commenting with -- gives a parse error in node */
 CREATE TABLE igv_project (
 
     expa_id         INT(7) PRIMARY KEY,
-    project_name    VARCHAR(20),
+    project_name    VARCHAR(50),
     sdg             INT(2),
     jd              VARCHAR(350),
     opp_provider    VARCHAR(50),
-    food            VARCHAR(20), --provided/covered/provided and covered
-    transportation  VARCHAR(20), --provided/covered/provided and covered
-    accommodation   VARCHAR(20), --provided/covered/provided and covered
+    food            VARCHAR(20), /*provided/covered/provided and covered*/
+    transportation  VARCHAR(20), /*provided/covered/provided and covered*/
+    accommodation   VARCHAR(20), /*provided/covered/provided and covered*/
     notes           VARCHAR(100)
 
 );
@@ -153,7 +154,7 @@ CREATE TABLE igv_question (
     question_id     INT(4) AUTO_INCREMENT PRIMARY KEY,
     question        VARCHAR(200),
 
-    FOREIGN KEY(project_id) REFERENCES igv_project(expa_id)
+    FOREIGN KEY(expa_id) REFERENCES igv_project(expa_id)
 
 );
 /* ============= iGV APPLICATION STATUS =============*/
@@ -168,42 +169,42 @@ CREATE TABLE igv_application_status (
 
 CREATE TABLE igv_application (
 
-    ep_id           INT(7), -- from expa
-    app_id          INT(5) AUTO_INCREMENT PRIMARY KEY, --one ep can have multiple applications
+    ep_id           INT(7), /* from expa */
+    app_id          INT(5) AUTO_INCREMENT PRIMARY KEY, /* one ep can have multiple applications*/
     app_status      VARCHAR(15),
     ep_name         VARCHAR(50),
-    incharge_member VARCHAR(50), -- member_id ???
+    incharge_member VARCHAR(50), /* member_id ??? */
     team            VARCHAR(15),
     applied_date    DATE,
     contacted_date  DATE,
     project_name    VARCHAR(20),
     slot_name       VARCHAR(25),
-    project_expa_id INT(7), --f KEY
-    gender          CHAR(1),  -- M/F
+    project_expa_id INT(7), /* f KEY */
+    gender          CHAR(1),  /* M/F */
     home_mc         VARCHAR(25),
     home_lc         VARCHAR(25),
     contact_number  VARCHAR(15),
     email           VARCHAR(50),
     notes           VARCHAR(150),
 
-    -- interview details will be filled after scheduling the interview--
+    /* interview details will be filled after scheduling the interview */
 
     interview_date  DATE,
     interview_time  TIME, 
 
-    -- EP Manager details
+    /* EP Manager details */
 
     ep_mng_name     VARCHAR(20),
     ep_mng_contact  VARCHAR(15),
     ep_mng_email    VARCHAR(50),
 
-    -- date recording --
+    /* date recording */
 
     abh_date        DATE,
     accepted_date   DATE,
     approved_date   DATE,
 
-    -- foreign key declaration 
+    /* foreign key declaration */ 
 
     FOREIGN KEY (project_expa_id) REFERENCES igv_project(expa_id)
 

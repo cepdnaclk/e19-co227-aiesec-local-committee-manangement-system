@@ -9,7 +9,7 @@ const {
 const { connection, execQuery } = require("../database/database");
 
 // view all users
-router.get("", (req, res) => {
+router.get("", (req, res, next) => {
   // id present send only requested user
   if (req.query.id) {
     const getUser = `SELECT * FROM member where id='${req.query.id}';`;
@@ -27,7 +27,9 @@ router.get("", (req, res) => {
     execQuery(getUsers)
       .then((rows) => {
         data = rows.map((row) => objectKeysSnakeToCamel(row));
-        res.status(200).json(data);
+        setTimeout(() => {
+          res.status(200).json(data);
+        }, 5000);
       })
       .catch();
   }
@@ -92,7 +94,9 @@ router.put("", (req, res, next) => {
 
     execQuery(updateMemberQuery)
       .then((rows) => {
-        res.status(200).json({ message: "Member details updated successfully" });
+        res
+          .status(200)
+          .json({ message: "Member details updated successfully" });
       })
       .catch((err) => {
         next(err);

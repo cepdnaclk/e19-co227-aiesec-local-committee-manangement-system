@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "../../api/axios";
 import MemberProfile from "./MemberProfile";
 import {
-  Paper,
   Box,
   Button,
   IconButton,
@@ -20,7 +19,8 @@ import Listing from "../../components/Listing";
 
 const MEMBERS_URL = "/member";
 
-export default function Users() {
+export default function MemberView() {
+  // TODO: Handle adding token to request globally
   const { token } = useContext(UserContext);
 
   const [isLoading, setLoading] = useState(true);
@@ -29,17 +29,13 @@ export default function Users() {
 
   const [snackbarState, setSnackbarState] = useState(snackbarIdleState);
 
-  const [members, setMembers] = useState(null);
+  const [members, setMembers] = useState([]);
 
   const [focusMemberId, setFocusMemberId] = useState("");
 
   const modalIdleState = { open: false, mode: "" };
   // member profile form visibility
   const [modalState, setModalState] = useState(modalIdleState);
-
-  useEffect(() => {
-    loadMembers();
-  }, []);
 
   const loadMembers = async (e) => {
     setLoading(true);
@@ -54,11 +50,15 @@ export default function Users() {
 
       setMembers(response.data);
     } catch (err) {
-      // TODO: Add better error handling when loading users
+      // TODO: Better error handling
       console.log(err);
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    loadMembers();
+  }, []);
 
   const handleRowClick = (id) => {
     setFocusMemberId(id);
@@ -87,6 +87,7 @@ export default function Users() {
         >
           <Listing
             initialRows={members}
+            // TODO: Set the required columns
             fields={["email"]}
             keyField="id"
             handleRowClick={handleRowClick}
@@ -117,11 +118,11 @@ export default function Users() {
               </Box>
               <MemberProfile
                 setSnackbarState={setSnackbarState}
-                modalState={modalState}
-                setModalState={setModalState}
-                modalIdleState={modalIdleState}
+                formState={modalState}
+                setFormState={setModalState}
+                formIdleState={modalIdleState}
                 refreshParent={loadMembers}
-                focusMemberId={focusMemberId}
+                focusItemId={focusMemberId}
               />
             </DialogContent>
           </Dialog>

@@ -23,6 +23,7 @@ const authenticateToken = require("./src/middleware/auth");
 app.use("/member", require("./src/route/member"));
 app.use("/term", require("./src/route/term"));
 app.use("/resource", require("./src/route/resource"));
+app.use("/project", require("./src/route/igv_projects"));
 
 // error logging
 app.use(require("./src/middleware/errorLogger"));
@@ -39,6 +40,6 @@ const connection = require("./src/database/database");
 process.on("SIGINT", function () {
   console.log("Caught interrupt signal");
 
-  connection.end();
+  // connection.end();
   process.exit(0);
 });

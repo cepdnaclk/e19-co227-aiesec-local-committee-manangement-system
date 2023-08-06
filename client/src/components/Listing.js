@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import Alert from "@mui/material/Alert";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
@@ -10,6 +11,7 @@ import Skeleton from "@mui/material/Skeleton";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
+import { TableContainer } from "@mui/material";
 
 function Listing(props) {
   const { initialRows, fields, keyField, isLoading, handleRowClick } = props;
@@ -27,7 +29,9 @@ function Listing(props) {
 
       return newRows;
     }
-    return initialRows;
+    // TODO: figure out why initialRows becomes null at times
+    // FIX: for now an empty array is passed if initialRows is falsy
+    return initialRows || [];
   }, [searchText, initialRows]);
 
   // render skeleton table while loading
@@ -69,16 +73,18 @@ function Listing(props) {
   };
 
   // create table rows
-  const tableRows = rows.map((row) => {
-    let key = row[keyField];
-    return (
-      <TableRow key={key} hover onClick={() => handleClick(key)}>
-        {fields.map((field, currIndex, array) => (
-          <TableCell key={currIndex}>{row[field]}</TableCell>
-        ))}
-      </TableRow>
-    );
-  });
+  const tableRows = rows
+    ? rows.map((row) => {
+        let key = row[keyField];
+        return (
+          <TableRow key={key} hover onClick={() => handleClick(key)}>
+            {fields.map((field, currIndex, array) => (
+              <TableCell key={currIndex}>{row[field]}</TableCell>
+            ))}
+          </TableRow>
+        );
+      })
+    : null;
 
   // handle search bar text value change
   const handleChange = (e) => {
@@ -86,25 +92,27 @@ function Listing(props) {
   };
 
   return (
-    <>
-      <TextField
-        variant="outlined"
-        size="small"
-        fullWidth
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-        onChange={handleChange}
-      />
-      <Table>
-        <TableHead>{tableHeader}</TableHead>
-        <TableBody>{tableRows}</TableBody>
-      </Table>
-    </>
+    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <TableContainer>
+        <TextField
+          variant="outlined"
+          size="small"
+          fullWidth
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          onChange={handleChange}
+        />
+        <Table>
+          <TableHead>{tableHeader}</TableHead>
+          <TableBody>{tableRows}</TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
   );
 }
 

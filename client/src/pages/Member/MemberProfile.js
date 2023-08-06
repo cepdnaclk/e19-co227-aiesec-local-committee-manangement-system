@@ -1,28 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "../../context/UserContext";
 import axios from "../../api/axios";
-import { Formik, Form, Field } from "formik";
+import { UserContext } from "../../context/UserContext";
+import { Formik, Form } from "formik";
 import * as yup from "yup";
 import ValidatedTextField from "../../components/ValidatedTextField";
 import ValidatedPasswordField from "../../components/ValidatedPasswordField";
 import ValidatedSelectField from "../../components/ValidatedSelectField";
 import ValidatedDateField from "../../components/ValidatedDateField";
-import {
-  Box,
-  Grid,
-  Button,
-  Snackbar,
-  Alert,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Typography,
-  TextField,
-  Divider,
-  Chip,
-  InputAdornment,
-} from "@mui/material";
+import { Grid, Button, Divider, Chip, InputAdornment } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -31,41 +16,40 @@ import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 const MEMBERS_URL = "/member";
 const RESOURCES_URL = "/member/resources";
 
-/* MODES:
+/* TODO: Implement modes
    [x] admin-add
-   [ ] admin-view
+   [x] admin-view (admin-delete)
    [ ] admin-edit
    [ ] user-view
    [ ] user-edit
-   -> admin-delete
 */
 
 export default function MemberProfile(props) {
+  // TODO: Handle adding token to request globally
+  const { token } = useContext(UserContext);
+
   const test = true;
 
-  // ~~~~~~~~~~~~~~~ FORM CONTROLS ~~~~~~~~~~~~~~~
   const [isLoading, setLoading] = useState(false);
 
   const {
-    modalState,
-    setModalState,
-    modalIdleState,
+    formState,
+    setFormState,
+    formIdleState,
     setSnackbarState,
     refreshParent,
-    focusMemberId,
+    focusItemId,
   } = props;
 
   const [areFieldsDisabled, disableFields] = useState(false);
 
   useEffect(() => {
-    if (modalState.mode === "admin-view" || modalState.mode === "user-view")
+    if (formState.mode === "admin-view" || formState.mode === "user-view")
       disableFields(true);
     else disableFields(false);
-  }, [modalState.mode]);
+  }, [formState.mode]);
 
-  const [departments, setDepartments] = useState([]);
-
-  // define initial state of form
+  // Define initial formState of form
   const [initialState, setInitialState] = useState({
     email: "",
     passphrase: "",
@@ -93,13 +77,12 @@ export default function MemberProfile(props) {
     boardingAddress: "",
   });
 
-  // ~~~~~~~~~~~~~~~ STATIC DATA ~~~~~~~~~~~~~~~
-  const { token } = useContext(UserContext);
-
   const genders = [
     { key: "M", value: "Male" },
     { key: "F", value: "Female" },
   ];
+
+  const [departments, setDepartments] = useState([]);
 
   const [resources, setResources] = useState({
     districts: [],
@@ -153,38 +136,42 @@ export default function MemberProfile(props) {
       console.log("Payload received: ", response.data);
       setResources(response.data);
 
-      if (modalState.mode === "admin-view") {
+      if (formState.mode === "admin-view") {
         const response = await axios.get(MEMBERS_URL, {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + token,
           },
-          params: { id: focusMemberId },
+          params: { id: focusItemId },
         });
         console.log("Payload received: ", response);
-        // TODO
+        const currFrontOffice = resources.frontOffices.find(
+          (element) => element.key === response.data.frontOfficeId
+        );
+        setDepartments(JSON.parse(currFrontOffice.departments));
         setInitialState(response.data);
       }
     } catch (err) {
-      // TODO: Add better error handling when loading functions
+      // TODO: Better error handling
       console.log(err);
     }
     setLoading(false);
   };
 
+  // TODO: Validate dates
   const formSchema = yup.object().shape({
     email: yup.string().required("Email required").email("Invalid email"),
     passphrase: yup.string().required("Password required"),
     fullName: yup.string().required("Full name required"),
     preferredName: yup.string(),
-    frontOfficeId: yup.string().required("Functional area required"),
+    frontOfficeId: yup.string().required("Front office required"),
     departmentId: yup.string().required("Department required"),
     backOfficeId: yup.string(),
-    joinedDate: yup.date(),
-    roleId: yup.string(),
+    joinedDate: yup.date().required("Joined Date"),
+    roleId: yup.string().required("Role required"),
     contactNo: yup.string(),
     aiesecEmail: yup.string(),
-    gender: yup.string().required("Gender required"),
+    gender: yup.string(),
     nic: yup.string(),
     birthDate: yup.string(),
     facebookLink: yup.string(),
@@ -213,8 +200,9 @@ export default function MemberProfile(props) {
         severity: "success",
       });
       refreshParent();
-      setModalState(modalIdleState);
+      setFormState(formIdleState);
     } catch (err) {
+      // TODO: Create seperate error message for "User already exists"
       console.log("Error: ", err);
       setSnackbarState({
         open: true,
@@ -238,9 +226,9 @@ export default function MemberProfile(props) {
         severity: "success",
       });
       refreshParent();
-      setModalState({
+      setFormState({
         open: true,
-        mode: modalState.mode.replace("edit", "view"),
+        mode: formState.mode.replace("edit", "view"),
       });
     } catch (err) {
       console.log("Error: ", err);
@@ -269,7 +257,7 @@ export default function MemberProfile(props) {
         severity: "success",
       });
       refreshParent();
-      setModalState(modalIdleState);
+      setFormState(formIdleState);
     } catch (err) {
       console.log("Error: ", err);
       setSnackbarState({
@@ -285,8 +273,8 @@ export default function MemberProfile(props) {
       initialValues={initialState}
       onSubmit={(formData, { setSubmitting, resetForm }) => {
         setSubmitting(true);
-        if (modalState.mode.includes("add")) handleAdd(formData);
-        else if (modalState.mode.includes("edit")) handleEdit(formData);
+        if (formState.mode.includes("add")) handleAdd(formData);
+        else if (formState.mode.includes("edit")) handleEdit(formData);
         else handleDelete(formData);
         setSubmitting(false);
       }}
@@ -296,7 +284,7 @@ export default function MemberProfile(props) {
       {({ values, errors, touched, isSubmitting, resetForm, handleChange }) => (
         <Form>
           <Grid container spacing={2}>
-            <pre>{JSON.stringify(values, null, 2)}</pre>
+            {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
             <Grid item xs={12}>
               <Divider textAlign="center">
                 <Chip label="Credentials"></Chip>
@@ -306,14 +294,14 @@ export default function MemberProfile(props) {
               <ValidatedTextField
                 name="email"
                 label="Email"
-                disabled={areFieldsDisabled || modalState.mode === "admin-edit"}
+                disabled={areFieldsDisabled || formState.mode === "admin-edit"}
               />
             </Grid>
             <Grid item xs={6}>
               <ValidatedPasswordField
                 name="passphrase"
                 label="Password"
-                disabled={areFieldsDisabled || modalState.mode === "admin-edit"}
+                disabled={areFieldsDisabled || formState.mode === "admin-edit"}
               />
             </Grid>
             <Grid item xs={12}>
@@ -487,15 +475,16 @@ export default function MemberProfile(props) {
                   );
                   setDepartments(JSON.parse(currFrontOffice.departments));
                 }}
-                disabled={areFieldsDisabled || modalState.mode === "user-edit"}
+                disabled={areFieldsDisabled || formState.mode === "user-edit"}
               />
             </Grid>
             <Grid item xs={3}>
+              {/* TODO: Department doesn't load on view */}
               <ValidatedSelectField
                 name="departmentId"
                 label="Department"
                 options={departments}
-                disabled={areFieldsDisabled || modalState.mode === "user-edit"}
+                disabled={areFieldsDisabled || formState.mode === "user-edit"}
               />
             </Grid>
             <Grid item xs={3}>
@@ -503,7 +492,7 @@ export default function MemberProfile(props) {
                 name="backOfficeId"
                 label="Back Office"
                 options={resources.backOffices}
-                disabled={areFieldsDisabled || modalState.mode === "user-edit"}
+                disabled={areFieldsDisabled || formState.mode === "user-edit"}
               />
             </Grid>
             <Grid item xs={3}>
@@ -511,14 +500,14 @@ export default function MemberProfile(props) {
                 name="roleId"
                 label="Role"
                 options={resources.roles}
-                disabled={areFieldsDisabled || modalState.mode === "user-edit"}
+                disabled={areFieldsDisabled || formState.mode === "user-edit"}
               />
             </Grid>
             <Grid item xs={6}>
               <ValidatedDateField
                 name="joinedDate"
                 label="Joined Date"
-                disabled={areFieldsDisabled || modalState.mode === "user-edit"}
+                disabled={areFieldsDisabled || formState.mode === "user-edit"}
               />
             </Grid>
             <Grid item xs={6}>
@@ -533,9 +522,9 @@ export default function MemberProfile(props) {
                 type="submit"
                 disabled={isSubmitting}
                 variant="contained"
-                color={modalState.mode.includes("view") ? "error" : "primary"}
+                color={formState.mode.includes("view") ? "error" : "primary"}
               >
-                {modalState.mode.includes("view") ? "Delete" : "Submit"}
+                {formState.mode.includes("view") ? "Delete" : "Submit"}
               </Button>
             </Grid>
           </Grid>
