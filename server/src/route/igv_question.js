@@ -1,20 +1,19 @@
+const requestBodyToFieldsAndValues = require("../utils/parse");
+
 const express = require("express");
 const router = express.Router();
 
-const {
-  requestBodyToFieldsAndValues,
-  objectKeysSnakeToCamel,
-} = require("../utils/parse");
-
 const { connection, execQuery } = require("../database/database");
 
-// view slots for each project - should be accessed within each project
+
+
+// view questions API each project - should be accessed within each project
 router.get("", (req, res) => {
     // if id present send only requested project details
     
-    //const getIgvProject = `SELECT * FROM igv_slot where project_name='${req.query.project_name}';`;
-    const getIgvSlot = `SELECT * FROM igv_slot where expa_id='${req.query.expa_id}';`;
-    execQuery(getIgvSlot)
+    const getIgvQuestion = `SELECT * FROM igv_question where expa_id='${req.query.expa_id}';`;
+    
+    execQuery(getIgvQuestion)
     .then((rows) => {
         data = objectKeysSnakeToCamel(rows[0]);
         res.status(200).json(data);
@@ -35,11 +34,11 @@ router.post("", (req, res, next) => {
         
         const [fields, values] = requestBodyToFieldsAndValues(req.body);
         
-        const addIgvSlots = `INSERT INTO igv_slot (${fields.toString()}) VALUES (${values.toString()})`;
+        const addIgvQuestion = `INSERT INTO igv_question (${fields.toString()}) VALUES (${values.toString()})`;
         
-        execQuery(addIgvSlots)
+        execQuery(addIgvQuestion)
         .then((rows) => {
-            res.status(200).json({message: "New iGV Project Slot Added Successfully" });
+            res.status(200).json({message: "New iGV Question Added Successfully" });
         })
 
         .catch((err) => {
@@ -51,7 +50,7 @@ router.post("", (req, res, next) => {
     }
 }); 
 
-//edit igv project slot
+//edit igv questions
 router.put("", (req, res, next) => {
     try {
       const [fields, values] = requestBodyToFieldsAndValues(req.body);
@@ -65,11 +64,11 @@ router.put("", (req, res, next) => {
   
       updateString = updateString.substring(0, updateString.length - 2);
   
-      const updateIgvSlotQuery = `UPDATE igv_slot SET ${updateString} WHERE expa_id=${values[0]};`;
+      const updateIgvQuestionQuery = `UPDATE igv_question SET ${updateString} WHERE expa_id=${values[0]};`;
   
-      execQuery(updateIgvSlotQuery)
+      execQuery(updateIgvQuestionQuery)
         .then((rows) => {
-          res.status(200).json({ message: "iGV Project slot edited successfully" });
+          res.status(200).json({ message: "iGV Question edited successfully" });
         })
         .catch((err) => {
           next(err);
@@ -81,18 +80,18 @@ router.put("", (req, res, next) => {
 
 // for deleting igv slots
 router.delete("", (req, res, next) => {
-try {
-    const deleteIgvSlotQuery = `DELETE FROM igv_slot WHERE expa_id=${req.query.expa_id}`;
-    execQuery(deleteIgvSlotQuery)
-    .then((rows) => {
-        res.status(200).json({ message: "iGV Project Slot Deleted Successfully" });
-    })
-    .catch((err) => {
+    try {
+        const deleteIgvQuestionQuery = `DELETE FROM igv_question WHERE expa_id=${req.query.expa_id}`;
+        execQuery(deleteIgvQuestionQuery)
+        .then((rows) => {
+            res.status(200).json({ message: "iGV Question Deleted Successfully" });
+        })
+        .catch((err) => {
+            next(err);
+        });
+    } catch (err) {
         next(err);
+    }
     });
-} catch (err) {
-    next(err);
-}
-});
-  
-module.exports = router;
+      
+    module.exports = router;
