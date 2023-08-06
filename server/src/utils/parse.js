@@ -16,4 +16,15 @@ function requestBodyToFieldsAndValues(body) {
   return [fields, values];
 }
 
-module.exports = requestBodyToFieldsAndValues;
+function objectKeysSnakeToCamel(snakeCaseObject) {
+  let camelCaseObject = {};
+  for (let snakeCaseKey in snakeCaseObject) {
+    let camelCaseKey = snakeCaseKey.replace(/([-_][a-z])/g, (group) =>
+      group.toUpperCase().replace("-", "").replace("_", "")
+    );
+    camelCaseObject[camelCaseKey] = snakeCaseObject[snakeCaseKey];
+  }
+  return camelCaseObject;
+}
+
+module.exports = { requestBodyToFieldsAndValues, objectKeysSnakeToCamel };

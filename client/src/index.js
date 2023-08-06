@@ -10,23 +10,14 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 // ReactDOM.render is no longer supported in React 18.
 // ReactDOM.render(<App />, document.getElementById('root'))
 
-// Custom MUI theme
-const theme = createTheme({
-  palette: {
-    primary: { main: "#037ef3" },
-  },
-});
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <UserProvider>
-        <ThemeProvider theme={theme}>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </ThemeProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </UserProvider>
     </LocalizationProvider>
   </React.StrictMode>

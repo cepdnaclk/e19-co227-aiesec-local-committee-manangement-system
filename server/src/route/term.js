@@ -22,8 +22,9 @@ router.post("", (req, res, next) => {
     const addTermQuery = `INSERT INTO term (${fields.toString()}) VALUES (${values.toString()})`;
 
     execQuery(addTermQuery)
-      .then((rows) => {res.status(200).json()})
-      
+      .then((rows) => {
+        res.status(200).json(rows);
+      })
       .catch((err) => {
         next(err);
       });

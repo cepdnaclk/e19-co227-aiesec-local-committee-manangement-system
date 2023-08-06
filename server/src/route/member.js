@@ -1,111 +1,116 @@
 const express = require("express");
 const router = express.Router();
 
-const requestBodyToFieldsAndValues = require("../utils/parse");
+const {
+  requestBodyToFieldsAndValues,
+  objectKeysSnakeToCamel,
+} = require("../utils/parse");
 
-const connection = require("../database/database");
+const { connection, execQuery } = require("../database/database");
 
 // view all users
 router.get("", (req, res) => {
-  const queryViewAllUsers = "SELECT id, email FROM member";
+  // id present send only requested user
+  if (req.query.id) {
+    const getUser = `SELECT * FROM member where id='${req.query.id}';`;
+    execQuery(getUser)
+      .then((rows) => {
+        data = objectKeysSnakeToCamel(rows[0]);
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } else {
+    const getUsers = `SELECT * FROM member;`;
 
-  connection.query(queryViewAllUsers, (err, result) => {
-    //errors handling
-    if (err) {
-      console.error("Error during member retrieval:", err);
-      return res.json({ message: "Internal Server Error" });
-    }
-    //for successful registrations
-    console.log(result);
-    res.json(result);
-  });
+    execQuery(getUsers)
+      .then((rows) => {
+        data = rows.map((row) => objectKeysSnakeToCamel(row));
+        res.status(200).json(data);
+      })
+      .catch();
+  }
 });
 
-// view functional areas
-router.get("/functional_area", (req, res) => {
-  const queryGetAllFunctionalAreas = connection.query(
-    "CALL GetFunctionalArea()",
-    (err, result) => {
-      //errors handling
-      if (err) {
-        console.error("Error during functional area retrieval:", err);
-        return res.json({ message: "Internal Server Error" });
-      }
-      // for successful registrations
-      // result is not similar to executing a query where only the data is returned
-      // TODO data is the first item of the result (Why?)
-      console.log(result[0]);
-      res.json(result[0]);
-    }
-  );
+// get required resources to fill out the register form (district, office ids, ... etc)
+router.get("/resources", (req, res, next) => {
+  execQuery("CALL GetMemberRegisterResources()")
+    .then((rows) => {
+      // console.log(rows);
+      // TODO hardcoded for now, find a better way to do this
+      const result = {
+        districts: rows[0],
+        frontOffices: rows[1],
+        backOffices: rows[2],
+        roles: rows[3],
+      };
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      next(err);
+    });
 });
 
-// // view departments
-// router.get("/department", authenticateToken, (req, res) => {
-//   const queryGetAllDepartments =
-//     "SELECT d.id, d.title, d.abbreviation FROM department as d " +
-//     "INNER JOIN valid_pair as v ON v.department_id = d.id " +
-//     "WHERE v.functional_area_id = '" +
-//     req.query.functionalAreaId +
-//     "';";
-//   console.log(JSON.stringify(req.query.functionalAreaId));
-//   // const queryGetAllFunctionalAreas = "SELECT * FROM functional_area;";
-
-//   connection.query(queryGetAllDepartments, (err, result) => {
-//     //errors handling
-//     if (err) {
-//       console.error("Error during functional area retrieval:", err);
-//       return res.json({ message: "Internal Server Error" });
-//     }
-//     //for successful registrations
-//     console.log(result);
-//     res.json(result);
-//   });
-// });
-
-// view user specified by id
-router.get(":id", (req, res) => {
-  // const queryViewAllUsers = "SELECT Member_ID AS id, Personal_email AS email FROM MEMBERS_MAIN WHERE Member_ID=" + req.params.id;
-
-  // connection.query(queryViewAllUsers, (err, result) => {
-  //   //errors handling
-  //   if (err) {
-  //     console.error('Error during member retrieval:', err);
-  //     return res.json({ message: 'Internal Server Error' });
-  //   }
-  //   //for successful registrations
-  //   console.log(result)
-  //   res.json(result)
-  // });
-  console.log(req.params.id);
-});
-
-router.post("", (req, res) => {
+router.post("", (req, res, next) => {
   try {
+    console.log(req.body);
+
     const [fields, values] = requestBodyToFieldsAndValues(req.body);
     const memberRegistrationQuery = `INSERT INTO member (${fields.toString()}) VALUES (${values.toString()})`;
 
-    connection.query(memberRegistrationQuery, (err, result) => {
-      //error handling
-      if (err) {
-        console.error("Error during member registration:", err);
-        return res.json({ message: "Internal Server Error" });
-      }
-
-      //for successful registrations
-      res.json({ message: "Member Registered Successfully" });
-    });
-  } catch (err) {}
-
-  // res.send({ data: "Save User" });
+    execQuery(memberRegistrationQuery)
+      .then((rows) => {
+        res.status(200).json({ message: "Ok" });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.put("", (req, res) => {
-  res.send({ data: "Update User" });
+router.put("", (req, res, next) => {
+  try {
+    const [fields, values] = requestBodyToFieldsAndValues(req.body);
+    // Combine the two arrays into a single array.
+    let updateString = "";
+
+    for (let i = 0; i < fields.length; i++) {
+      updateString += fields[i] + " = ";
+      updateString += values[i] + ", ";
+    }
+
+    updateString = updateString.substring(0, updateString.length - 2);
+
+    const updateMemberQuery = `UPDATE member SET ${updateString} WHERE id=${values[0]};`;
+
+    execQuery(updateMemberQuery)
+      .then((rows) => {
+        res.status(200).json({ message: "Ok" });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.delete("", (req, res) => {
-  res.send({ data: "Delete User" });
+router.delete("", (req, res, next) => {
+  try {
+    const deleteMemberQuery = `DELETE FROM member WHERE id=${req.query.id}`;
+    execQuery(deleteMemberQuery)
+      .then((rows) => {
+        res.status(200).json({ message: "Ok" });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;
