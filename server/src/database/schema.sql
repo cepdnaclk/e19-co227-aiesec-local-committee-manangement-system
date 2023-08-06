@@ -156,11 +156,13 @@ CREATE TABLE igv_question (
     FOREIGN KEY(project_id) REFERENCES igv_project(expa_id)
 
 );
+/* ============= iGV APPLICATION STATUS =============*/
 
-/* CREATE TABLE igv_fsm (
-
+CREATE TABLE igv_application_status (
+    status_id       INT(2) PRIMARY KEY,
+    status_name     VARCHAR(15)
     
- )*/
+ )
 
 /* ================= iGV APPLICATIONS TABLE =================*/
 

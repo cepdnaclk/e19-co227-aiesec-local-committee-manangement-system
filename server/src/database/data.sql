@@ -91,6 +91,11 @@ INSERT INTO valid_pair (office_id, department_id) VALUES
 ,(4,1),(4,2),(4,4),(4,6),(4,7),(4,8) /* ogt */
 ;
 
+INSERT INTO igv_application_status (status_id, status_name) VALUES
+(0, "Open"),(1,"Rejected"), (2, "Withdrawn")(3,"Accepted By Host"),(4, "Accepted"),
+(5, "Approved"),(6, "Approval Broken"),(7,"Realized"),(8,"Realizaiton Broken"),
+(9,"Finished"),(10, "Completed");
+
 /* =============== DUMMY DATA =============== */
 INSERT INTO member (email, passphrase)
 VALUES 
@@ -107,3 +112,36 @@ INSERT INTO igv_projects (expa_id, project_name, sdg, jd, opp_provider, food, tr
 (1234567, "Global Classroom - Kandy", 4, 
 "1. Participate in activites to teach English to children. 
 2. Conduct practical activites", "Britshway English Acadamy", "Provided", "Covered", "Provided and Covered", "Only for europeans" );
+
+INSERT INTO igv_application (
+ep_id,          
+app_id,         
+app_status,     
+ep_name,        
+incharge_member,
+team,           
+applied_date,   
+contacted_date, 
+project_name,   
+slot_name,      
+project_expa_id,
+gender,         
+home_mc,        
+home_lc,        
+contact_number, 
+email,          
+notes,
+interview_date,
+interview_time,
+ep_mng_name,   
+ep_mng_contact,
+ep_mng_email,
+abh_date,     
+accepted_date,
+approved_date,
+) VALUES 
+
+(1234567, "OPEN", "Tony Tamer", "Dilini", "Team1", "2023-07-31","2023-08-01",
+"Global Classroom", "GC-Kandy September 1", "0129123","M", "Turkey", "ANKARA",
+"092092484","tony@aiesec.net","Note test 1 3 4","2023-08-02","1.30 PM",
+"EP manager 1", "03655989966","abuoew@aiesec.net","2023-08-02", "2023-08-03", "2023-08-04");
