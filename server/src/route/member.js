@@ -52,6 +52,9 @@ router.get("/resources", (req, res, next) => {
     });
 });
 
+//only for LCVP PM and People work in PM back office
+
+//add new members
 router.post("", (req, res, next) => {
   try {
     console.log(req.body);
@@ -71,6 +74,7 @@ router.post("", (req, res, next) => {
   }
 });
 
+//update member details
 router.put("", (req, res, next) => {
   try {
     const [fields, values] = requestBodyToFieldsAndValues(req.body);
@@ -97,6 +101,8 @@ router.put("", (req, res, next) => {
     next(err);
   }
 });
+
+//delete members - access only for LCVP PM
 
 router.delete("", (req, res, next) => {
   try {
