@@ -102,3 +102,8 @@ INSERT INTO term VALUES
 ('22-Summer', '2022-01-01', '2022-05-01', '2022-03-01')
 ,('22-Winter', '2022-06-01', '2022-12-01', '2022-07-01')
 ;
+
+INSERT INTO igv_projects (expa_id, project_name, sdg, jd, opp_provider, food, transportation, accommodation, notes) VALUES
+(1234567, "Global Classroom - Kandy", 4, 
+"1. Participate in activites to teach English to children. 
+2. Conduct practical activites", "Britshway English Acadamy", "Provided", "Covered", "Provided and Covered", "Only for europeans" );
