@@ -137,7 +137,7 @@ CREATE TABLE igv_project (
 CREATE TABLE igv_slot (
 
     expa_id         INT(7),
-    slot_id         INT(3) AUTO_INCREMENT PRIMARY KEY,
+    slot_id         INT(4) AUTO_INCREMENT PRIMARY KEY,
     title           VARCHAR(25),
     start_date      DATE,
     end_date        DATE,
@@ -149,8 +149,8 @@ CREATE TABLE igv_slot (
 /* ================= iGV INTERVIEW QUESRIONS TABLE ========= */
 CREATE TABLE igv_question (
 
-    project_id      INT(7),
-    question_id     INT(3) AUTO_INCREMENT PRIMARY KEY,
+    expa_id         INT(7),
+    question_id     INT(4) AUTO_INCREMENT PRIMARY KEY,
     question        VARCHAR(200),
 
     FOREIGN KEY(project_id) REFERENCES igv_project(expa_id)
@@ -161,3 +161,59 @@ CREATE TABLE igv_question (
 
     
  )*/
+
+/* ================= iGV APPLICATIONS TABLE =================*/
+
+CREATE TABLE igv_application (
+
+    ep_id           INT(7), -- from expa
+    app_id          INT(5) AUTO_INCREMENT PRIMARY KEY, --one ep can have multiple applications
+    app_status      VARCHAR(15),
+    ep_name         VARCHAR(50),
+    incharge_member VARCHAR(50), -- member_id ???
+    team            VARCHAR(15),
+    applied_date    DATE,
+    contacted_date  DATE,
+    project_name    VARCHAR(20),
+    slot_name       VARCHAR(25),
+    project_expa_id INT(7), --f KEY
+    gender          CHAR(1),  -- M/F
+    home_mc         VARCHAR(25),
+    home_lc         VARCHAR(25),
+    contact_number  VARCHAR(15),
+    email           VARCHAR(50),
+    notes           VARCHAR(150),
+
+    -- interview details will be filled after scheduling the interview--
+
+    interview_date  DATE,
+    interview_time  TIME, 
+
+    -- EP Manager details
+
+    ep_mng_name     VARCHAR(20),
+    ep_mng_contact  VARCHAR(15),
+    ep_mng_email    VARCHAR(50),
+
+    -- date recording --
+
+    abh_date        DATE,
+    accepted_date   DATE,
+    approved_date   DATE,
+
+    -- foreign key declaration 
+
+    FOREIGN KEY (project_expa_id) REFERENCES igv_project(expa_id)
+
+);
+
+/* =================== iGV INTERVIEW LOG TABLE =========*/
+CREATE TABLE igv_interview_log (
+
+    app_id          INT(5),
+    question_id     INT(3),
+    answer          VARCHAR(200),
+
+    FOREIGN KEY (app_id) REFERENCES igv_application(app_id),
+    FOREIGN KEY (question_id) REFERENCES igv_question(question_id)
+);
