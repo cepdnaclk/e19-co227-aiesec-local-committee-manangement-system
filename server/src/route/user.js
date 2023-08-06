@@ -3,7 +3,7 @@ const router = express.Router();
 
 const jwt = require("jsonwebtoken");
 
-const connection = require("../database/database");
+const { connection } = require("../database/database");
 
 router.post("/login", (req, res) => {
   try {
@@ -11,9 +11,9 @@ router.post("/login", (req, res) => {
     const password = req.body.password;
     console.log(email, password);
 
-    const queryFindUser = `SELECT Member_ID, User_password 
-                                FROM MEMBERS_MAIN 
-                                WHERE Personal_email = ?;`;
+    const queryFindUser = `SELECT id, email, passphrase 
+                                FROM member 
+                                WHERE email = ?;`;
 
     connection.query(queryFindUser, [email], (err, result) => {
       if (err) {
@@ -25,15 +25,12 @@ router.post("/login", (req, res) => {
       }
       const user = result[0];
 
-      if (password != user.User_password) {
+      if (password != user.passphrase) {
         return res.status(401).json({ message: "Invalid password" });
       }
 
       // Successful login, proceed with further actions
-      const accessToken = jwt.sign(
-        user.Member_ID,
-        process.env.ACCESS_TOKEN_SECRET
-      );
+      const accessToken = jwt.sign(user.id, process.env.ACCESS_TOKEN_SECRET);
       res.json({ message: "Login successful", accessToken: accessToken });
     });
   } catch (error) {

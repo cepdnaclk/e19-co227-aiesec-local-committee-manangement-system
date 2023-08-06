@@ -4,7 +4,6 @@ const express = require("express");
 const router = express.Router();
 
 const { execQuery } = require("../database/database");
-const { getQuery } = require("../utils/sql");
 
 router.get("", (req, res) => {
   execQuery("CALL GetAllTerms()")
@@ -22,7 +21,9 @@ router.post("", (req, res, next) => {
     const addTermQuery = `INSERT INTO term (${fields.toString()}) VALUES (${values.toString()})`;
 
     execQuery(addTermQuery)
-      .then(() => {})
+      .then((rows) => {
+        res.status(200).json(rows);
+      })
       .catch((err) => {
         next(err);
       });

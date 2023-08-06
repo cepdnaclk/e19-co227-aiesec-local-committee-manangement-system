@@ -6,7 +6,7 @@ import { TextField, Button, Typography, Grid, Paper, Box } from "@mui/material";
 import * as yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 // import loginBanner from "../../assets/login-banner.jpg";
-const LOGIN_URL = "/login";
+const LOGIN_URL = "/user/login";
 
 /* TODO
  * [x] Integrate Formik to form
@@ -87,7 +87,7 @@ export default function Login() {
             md={5}
             lg={4}
             xl={3}
-            component={Paper}
+            // component={Paper}
             sx={{ borderRadius: "16px" }}
           >
             <Box
