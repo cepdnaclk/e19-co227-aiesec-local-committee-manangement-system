@@ -61,7 +61,7 @@ router.post("", (req, res, next) => {
 
     execQuery(memberRegistrationQuery)
       .then((rows) => {
-        res.status(200).json({ message: "Ok" });
+        res.status(200).json({ message: "New Member created successfully" });
       })
       .catch((err) => {
         next(err);
@@ -88,7 +88,7 @@ router.put("", (req, res, next) => {
 
     execQuery(updateMemberQuery)
       .then((rows) => {
-        res.status(200).json({ message: "Ok" });
+        res.status(200).json({ message: "Member details updated successfully" });
       })
       .catch((err) => {
         next(err);
@@ -103,7 +103,7 @@ router.delete("", (req, res, next) => {
     const deleteMemberQuery = `DELETE FROM member WHERE id=${req.query.id}`;
     execQuery(deleteMemberQuery)
       .then((rows) => {
-        res.status(200).json({ message: "Ok" });
+        res.status(200).json({ message: "Member deleted Sucessfully" });
       })
       .catch((err) => {
         next(err);

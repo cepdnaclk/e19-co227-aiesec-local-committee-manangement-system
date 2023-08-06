@@ -134,20 +134,20 @@ CREATE TABLE igv_project (
 );
 
 /* ================ PROJECT SLOTS TABLE ========== */
-CREATE TABLE slots (
+CREATE TABLE igv_slot (
 
-    project_id      INT(7),
+    expa_id         INT(7),
     slot_id         INT(3) AUTO_INCREMENT PRIMARY KEY,
     title           VARCHAR(25),
     start_date      DATE,
     end_date        DATE,
     num_openings    INT(2),
 
-    FOREIGN KEY(project_id) REFERENCES igv_project(expa_id)
+    FOREIGN KEY(expa_id) REFERENCES igv_project(expa_id)
 );
 
 /* ================= iGV INTERVIEW QUESRIONS TABLE ========= */
-CREATE TABLE igv_questions (
+CREATE TABLE igv_question (
 
     project_id      INT(7),
     question_id     INT(3) AUTO_INCREMENT PRIMARY KEY,
