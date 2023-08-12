@@ -6,14 +6,12 @@ const {
   objectKeysSnakeToCamel,
 } = require("../utils/parse");
 
-const { connection, execQuery } = require("../database/database");
+const { execQuery } = require("../database/database");
 
-// view all users
-router.get("", (req, res, next) => {
-  // id present send only requested user
+// get users
+router.get("/", (req, res, next) => {
   if (req.query.id) {
-    const getUser = `SELECT * FROM member where id='${req.query.id}';`;
-    execQuery(getUser)
+    execQuery(`SELECT * FROM member WHERE id=${req.query.id}`)
       .then((rows) => {
         data = objectKeysSnakeToCamel(rows[0]);
         res.status(200).json(data);
@@ -22,25 +20,22 @@ router.get("", (req, res, next) => {
         next(err);
       });
   } else {
-    const getUsers = `SELECT * FROM member;`;
-
-    execQuery(getUsers)
+    execQuery("CALL GetAllMembers()")
       .then((rows) => {
-        data = rows.map((row) => objectKeysSnakeToCamel(row));
-        setTimeout(() => {
-          res.status(200).json(data);
-        }, 5000);
+        data = rows[0].map((row) => objectKeysSnakeToCamel(row));
+        res.status(200).json(data);
       })
-      .catch();
+      .catch((err) => {
+        next(err);
+      });
   }
 });
 
 // get required resources to fill out the register form (district, office ids, ... etc)
-router.get("/resources", (req, res, next) => {
+router.get("/resources/", (req, res, next) => {
   execQuery("CALL GetMemberRegisterResources()")
     .then((rows) => {
-      // console.log(rows);
-      // TODO hardcoded for now, find a better way to do this
+      // TODO: result is mapped into object by hardcoding for now, find a better way to do this
       const result = {
         districts: rows[0],
         frontOffices: rows[1],
@@ -56,11 +51,9 @@ router.get("/resources", (req, res, next) => {
 
 //only for LCVP PM and People work in PM back office
 
-//add new members
-router.post("", (req, res, next) => {
+//add new member
+router.post("/", (req, res, next) => {
   try {
-    console.log(req.body);
-
     const [fields, values] = requestBodyToFieldsAndValues(req.body);
     const memberRegistrationQuery = `INSERT INTO member (${fields.toString()}) VALUES (${values.toString()})`;
 
@@ -77,7 +70,7 @@ router.post("", (req, res, next) => {
 });
 
 //update member details
-router.put("", (req, res, next) => {
+router.put("/", (req, res, next) => {
   try {
     const [fields, values] = requestBodyToFieldsAndValues(req.body);
     // Combine the two arrays into a single array.
@@ -88,6 +81,7 @@ router.put("", (req, res, next) => {
       updateString += values[i] + ", ";
     }
 
+    // remove last trailling ", "
     updateString = updateString.substring(0, updateString.length - 2);
 
     const updateMemberQuery = `UPDATE member SET ${updateString} WHERE id=${values[0]};`;
@@ -107,8 +101,7 @@ router.put("", (req, res, next) => {
 });
 
 //delete members - access only for LCVP PM
-
-router.delete("", (req, res, next) => {
+router.delete("/", (req, res, next) => {
   try {
     const deleteMemberQuery = `DELETE FROM member WHERE id=${req.query.id}`;
     execQuery(deleteMemberQuery)

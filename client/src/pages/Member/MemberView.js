@@ -4,20 +4,29 @@ import MemberProfile from "./MemberProfile";
 import {
   Box,
   Button,
-  IconButton,
   Dialog,
   DialogContent,
   Snackbar,
   Alert,
+  Paper,
+  Grid,
+  Skeleton,
+  TextField,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
 import { UserContext } from "../../context/UserContext";
 
 import Listing from "../../components/Listing";
 
-const MEMBERS_URL = "/member";
+import MemberCard from "./MemberCard";
+import MemberCardSkeleton from "./MemberCardSkeleton";
+
+const MEMBERS_URL = "/member/";
 
 export default function MemberView() {
   // TODO: Handle adding token to request globally
@@ -27,11 +36,15 @@ export default function MemberView() {
 
   const snackbarIdleState = { open: false, message: "", severity: "info" };
 
+  const [searchText, setSearchText] = useState("");
+
   const [snackbarState, setSnackbarState] = useState(snackbarIdleState);
+
+  const [initialMembers, setInitialMembers] = useState([]);
 
   const [members, setMembers] = useState([]);
 
-  const [focusMemberId, setFocusMemberId] = useState("");
+  const [focusMemberId, setFocusMemberId] = useState({});
 
   const modalIdleState = { open: false, mode: "" };
   // member profile form visibility
@@ -48,7 +61,7 @@ export default function MemberView() {
 
       console.log(response);
 
-      setMembers(response.data);
+      setInitialMembers(response.data);
     } catch (err) {
       // TODO: Better error handling
       console.log(err);
@@ -61,39 +74,105 @@ export default function MemberView() {
   }, []);
 
   const handleRowClick = (id) => {
+    console.log(id);
     setFocusMemberId(id);
     setModalState({ open: true, mode: "admin-view" });
   };
 
+  const handleSearchTextChange = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  useEffect(() => {
+    if (searchText !== "" && initialMembers) {
+      let newMembers = [];
+      initialMembers?.forEach((member) => {
+        if (member["preferredName"].toLowerCase().includes(searchText))
+          newMembers.push(member);
+      });
+      setMembers(newMembers);
+    } else {
+      setMembers(initialMembers);
+    }
+  }, [searchText, initialMembers]);
+
   return (
     <>
-      <Box component="main" sx={{ m: 1 }}>
-        <Box component="header" sx={{ width: "100%", my: 1 }} textAlign="right">
-          <IconButton onClick={loadMembers}>
-            <RefreshIcon />
-          </IconButton>
-          <Button
-            onClick={() => {
-              setModalState({ open: true, mode: "admin-add" });
-            }}
-          >
-            New User
-          </Button>
+      <Box component="main">
+        <Box component="header" sx={{ width: "100%", my: 1 }}>
+          {isLoading ? (
+            <Skeleton
+              variant="rectangular"
+              height={48}
+              sx={{ borderRadius: "10px" }}
+            />
+          ) : (
+            <Box
+              component={Paper}
+              sx={{
+                borderRadius: "10px",
+                padding: 1,
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <TextField
+                onChange={handleSearchTextChange}
+                size="small"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton>
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{ flexGrow: 1 }}
+              />
+              <IconButton
+                onClick={() => {
+                  loadMembers();
+                  setSearchText("");
+                }}
+              >
+                <RefreshIcon />
+              </IconButton>
+              <Button
+                onClick={() => {
+                  setModalState({ open: true, mode: "admin-add" });
+                }}
+              >
+                New User
+              </Button>
+            </Box>
+          )}
         </Box>
-        <Box
-          component="section"
-          sx={{ width: "100%", my: 1 }}
-          textAlign="center"
-        >
-          <Listing
-            initialRows={members}
-            // TODO: Set the required columns
-            fields={["email"]}
-            keyField="id"
-            handleRowClick={handleRowClick}
-            searchField="email"
-            isLoading={isLoading}
-          />
+        <Box component="section" sx={{ width: "100%", my: 2 }}>
+          {/* <Listing
+              initialRows={members}
+              // TODO: Set the required columns
+              fields={["email", "preferredName", "fullName"]}
+              keyField="id"
+              handleRowClick={handleRowClick}
+              searchField="email"
+              isLoading={isLoading}
+            /> */}
+          <Grid container spacing={2}>
+            {isLoading ? (
+              <>
+                <MemberCardSkeleton />
+                <MemberCardSkeleton />
+                <MemberCardSkeleton />
+                <MemberCardSkeleton />
+                <MemberCardSkeleton />
+              </>
+            ) : (
+              members.map((member, i) => (
+                <MemberCard member={member} onClick={handleRowClick} key={i} />
+              ))
+            )}
+          </Grid>
           <Dialog open={modalState.open} fullWidth maxWidth="md">
             <DialogContent dividers>
               <Box>

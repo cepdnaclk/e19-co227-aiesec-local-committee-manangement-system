@@ -86,7 +86,7 @@ CREATE TABLE member (
     contact_no          VARCHAR(12),
     aiesec_email        VARCHAR(255),
     gender              CHAR(1),
-    nic                 INT(12),
+    nic                 CHAR(12),
     birth_date          CHAR(10),
     facebook_link       VARCHAR(255),
     linkedin_link       VARCHAR(255),
@@ -120,6 +120,7 @@ CREATE TABLE term (
 /* ============== iGV PROJECTS =============== */
 
 /* commenting with -- gives a parse error in node */
+/* can be deleted -  slots deleted - questions,application set null*/
 CREATE TABLE igv_project (
 
     expa_id         INT(7) PRIMARY KEY,
@@ -161,9 +162,8 @@ CREATE TABLE igv_question (
 
 CREATE TABLE igv_application_status (
     status_id       INT(2) PRIMARY KEY,
-    status_name     VARCHAR(15)
-    
- )
+    status_name     VARCHAR(50)  
+);
 
 /* ================= iGV APPLICATIONS TABLE =================*/
 
@@ -175,8 +175,8 @@ CREATE TABLE igv_application (
     ep_name         VARCHAR(50),
     incharge_member VARCHAR(50), /* member_id ??? */
     team            VARCHAR(15),
-    applied_date    DATE,
-    contacted_date  DATE,
+    applied_date    CHAR(10),
+    contacted_date  CHAR(10),
     project_name    VARCHAR(20),
     slot_name       VARCHAR(25),
     project_expa_id INT(7), /* f KEY */
@@ -189,8 +189,8 @@ CREATE TABLE igv_application (
 
     /* interview details will be filled after scheduling the interview */
 
-    interview_date  DATE,
-    interview_time  TIME, 
+    interview_date  CHAR(10),
+    interview_time  CHAR(10), 
 
     /* EP Manager details */
 
@@ -200,9 +200,9 @@ CREATE TABLE igv_application (
 
     /* date recording */
 
-    abh_date        DATE,
-    accepted_date   DATE,
-    approved_date   DATE,
+    abh_date        CHAR(10),
+    accepted_date   CHAR(10),
+    approved_date   CHAR(10),
 
     /* foreign key declaration */ 
 

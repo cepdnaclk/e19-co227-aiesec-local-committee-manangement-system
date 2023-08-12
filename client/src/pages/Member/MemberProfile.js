@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "../../api/axios";
 import { UserContext } from "../../context/UserContext";
 import { Formik, Form } from "formik";
@@ -13,13 +13,13 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 
-const MEMBERS_URL = "/member";
-const RESOURCES_URL = "/member/resources";
+const MEMBERS_URL = "/member/";
+const RESOURCES_URL = "/member/resources/";
 
 /* TODO: Implement modes
    [x] admin-add
    [x] admin-view (admin-delete)
-   [ ] admin-edit
+   [x] admin-edit
    [ ] user-view
    [ ] user-edit
 */
@@ -82,19 +82,26 @@ export default function MemberProfile(props) {
     { key: "F", value: "Female" },
   ];
 
-  const [departments, setDepartments] = useState([]);
+  // const [departments, setDepartments] = useState([]);
+  const departments = useRef([]);
 
-  const [resources, setResources] = useState({
-    districts: [],
-    frontOffices: [],
-    backOffices: [],
-    roles: [],
+  // const [resources, setResources] = useState({
+  //   districts: [],
+  //   frontOffices: [],
+  //   backOffices: [],
+  //   roles: [],
+  // });
+  const resources = useRef({
+    districts: [{ "": "" }],
+    frontOffices: [{ "": "" }],
+    backOffices: [{ "": "" }],
+    roles: [{ "": "" }],
   });
 
   useEffect(() => {
     loadResources();
 
-    if (test) {
+    if (test && formState.mode === "admin-add") {
       setInitialState({
         email: "jane@example.com",
         passphrase: "456",
@@ -134,7 +141,7 @@ export default function MemberProfile(props) {
         },
       });
       console.log("Payload received: ", response.data);
-      setResources(response.data);
+      resources.current = response.data;
 
       if (formState.mode === "admin-view") {
         const response = await axios.get(MEMBERS_URL, {
@@ -142,13 +149,19 @@ export default function MemberProfile(props) {
             "Content-Type": "application/json",
             Authorization: "Bearer " + token,
           },
-          params: { id: focusItemId },
+          params: {
+            id: focusItemId,
+          },
         });
-        console.log("Payload received: ", response);
-        const currFrontOffice = resources.frontOffices.find(
-          (element) => element.key === response.data.frontOfficeId
+
+        console.log(response.data);
+        let currFrontOffice = resources.current.frontOffices.find(
+          (element) => element.key == response.data.frontOfficeId
         );
-        setDepartments(JSON.parse(currFrontOffice.departments));
+        // console.log(currFrontOffice.departments);
+        if (currFrontOffice) {
+          departments.current = JSON.parse(currFrontOffice.departments);
+        }
         setInitialState(response.data);
       }
     } catch (err) {
@@ -172,7 +185,7 @@ export default function MemberProfile(props) {
     contactNo: yup.string(),
     aiesecEmail: yup.string(),
     gender: yup.string(),
-    nic: yup.string(),
+    nic: yup.string().max(12, "NIC too long"),
     birthDate: yup.string(),
     facebookLink: yup.string(),
     linkedinLink: yup.string(),
@@ -248,7 +261,7 @@ export default function MemberProfile(props) {
           Authorization: "Bearer " + token,
         },
         params: {
-          id: formData.id,
+          id: focusItemId,
         },
       });
       setSnackbarState({
@@ -363,7 +376,7 @@ export default function MemberProfile(props) {
               <ValidatedSelectField
                 name="districtId"
                 label="District"
-                options={resources.districts}
+                options={resources.current.districts}
                 disabled={areFieldsDisabled}
               />
             </Grid>
@@ -465,15 +478,16 @@ export default function MemberProfile(props) {
               <ValidatedSelectField
                 name="frontOfficeId"
                 label="Front Office"
-                options={resources.frontOffices}
+                options={resources.current.frontOffices}
                 onChange={(e) => {
                   // Call default Formik handleChange()
                   handleChange(e);
                   // Additionally load the related departments
-                  const currFrontOffice = resources.frontOffices.find(
+                  const currFrontOffice = resources.current.frontOffices.find(
                     (element) => element.key === e.target.value
                   );
-                  setDepartments(JSON.parse(currFrontOffice.departments));
+                  // setDepartments(JSON.parse(currFrontOffice.departments));
+                  departments.current = JSON.parse(currFrontOffice.departments);
                 }}
                 disabled={areFieldsDisabled || formState.mode === "user-edit"}
               />
@@ -483,7 +497,7 @@ export default function MemberProfile(props) {
               <ValidatedSelectField
                 name="departmentId"
                 label="Department"
-                options={departments}
+                options={departments.current}
                 disabled={areFieldsDisabled || formState.mode === "user-edit"}
               />
             </Grid>
@@ -491,7 +505,7 @@ export default function MemberProfile(props) {
               <ValidatedSelectField
                 name="backOfficeId"
                 label="Back Office"
-                options={resources.backOffices}
+                options={resources.current.backOffices}
                 disabled={areFieldsDisabled || formState.mode === "user-edit"}
               />
             </Grid>
@@ -499,7 +513,7 @@ export default function MemberProfile(props) {
               <ValidatedSelectField
                 name="roleId"
                 label="Role"
-                options={resources.roles}
+                options={resources.current.roles}
                 disabled={areFieldsDisabled || formState.mode === "user-edit"}
               />
             </Grid>

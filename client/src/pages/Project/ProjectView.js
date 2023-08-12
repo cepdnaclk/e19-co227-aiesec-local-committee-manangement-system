@@ -21,9 +21,9 @@ export default function ProjectView() {
 
   const [snackbarState, setSnackbarState] = useState(snackbarIdleState);
 
-  const [projects, setProjects] = useState(null);
+  const [projects, setProjects] = useState([]);
 
-  const [focusProjectId, setFocusProjectId] = useState("");
+  const [focusProject, setFocusProject] = useState({});
 
   const formIdleState = { open: false, mode: "" };
 
@@ -52,97 +52,103 @@ export default function ProjectView() {
     setLoading(false);
   };
 
-  const handleRowClick = (id) => {
-    console.log("Current Id: ", id);
-    setFocusProjectId(id);
+  const handleRowClick = (row) => {
+    console.log("Current item: ", row);
+    setFocusProject(row);
     setFormState({ open: true, mode: "view" });
   };
 
   return (
     <>
-      <Box component="main" sx={{ m: 1 }}>
-        <Box component="header" sx={{ width: "100%", my: 1 }} textAlign="right">
-          {formState.mode === "" ? (
-            <IconButton onClick={loadProjects}>
-              <RefreshIcon />
-            </IconButton>
-          ) : null}
-          {formState.mode === "" ? (
-            <Button
-              onClick={() => {
-                setFormState({ open: true, mode: "add" });
-              }}
-            >
-              New Project
-            </Button>
-          ) : null}
-          {formState.mode === "view" ? (
-            <IconButton
-              onClick={() => {
-                setFormState({ open: true, mode: "edit" });
-              }}
-            >
-              <EditIcon />
-            </IconButton>
-          ) : null}
-          {formState.mode !== "" ? (
-            <IconButton
-              onClick={() => {
-                setFormState(formIdleState);
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
-          ) : null}
-        </Box>
-        <Box
-          component="section"
-          sx={{ width: "100%", my: 1 }}
-          textAlign="center"
-        >
-          <Box display={formState.mode === "" ? "block" : "none"}>
-            <Listing
-              initialRows={projects}
-              // TODO: Set the required columns
-              fields={[
-                "expaId",
-                "projectName",
-                "sdg",
-                "jd",
-                "oppProvider",
-                "food",
-                "transportation",
-                "accommodation",
-                "notes",
-              ]}
-              keyField="expaId"
-              handleRowClick={handleRowClick}
-              searchField="projectName"
-              isLoading={isLoading}
-            />
+      <Box component="main">
+        <Paper sx={{ borderRadius: "10px", p: 3 }}>
+          <Box
+            component="header"
+            sx={{ width: "100%", my: 1 }}
+            textAlign="right"
+          >
+            {formState.mode === "" ? (
+              <IconButton onClick={loadProjects}>
+                <RefreshIcon />
+              </IconButton>
+            ) : null}
+            {formState.mode === "" ? (
+              <Button
+                onClick={() => {
+                  setFormState({ open: true, mode: "add" });
+                }}
+              >
+                New Project
+              </Button>
+            ) : null}
+            {formState.mode === "view" ? (
+              <IconButton
+                onClick={() => {
+                  setFormState({ open: true, mode: "edit" });
+                }}
+              >
+                <EditIcon />
+              </IconButton>
+            ) : null}
+            {formState.mode !== "" ? (
+              <IconButton
+                onClick={() => {
+                  setFormState(formIdleState);
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+            ) : null}
           </Box>
-          <Box display={formState.mode !== "" ? "block" : "none"}>
-            <ProjectProfile
-              setSnackbarState={setSnackbarState}
-              formState={formState}
-              setFormState={setFormState}
-              formIdleState={formIdleState}
-              refreshParent={loadProjects}
-              focusItemId={focusProjectId}
-            />
+          <Box
+            component="section"
+            sx={{ width: "100%", my: 1 }}
+            textAlign="center"
+          >
+            <Box display={formState.mode === "" ? "block" : "none"}>
+              <Listing
+                initialRows={projects}
+                // TODO: Set the required columns
+                fields={[
+                  "expaId",
+                  "projectName",
+                  "sdg",
+                  "jd",
+                  "oppProvider",
+                  "food",
+                  "transportation",
+                  "accommodation",
+                  "notes",
+                ]}
+                keyField="expaId"
+                handleRowClick={handleRowClick}
+                searchField="projectName"
+                isLoading={isLoading}
+              />
+            </Box>
+            <Box display={formState.mode !== "" ? "block" : "none"}>
+              <ProjectProfile
+                setSnackbarState={setSnackbarState}
+                formState={formState}
+                setFormState={setFormState}
+                formIdleState={formIdleState}
+                refreshParent={loadProjects}
+                focusItem={focusProject}
+              />
+            </Box>
           </Box>
-        </Box>
-        <Snackbar
-          open={snackbarState.open}
-          autoHideDuration={4000}
-          onClose={() => {
-            setSnackbarState(snackbarIdleState);
-          }}
-        >
-          <Alert severity={snackbarState.severity}>
-            {snackbarState.message}
-          </Alert>
-        </Snackbar>
+          <Snackbar
+            open={snackbarState.open}
+            autoHideDuration={4000}
+            onClose={() => {
+              setSnackbarState(snackbarIdleState);
+            }}
+          >
+            <Alert severity={snackbarState.severity}>
+              {snackbarState.message}
+            </Alert>
+          </Snackbar>
+        </Paper>
       </Box>
     </>
   );

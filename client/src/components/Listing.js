@@ -68,8 +68,8 @@ function Listing(props) {
   );
 
   // table row click handler
-  const handleClick = (key) => {
-    handleRowClick(key);
+  const handleClick = (row) => {
+    handleRowClick(row);
   };
 
   // create table rows
@@ -77,7 +77,7 @@ function Listing(props) {
     ? rows.map((row) => {
         let key = row[keyField];
         return (
-          <TableRow key={key} hover onClick={() => handleClick(key)}>
+          <TableRow key={key} hover onClick={() => handleClick(row)}>
             {fields.map((field, currIndex, array) => (
               <TableCell key={currIndex}>{row[field]}</TableCell>
             ))}

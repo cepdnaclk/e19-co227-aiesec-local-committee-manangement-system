@@ -33,7 +33,7 @@ export default function ProjectProfile(props) {
     formIdleState,
     setSnackbarState,
     refreshParent,
-    focusItemId,
+    focusItem,
   } = props;
 
   const [areFieldsDisabled, disableFields] = useState(false);
@@ -86,16 +86,18 @@ export default function ProjectProfile(props) {
     // TODO: Render error message if load fails on view mode
     try {
       setLoading(true);
-      //   console.log("From inside profile: ", focusItemId);
-      const response = await axios.get(PROJECT_URL, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        params: { expaId: focusItemId },
-      });
-      console.log("Payload received: ", response);
-      setInitialState(response.data);
+      // //   console.log("From inside profile: ", focusItemId);
+      // const response = await axios.get(PROJECT_URL, {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: "Bearer " + token,
+      //   },
+      //   params: { expaId: focusItem.expaId },
+      // });
+      // console.log("Payload received: ", response);
+      console.log(focusItem);
+      setInitialState(focusItem);
+      console.log(initialState);
     } catch (err) {
       // TODO: Better error handling
       console.log(err);
@@ -295,7 +297,7 @@ export default function ProjectProfile(props) {
               <Grid item xs={12} textAlign="right">
                 <Button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || formState.mode === "view"}
                   variant="contained"
                   color={formState.mode === "view" ? "error" : "primary"}
                 >
@@ -315,7 +317,7 @@ export default function ProjectProfile(props) {
               </Divider>
             </Grid>
             <Grid item xs={12}>
-              <SlotView />
+              <SlotView project={focusItem} />
             </Grid>
           </Grid>
         </>

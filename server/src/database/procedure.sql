@@ -20,3 +20,35 @@ SELECT
     DATE_FORMAT(newbie_recruitment_date, "%Y-%m-%d") as newbieRecruitmentDate
 FROM term;
 END;
+
+CREATE PROCEDURE GetAllMembers()
+BEGIN
+SELECT 
+    m.id,
+    m.preferred_name,
+    m.front_office_id,
+    f.abbreviation AS front_office_abbreviation,
+    m.department_id,
+    d.abbreviation AS department_abbreviation,
+    m.role_id, 
+    r.abbreviation AS role_abbreviation,
+    m.photo_link,
+    m.aiesec_email
+    FROM member AS m
+    LEFT JOIN front_office AS f
+    ON f.id = m.front_office_id
+    LEFT JOIN department AS d
+    ON d.id = m.department_id
+    LEFT JOIN role as r
+    ON r.id = m.role_id;
+END;
+
+CREATE PROCEDURE GetMember(IN id INT(5))
+BEGIN
+SELECT
+    *
+FROM
+    member
+WHERE
+    id = id;
+END;

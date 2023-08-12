@@ -188,18 +188,18 @@ function App() {
           </AppBar>
         </Box>
         <Box component="main" sx={{ m: 2 }}>
-          <Paper sx={{ p: 0.5, borderRadius: "10px" }}>
-            <Routes>
-              <Route element={<ProtectedRoutes />}>
-                <Route path="/users" element={<MemberView />} />
-                <Route path="/projects" element={<ProjectView />} />
-                <Route path="/terms" element={<Terms />} />
-              </Route>
-              <Route element={<AdminRoutes />}></Route>
-              <Route path="/" element={<h1>{"Home"}</h1>} />
-              <Route path="/login" element={<Login />} />
-            </Routes>
-          </Paper>
+          {/* <Paper sx={{ p: 0.5, borderRadius: "10px" }}> */}
+          <Routes>
+            <Route element={<ProtectedRoutes />}>
+              <Route path="/users" element={<MemberView />} />
+              <Route path="/projects" element={<ProjectView />} />
+              <Route path="/terms" element={<Terms />} />
+            </Route>
+            <Route element={<AdminRoutes />}></Route>
+            <Route path="/" element={<h1>{"Home"}</h1>} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+          {/* </Paper> */}
         </Box>
       </div>
     </ThemeProvider>
