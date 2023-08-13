@@ -329,4 +329,10 @@ INSERT INTO igv_slot (expa_id, title, start_date, end_date, num_openings) VALUES
     "2020-01-01",
     "2020-02-02",
     "2"
-)
+);
+
+INSERT INTO igv_question (expa_id, question) VALUES 
+(1234567, "What does the fox say?")
+,(1234567, "Why is gamora?")
+,(1234567, "When we fall asleep where do we go?")
+;

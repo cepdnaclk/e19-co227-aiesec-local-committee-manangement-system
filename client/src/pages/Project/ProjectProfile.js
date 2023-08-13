@@ -4,14 +4,13 @@ import { UserContext } from "../../context/UserContext";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import ValidatedTextField from "../../components/ValidatedTextField";
-import ValidatedPasswordField from "../../components/ValidatedPasswordField";
 import ValidatedSelectField from "../../components/ValidatedSelectField";
-import ValidatedDateField from "../../components/ValidatedDateField";
-import { Grid, Button, Divider, Chip, InputAdornment } from "@mui/material";
+import { Grid, Button, Divider, Chip } from "@mui/material";
 
 import SlotView from "../Slot/SlotView";
+import Question from "../Questions/Question";
 
-const PROJECT_URL = "/project";
+const PROJECT_URL = "/project/";
 
 /* TODO: Implement modes
    [ ] - add
@@ -34,6 +33,7 @@ export default function ProjectProfile(props) {
     setSnackbarState,
     refreshParent,
     focusItem,
+    setFocusItem,
   } = props;
 
   const [areFieldsDisabled, disableFields] = useState(false);
@@ -87,6 +87,7 @@ export default function ProjectProfile(props) {
     try {
       setLoading(true);
       // //   console.log("From inside profile: ", focusItemId);
+      // console.log("Requesting: ", focusItem.expaId);
       // const response = await axios.get(PROJECT_URL, {
       //   headers: {
       //     "Content-Type": "application/json",
@@ -94,10 +95,11 @@ export default function ProjectProfile(props) {
       //   },
       //   params: { expaId: focusItem.expaId },
       // });
-      // console.log("Payload received: ", response);
-      console.log(focusItem);
+
+      // console.log("Project Payload received: ", response.body);
+      // // console.log(focusItem);
       setInitialState(focusItem);
-      console.log(initialState);
+      // console.log(initialState);
     } catch (err) {
       // TODO: Better error handling
       console.log(err);
@@ -131,6 +133,7 @@ export default function ProjectProfile(props) {
         severity: "success",
       });
       refreshParent();
+      setFocusItem(formData);
       setFormState({ open: true, mode: "view" });
     } catch (err) {
       // TODO: Create seperate error message for "Project already exists"
@@ -198,6 +201,11 @@ export default function ProjectProfile(props) {
       });
     }
   };
+
+  // TODO: Create a skeleton
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
 
   return (
     <>
@@ -318,6 +326,19 @@ export default function ProjectProfile(props) {
             </Grid>
             <Grid item xs={12}>
               <SlotView project={focusItem} />
+            </Grid>
+          </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Divider textAlign="center">
+                <Chip label="Questions"></Chip>
+              </Divider>
+            </Grid>
+            <Grid item xs={12}>
+              <Question
+                focusItemId={focusItem.expaId}
+                setSnackbarState={setSnackbarState}
+              />
             </Grid>
           </Grid>
         </>

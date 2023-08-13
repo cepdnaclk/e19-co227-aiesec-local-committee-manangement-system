@@ -10,7 +10,7 @@ import { UserContext } from "../../context/UserContext";
 
 import Listing from "../../components/Listing";
 
-const PROJECT_URL = "/project";
+const PROJECT_URL = "/project/";
 
 export default function ProjectView() {
   const { token } = useContext(UserContext);
@@ -134,6 +134,7 @@ export default function ProjectView() {
                 formIdleState={formIdleState}
                 refreshParent={loadProjects}
                 focusItem={focusProject}
+                setFocusItem={setFocusProject}
               />
             </Box>
           </Box>

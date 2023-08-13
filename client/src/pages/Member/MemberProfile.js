@@ -7,7 +7,14 @@ import ValidatedTextField from "../../components/ValidatedTextField";
 import ValidatedPasswordField from "../../components/ValidatedPasswordField";
 import ValidatedSelectField from "../../components/ValidatedSelectField";
 import ValidatedDateField from "../../components/ValidatedDateField";
-import { Grid, Button, Divider, Chip, InputAdornment } from "@mui/material";
+import {
+  Grid,
+  Button,
+  Divider,
+  Chip,
+  InputAdornment,
+  Skeleton,
+} from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -281,7 +288,14 @@ export default function MemberProfile(props) {
     }
   };
 
-  return (
+  // TODO: skeleton is not rendered during load
+  return isLoading ? (
+    <>
+      <Skeleton variant="text" animation="wave" />
+      <Skeleton variant="text" animation="wave" />
+      <Skeleton variant="text" animation="wave" />
+    </>
+  ) : (
     <Formik
       initialValues={initialState}
       onSubmit={(formData, { setSubmitting, resetForm }) => {

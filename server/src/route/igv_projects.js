@@ -9,7 +9,7 @@ const {
 } = require("../utils/parse");
 
 // view projects API
-router.get("", (req, res, next) => {
+router.get("/", (req, res, next) => {
   // if id present send only requested project details
   if (req.query.expaId) {
     // console.log(req.query);
@@ -17,8 +17,8 @@ router.get("", (req, res, next) => {
     const getIgvProject = `SELECT * FROM igv_project where expa_id='${req.query.expaId}';`;
     execQuery(getIgvProject)
       .then((rows) => {
-        console.log(rows[0]);
-        data = objectKeysSnakeToCamel(rows[0]);
+        console.log(rows);
+        data = objectKeysSnakeToCamel(rows);
         res.status(200).json(data);
       })
       .catch((err) => {
@@ -39,9 +39,9 @@ router.get("", (req, res, next) => {
 // edit, update, delete access only for iGV LCVP
 
 //API for adding new iGV project
-router.post("", (req, res, next) => {
+router.post("/", (req, res, next) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
 
     const [fields, values] = requestBodyToFieldsAndValues(req.body);
 
@@ -62,7 +62,7 @@ router.post("", (req, res, next) => {
 
 //edit igv projects
 
-router.put("", (req, res, next) => {
+router.put("/", (req, res, next) => {
   try {
     const [fields, values] = requestBodyToFieldsAndValues(req.body);
     // Combine the two arrays into a single array.
@@ -72,7 +72,7 @@ router.put("", (req, res, next) => {
       updateString += fields[i] + " = ";
       updateString += values[i] + ", ";
     }
-
+    console.log(values);
     updateString = updateString.substring(0, updateString.length - 2);
 
     const updateIgvProjectQuery = `UPDATE igv_project SET ${updateString} WHERE expa_id=${values[0]};`;
@@ -91,7 +91,7 @@ router.put("", (req, res, next) => {
 
 // delete iGV project
 
-router.delete("", (req, res, next) => {
+router.delete("/", (req, res, next) => {
   try {
     const deleteMemberQuery = `DELETE FROM igv_project WHERE expa_id=${req.query.expaId}`;
     execQuery(deleteMemberQuery)

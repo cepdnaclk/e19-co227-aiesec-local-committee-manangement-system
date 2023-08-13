@@ -9,12 +9,12 @@ const {
 const { connection, execQuery } = require("../database/database");
 
 // view slots for each project - should be accessed within each project
-router.get("", (req, res, next) => {
-  //const getIgvProject = `SELECT * FROM igv_slot where project_name='${req.query.project_name}';`;
+router.get("/", (req, res, next) => {
+  console.log(req);
   const getIgvSlot = `SELECT * FROM igv_slot where expa_id='${req.query.expaId}';`;
   execQuery(getIgvSlot)
     .then((rows) => {
-      data = objectKeysSnakeToCamel(rows[0]);
+      data = rows.map((row) => objectKeysSnakeToCamel(row));
       res.status(200).json(data);
     })
     .catch((err) => {
@@ -25,7 +25,7 @@ router.get("", (req, res, next) => {
 // edit, update, delete access only for iGV LCVP
 
 // adding new slot per each project - should be accessed within each project
-router.post("", (req, res, next) => {
+router.post("/", (req, res, next) => {
   try {
     console.log(req.body);
 
@@ -49,7 +49,7 @@ router.post("", (req, res, next) => {
 });
 
 //edit igv project slot
-router.put("", (req, res, next) => {
+router.put("/", (req, res, next) => {
   try {
     const [fields, values] = requestBodyToFieldsAndValues(req.body);
     // Combine the two arrays into a single array.
@@ -62,7 +62,7 @@ router.put("", (req, res, next) => {
 
     updateString = updateString.substring(0, updateString.length - 2);
 
-    const updateIgvSlotQuery = `UPDATE igv_slot SET ${updateString} WHERE expa_id=${values[0]};`;
+    const updateIgvSlotQuery = `UPDATE igv_slot SET ${updateString} WHERE expa_id=${values[0]} AND slot_id=${values[1]};`;
 
     execQuery(updateIgvSlotQuery)
       .then((rows) => {
@@ -79,9 +79,9 @@ router.put("", (req, res, next) => {
 });
 
 // for deleting igv slots
-router.delete("", (req, res, next) => {
+router.delete("/", (req, res, next) => {
   try {
-    const deleteIgvSlotQuery = `DELETE FROM igv_slot WHERE expa_id=${req.query.expa_id}`;
+    const deleteIgvSlotQuery = `DELETE FROM igv_slot WHERE expa_id=${req.query.expaId} AND slot_id=${req.query.slotId}`;
     execQuery(deleteIgvSlotQuery)
       .then((rows) => {
         res

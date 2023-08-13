@@ -141,8 +141,8 @@ CREATE TABLE igv_slot (
     expa_id         INT(7),
     slot_id         INT(4) AUTO_INCREMENT PRIMARY KEY,
     title           VARCHAR(25),
-    start_date      DATE,
-    end_date        DATE,
+    start_date      CHAR(10),
+    end_date        CHAR(10),
     num_openings    INT(2),
 
     FOREIGN KEY(expa_id) REFERENCES igv_project(expa_id)
