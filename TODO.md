@@ -1,12 +1,12 @@
 ## General
 
-[ ] Porting project to typescript
-[ ] JWT refresh tokens
-[ ] Allow console logging only in debugging by creating a global variable called "DEBUG" and replacing "console.log()" statements to "DEBUG && console.log()"
+- [ ] Porting project to typescript
+- [ ] JWT refresh tokens
+- [ ] Allow console logging only in debugging by creating a global variable called "DEBUG" and replacing "console.log()" statements to "DEBUG && console.log()"
 
 ## Frontend
 
-[ ] Global data store for data such as genders etc.
+- [ ] Global data store for data such as genders etc.
 
 ### Components
 
@@ -43,4 +43,4 @@
 
 ## Backend
 
-[ ] Handle empty row returns from sql calls otherwise the map functions will break
+- [ ] Handle empty row returns from sql calls otherwise the map functions will break
