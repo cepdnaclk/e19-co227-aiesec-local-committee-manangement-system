@@ -334,3 +334,16 @@ INSERT INTO igv_question (expa_id, question) VALUES
 ,(1234567, "Why is gamora?")
 ,(1234567, "When we fall asleep where do we go?")
 ;
+
+INSERT INTO igv_interview_log (app_id, question_id, answer) VALUES
+
+(12345, 1, "Awoooo")
+,(12345, 2, "What?")
+,(12345, 3, "Ananthayata")
+;
+
+INSERT INTO igv_slots (expa_id, title, start_date, end_date, num_openings) VALUES
+
+(1234567, "August - 1", "2023-08-25", , 3 )
+,(1234567, "September - 2", "2023-09-10", , 5)
+;
