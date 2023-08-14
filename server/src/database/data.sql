@@ -344,8 +344,8 @@ INSERT INTO igv_interview_log (app_id, question_id, answer) VALUES
 
 INSERT INTO igv_slots (expa_id, title, start_date, end_date, num_openings) VALUES
 
-(1234567, "August - 1", "2023-08-25", , 3 )
-,(1234567, "September - 2", "2023-09-10", , 5)
+(1234567, "August - 1", "2023-08-25", "2023-09-10", 3 )
+,(1234567, "September - 2", "2023-09-10", "2023-10-25" , 5)
 ;
 
 INSERT INTO lc_event (title, event_description, post_link, event_date) VALUES

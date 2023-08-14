@@ -100,3 +100,12 @@ SELECT
 FROM
     member;
 END;
+
+#produre to calculate slot end date after start date is added
+CREATE PROCEDURE CalculateEndDate(IN start_date DATE, OUT end_date DATE)
+BEGIN
+    SET end_date = DATE_ADD(start_date, INTERVAL 6 WEEK);
+END;
+
+CALL CalculateEndDate('2023-08-14', @output);
+SELECT @output AS calculated_end_date;
