@@ -12,95 +12,118 @@ const { connection, execQuery } = require("../database/database");
 
 // view all applications - recent ones first
 
-router.get("", (req, res) => {
-    // id present send only requested user
-    if (req.query.ep_name) {
-      const getIgvApplication = `SELECT * FROM igv_application where ep_name='${req.query.ep_name}' ORDER BY applied_date DESC;`;
-      execQuery(getIgvApplication)
-        .then((rows) => {
-          data = objectKeysSnakeToCamel(rows[0]);
-          res.status(200).json(data);
-        })
-        .catch((err) => {
-          next(err);
-        });
-    } else {
-      const getIgvApplication = `SELECT * FROM igv_application ORDER BY applied_date DESC ;`;
-  
-      execQuery(getIgvApplication)
-        .then((rows) => {
-          data = rows.map((row) => objectKeysSnakeToCamel(row));
-          res.status(200).json(data);
-        })
-        .catch();
-    }
-  });
+router.get("/", (req, res, next) => {
+  // id present send only requested user
+  if (req.query.appId) {
+    const getIgvApplication = `SELECT * FROM igv_application where app_id='${req.query.appId}';`;
+    execQuery(getIgvApplication)
+      .then((rows) => {
+        data = objectKeysSnakeToCamel(rows[0]);
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } else {
+    const getIgvApplication = `CALL GetAllApplications()`;
+
+    execQuery(getIgvApplication)
+      .then((rows) => {
+        data = rows[0].map((row) => objectKeysSnakeToCamel(row));
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+});
+
+router.get("/resources/", (req, res, next) => {
+  execQuery("CALL GetApplicationResources()")
+    .then((rows) => {
+      data = rows[0].map((row) => objectKeysSnakeToCamel(row));
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+router.get("/members/", (req, res, next) => {
+  execQuery("CALL GetInChargeMemberList()")
+    .then((rows) => {
+      data = rows[0].map((row) => objectKeysSnakeToCamel(row));
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
 
 // add date into application
-router.post("", (req, res, next) => {
-    try {
-        console.log(req.body);
+router.post("/", (req, res, next) => {
+  try {
+    console.log(req.body);
 
-        const [fields, values] = requestBodyToFieldsAndValues(req.body);
-        const igvApplicationAddQuery = `INSERT INTO igv_application (${fields.toString()}) VALUES (${values.toString()})`;
+    const [fields, values] = requestBodyToFieldsAndValues(req.body);
+    const igvApplicationAddQuery = `INSERT INTO igv_application (${fields.toString()}) VALUES (${values.toString()})`;
 
-        execQuery(igvApplicationAddQuery)
-        .then((rows) => {
-            res.status(200).json({ message: "New Application Added Successfully" });
-        })
-        .catch((err) => {
-            next(err);
-        });
-
-    } catch (err) {
+    execQuery(igvApplicationAddQuery)
+      .then((rows) => {
+        res.status(200).json({ message: "New Application Added Successfully" });
+      })
+      .catch((err) => {
         next(err);
-    }
+      });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // edit igv application
 
-router.put("", (req, res, next) => {
-    try {
-      const [fields, values] = requestBodyToFieldsAndValues(req.body);
-      // Combine the two arrays into a single array.
-      let updateString = "";
-  
-      for (let i = 0; i < fields.length; i++) {
-        updateString += fields[i] + " = ";
-        updateString += values[i] + ", ";
-      }
-  
-      updateString = updateString.substring(0, updateString.length - 2);
-  
-      const updateIgvApplicationQuery = `UPDATE igv_application SET ${updateString} WHERE id=${values[0]};`;
-  
-      execQuery(updateIgvApplicationQuery)
-        .then((rows) => {
-          res.status(200).json({ message: "Application updated successfully" });
-        })
-        .catch((err) => {
-          next(err);
-        });
-    } catch (err) {
-      next(err);
-    }
-  });
+router.put("/", (req, res, next) => {
+  try {
+    const [fields, values] = requestBodyToFieldsAndValues(req.body);
+    // Combine the two arrays into a single array.
+    let updateString = "";
 
-// delete application - delete access only for LCVP iGV 
-
-router.delete("", (req, res, next) => {
-    try {
-      const deleteMemberQuery = `DELETE FROM igv_application WHERE id=${req.query.id}`;
-      execQuery(deleteMemberQuery)
-        .then((rows) => {
-          res.status(200).json({ message: "Member deleted Sucessfully" });
-        })
-        .catch((err) => {
-          next(err);
-        });
-    } catch (err) {
-      next(err);
+    for (let i = 0; i < fields.length; i++) {
+      updateString += fields[i] + " = ";
+      updateString += values[i] + ", ";
     }
+
+    updateString = updateString.substring(0, updateString.length - 2);
+
+    const updateIgvApplicationQuery = `UPDATE igv_application SET ${updateString} WHERE app_id=${req.query.appId};`;
+
+    execQuery(updateIgvApplicationQuery)
+      .then((rows) => {
+        res.status(200).json({ message: "Application updated successfully" });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } catch (err) {
+    next(err);
+  }
 });
-  
-  module.exports = router;
+
+// delete application - delete access only for LCVP iGV
+
+router.delete("/", (req, res, next) => {
+  try {
+    const deleteMemberQuery = `DELETE FROM igv_application WHERE app_id=${req.query.appId}`;
+    execQuery(deleteMemberQuery)
+      .then((rows) => {
+        res.status(200).json({ message: "Member deleted Sucessfully" });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } catch (err) {
+    next(err);
+  }
+});
+
+module.exports = router;

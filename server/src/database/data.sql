@@ -266,18 +266,25 @@ INSERT INTO igv_project (expa_id, project_name, sdg, jd, opp_provider, food, tra
 (1234567, "Global Classroom - Kandy", 4, 
 "1. Participate in activites to teach English to children. 
 2. Conduct practical activites", "Britshway English Acadamy", "Provided", "Covered", "Provided and Covered", "Only for europeans" );
+INSERT INTO igv_slot (expa_id, title, start_date, end_date, num_openings) VALUES 
+(
+    1234567,
+    "Slot 1",
+    "2020-01-01",
+    "2020-02-02",
+    "2"
+);
 
 INSERT INTO igv_application (
 ep_id,          
 app_id,         
 app_status,     
 ep_name,        
-incharge_member,
+incharge_member_id,
 team,           
 applied_date,   
-contacted_date, 
-project_name,   
-slot_name,      
+contacted_date,   
+slot_id,      
 project_expa_id,
 gender,         
 home_mc,        
@@ -299,12 +306,11 @@ approved_date
 1234567,
 "OPEN", 
 "Tony Tamer", 
-"Dilini", 
+1, 
 "Team1", 
 "2023-07-31",
 "2023-08-01",
-"Global Classroom",
-"GC-Kandy September 1",
+1,
 1234567,
 "M", 
 "Turkey", 
@@ -322,14 +328,6 @@ approved_date
 "2023-08-04"
 );
 
-INSERT INTO igv_slot (expa_id, title, start_date, end_date, num_openings) VALUES 
-(
-    1234567,
-    "Slot 1",
-    "2020-01-01",
-    "2020-02-02",
-    "2"
-);
 
 INSERT INTO igv_question (expa_id, question) VALUES 
 (1234567, "What does the fox say?")

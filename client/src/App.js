@@ -29,6 +29,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 import AdminRoutes from "./utils/AdminRoutes";
 import Terms from "./pages/Terms/Terms";
+import ApplicationView from "./pages/Application/ApplicationView";
 
 function App() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -125,6 +126,14 @@ function App() {
                 </Button>
                 <Button
                   component={Link}
+                  to="/applications"
+                  variant="text"
+                  disableElevation
+                >
+                  Applications
+                </Button>
+                <Button
+                  component={Link}
                   to="/terms"
                   variant="text"
                   disableElevation
@@ -158,7 +167,7 @@ function App() {
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleProfileMenuClose}
-                aria-labelledby="profile-buttin"
+                aria-labelledby="profile-button"
               >
                 <MenuItem onClick={handleProfileMenuClose}>My Profile</MenuItem>
                 <MenuItem
@@ -194,6 +203,7 @@ function App() {
               <Route path="/users" element={<MemberView />} />
               <Route path="/projects" element={<ProjectView />} />
               <Route path="/terms" element={<Terms />} />
+              <Route path="/applications" element={<ApplicationView />} />
             </Route>
             <Route element={<AdminRoutes />}></Route>
             <Route path="/" element={<h1>{"Home"}</h1>} />

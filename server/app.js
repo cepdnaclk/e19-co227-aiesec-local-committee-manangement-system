@@ -26,6 +26,7 @@ app.use("/resource", require("./src/route/resource"));
 app.use("/project", require("./src/route/igv_projects"));
 app.use("/slot", require("./src/route/igv_slots"));
 app.use("/question", require("./src/route/igv_question"));
+app.use("/application", require("./src/route/igv_application"));
 
 // error logging
 app.use(require("./src/middleware/errorLogger"));

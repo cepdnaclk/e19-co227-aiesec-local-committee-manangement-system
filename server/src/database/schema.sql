@@ -173,12 +173,12 @@ CREATE TABLE igv_application (
     app_id          INT(5) AUTO_INCREMENT PRIMARY KEY, /* one ep can have multiple applications*/
     app_status      VARCHAR(15),
     ep_name         VARCHAR(50),
-    incharge_member VARCHAR(50), /* member_id ??? */
+    incharge_member_id INT(5),
     team            VARCHAR(15),
     applied_date    CHAR(10),
     contacted_date  CHAR(10),
-    project_name    VARCHAR(20),
-    slot_name       VARCHAR(25),
+    /* project_name    VARCHAR(20),*/
+    slot_id       INT(4),
     project_expa_id INT(7), /* f KEY */
     gender          CHAR(1),  /* M/F */
     home_mc         VARCHAR(25),
@@ -206,8 +206,9 @@ CREATE TABLE igv_application (
 
     /* foreign key declaration */ 
 
-    FOREIGN KEY (project_expa_id) REFERENCES igv_project(expa_id)
-
+    FOREIGN KEY (project_expa_id) REFERENCES igv_project(expa_id),
+    FOREIGN KEY (incharge_member_id) REFERENCES member(id),
+    FOREIGN KEY (slot_id) REFERENCES igv_slot(slot_id)
 );
 
 /* =================== iGV INTERVIEW LOG TABLE =========*/

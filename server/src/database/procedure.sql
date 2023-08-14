@@ -52,3 +52,51 @@ FROM
 WHERE
     id = id;
 END;
+
+CREATE PROCEDURE GetAllApplications()
+BEGIN
+SELECT 
+    a.ep_id,
+    a.app_status,
+    a.app_id,
+    a.ep_name,
+    m.preferred_name as incharge_member,
+    p.project_name,
+    s.title as slot_name
+FROM 
+    igv_application as a
+LEFT JOIN
+    igv_project as p
+ON
+    a.project_expa_id = p.expa_id
+LEFT JOIN
+    igv_slot as s
+ON
+    a.slot_id = s.slot_id
+LEFT JOIN
+    member as m
+ON
+    a.incharge_member_id = m.id
+ORDER BY 
+    a.applied_date DESC ;
+END;
+
+CREATE PROCEDURE GetApplicationResources()
+BEGIN
+SELECT
+    p.expa_id as 'key',
+    p.project_name as 'value',
+    JSON_ARRAYAGG(JSON_OBJECT('key',s.slot_id,'value', s.title)) as 'slots'
+FROM igv_project AS p, igv_slot As s
+WHERE p.expa_id = s.expa_id
+GROUP BY p.expa_id, p.project_name;
+END;
+
+CREATE PROCEDURE GetInChargeMemberList()
+BEGIN
+SELECT
+    id as 'key',
+    preferred_name as 'value'
+FROM
+    member;
+END;

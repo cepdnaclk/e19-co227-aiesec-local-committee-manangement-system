@@ -84,6 +84,7 @@ export default function MemberProfile(props) {
     boardingAddress: "",
   });
 
+  // TODO: create a global store for storing global data
   const genders = [
     { key: "M", value: "Male" },
     { key: "F", value: "Female" },
