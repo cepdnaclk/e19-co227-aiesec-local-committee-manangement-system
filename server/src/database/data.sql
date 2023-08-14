@@ -347,3 +347,7 @@ INSERT INTO igv_slots (expa_id, title, start_date, end_date, num_openings) VALUE
 (1234567, "August - 1", "2023-08-25", , 3 )
 ,(1234567, "September - 2", "2023-09-10", , 5)
 ;
+
+INSERT INTO lc_event (title, event_description, post_link, event_date) VALUES
+
+("Local Committee Meeting - August", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30");

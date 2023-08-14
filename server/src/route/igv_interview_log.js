@@ -64,9 +64,9 @@ router.get("/", (req, res, next) => {
   
       // updateString = updateString.substring(0, updateString.length - 2);
   
-      const updateIgvQuestionQuery = `UPDATE igv_interview_log SET question='${req.body.question}' WHERE expa_id=${req.body.expaId} AND question_id=${req.body.questionId};`;
+      const updateIgvAnswerQuery = `UPDATE igv_interview_log SET answer='${req.body.question}' WHERE app_id=${req.body.appId} AND question_id=${req.body.questionId};`;
   
-      execQuery(updateIgvQuestionQuery)
+      execQuery(updateIgvAnswerQuery)
         .then((rows) => {
           res.status(200).json({ message: "iGV Answer edited successfully" });
         })

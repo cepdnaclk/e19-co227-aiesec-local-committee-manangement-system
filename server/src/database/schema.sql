@@ -66,7 +66,7 @@ CREATE TABLE valid_pair (
 );
 
 /* =============== MEMEBERS MASTER TABLE =============== */
-CREATE TABLE member (
+CREATE TABLE member ( 
 
     id       INT(5) AUTO_INCREMENT PRIMARY KEY,
 
@@ -109,10 +109,23 @@ CREATE TABLE member (
 
 /* =============== TERMS TABLE =============== */
 CREATE TABLE term (
+
     title                   VARCHAR(10) PRIMARY KEY NOT NULL, #yy-Summer/Winter
     start_date              DATE NOT NULL,
     end_date                DATE NOT NULL,
     newbie_recruitment_date DATE NOT NULL
+);
+
+/* =============== UPCOMING EVENTS TABLE =========*/
+
+CREATE TABLE lc_event (
+
+    event_id                INT(4) AUTO_INCREMENT PRIMARY KEY,
+    title                   VARCHAR(50),
+    event_description       VARCHAR(200),
+    post_link               VARCHAR(255),
+    event_date              DATE #remove when current date is past the event date
+
 );
 
 /* =============== TEAMS TABLE =============== */
