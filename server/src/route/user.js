@@ -11,7 +11,7 @@ router.post("/login", (req, res) => {
     const password = req.body.password;
     console.log(email, password);
 
-    const queryFindUser = `SELECT id, email, passphrase 
+    const queryFindUser = `SELECT id, email, passphrase, role_id, preferred_name 
                                 FROM member 
                                 WHERE email = ?;`;
 
@@ -31,7 +31,14 @@ router.post("/login", (req, res) => {
 
       // Successful login, proceed with further actions
       const accessToken = jwt.sign(user.id, process.env.ACCESS_TOKEN_SECRET);
-      res.json({ message: "Login successful", accessToken: accessToken });
+      res.json({
+        message: "Login successful",
+        accessToken: accessToken,
+        id: user.id,
+        // TODO: snake to camel conversion of query
+        preferredName: user.preferred_name,
+        roleId: user.role_id,
+      });
     });
   } catch (error) {
     console.error("Error during login:", error);

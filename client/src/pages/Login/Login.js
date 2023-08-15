@@ -50,6 +50,9 @@ export default function Login() {
 
       setUser({
         email: credentials.email,
+        preferredName: response?.data?.preferredName,
+        roleId: response?.data?.roleId,
+        id: response?.data?.id,
       });
       setToken(response?.data?.accessToken);
       // const roles = response?.data?.roles;

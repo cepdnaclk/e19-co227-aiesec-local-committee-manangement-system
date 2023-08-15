@@ -134,7 +134,7 @@ VALUES
     "1",
     "1",
     "2019-01-01",
-    "4",
+    "1",
     "1234567890",
     "john@example.com",
     "M",
@@ -324,7 +324,7 @@ approved_date
 "092092484",
 "tony@aiesec.net",
 "Note test 1 3 4",
-"2023-08-02",
+"2023-10-02",
 "1.30 PM",
 "EP manager 1",
 "03655989966",
@@ -351,4 +351,6 @@ INSERT INTO igv_slot (expa_id, title, start_date, end_date, num_openings) VALUES
 
 INSERT INTO lc_event (title, event_description, post_link, event_date) VALUES
 
-("Local Committee Meeting - August", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30");
+("Local Committee Meeting - August", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
+,("Local Committee Meeting - September", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
+;

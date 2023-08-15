@@ -141,3 +141,15 @@ BEGIN
         SET i = i + 1;
     END WHILE;
 END;
+
+CREATE PROCEDURE GetUpcomingInterviews(IN id INT(5))
+BEGIN
+SELECT
+    ep_name, interview_date, interview_time
+FROM
+    igv_application
+WHERE
+    incharge_member_id = id
+AND
+    DATE(interview_date) >= CURDATE();
+END;

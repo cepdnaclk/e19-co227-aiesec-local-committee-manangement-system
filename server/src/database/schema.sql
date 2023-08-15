@@ -124,7 +124,7 @@ CREATE TABLE lc_event (
     title                   VARCHAR(50),
     event_description       VARCHAR(200),
     post_link               VARCHAR(255),
-    event_date              DATE #remove when current date is past the event date
+    event_date              CHAR(10) #remove when current date is past the event date
 
 );
 

@@ -157,4 +157,18 @@ router.put("/log/", (req, res, next) => {
     });
 });
 
+router.get("/upcoming/", (req, res, next) => {
+  execQuery(
+    // Enclose the json array in '' to make it a valid json string
+    `CALL GetUpcomingInterviews(${req.query.id});`
+  )
+    .then((rows) => {
+      data = rows[0].map((row) => objectKeysSnakeToCamel(row));
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
 module.exports = router;

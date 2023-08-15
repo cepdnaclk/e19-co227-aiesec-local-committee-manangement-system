@@ -533,7 +533,14 @@ const ApplicationProfile = (props) => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Divider textAlign="center">
-              <Chip label="Interview Log"></Chip>
+              <Chip
+                label="Interview Log"
+                sx={{
+                  background:
+                    // "linear-gradient(to right bottom, #F3F4F7, #52565E)",
+                    "#7552CC",
+                }}
+              ></Chip>
             </Divider>
           </Grid>
           <Grid item xs={12}>

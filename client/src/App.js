@@ -22,6 +22,7 @@ import {
   Switch,
   ScopedCssBaseline,
   Paper,
+  IconButton,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -30,15 +31,29 @@ import CssBaseline from "@mui/material/CssBaseline";
 import AdminRoutes from "./utils/AdminRoutes";
 import Terms from "./pages/Terms/Terms";
 import ApplicationView from "./pages/Application/ApplicationView";
+import Home from "./pages/Home/Home";
+
+import DarkLogo from "./assets/White-Black-Logo.png";
+import LightLogo from "./assets/Black-Logo.png";
+import BlueLogo from "./assets/Blue-Logo.png";
 
 function App() {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const menuOpen = Boolean(menuAnchorEl);
   const handleProfileMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    setMenuAnchorEl(event.currentTarget);
   };
   const handleProfileMenuClose = () => {
-    setAnchorEl(null);
+    setMenuAnchorEl(null);
+  };
+
+  const [adminAnchorEl, setAdminAnchorEl] = useState(null);
+  const adminOpen = Boolean(adminAnchorEl);
+  const handleAdminMenuClick = (event) => {
+    setAdminAnchorEl(event.currentTarget);
+  };
+  const handleAdminMenuClose = () => {
+    setAdminAnchorEl(null);
   };
 
   const { user } = useContext(UserContext);
@@ -50,7 +65,13 @@ function App() {
       createTheme({
         palette: {
           mode: prefersDarkMode ? "dark" : "light",
-          // primary: { main: "#037ef3" },
+          primary: { main: "#037ef3" },
+          navButton: {
+            main: "#E3D026",
+            light: "#E9DB5D",
+            dark: "#A29415",
+            contrastText: "#242105",
+          },
         },
         components: {
           MuiCssBaseline: {
@@ -101,29 +122,37 @@ function App() {
             sx={{ borderRadius: "10px" }}
           >
             <Toolbar>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Title
-              </Typography>
+              <Box
+                component="img"
+                // src={prefersDarkMode ? DarkLogo : LightLogo}
+                src={BlueLogo}
+                sx={{ maxWidth: "200px" }}
+              />
+              {/* the empty typography component will grow pushing the stack to the right */}
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{ flexGrow: 1 }}
+              ></Typography>
+              {/* <IconButton edge="start" disabled={true}>
+                <Box
+                  component="img"
+                  src={Logo}
+                  sx={{ maxWidth: "200px"}}
+                />
+              </IconButton> */}
               <Stack direction="row" spacing={2}>
                 <Button component={Link} to="/" variant="text" disableElevation>
                   Home
                 </Button>
-                <Button
+                {/* <Button
                   component={Link}
                   to="/users"
                   variant="text"
                   disableElevation
                 >
                   Users
-                </Button>
-                <Button
-                  component={Link}
-                  to="/projects"
-                  variant="text"
-                  disableElevation
-                >
-                  Projects
-                </Button>
+                </Button> */}
                 <Button
                   component={Link}
                   to="/applications"
@@ -132,27 +161,39 @@ function App() {
                 >
                   Applications
                 </Button>
-                <Button
+                {user?.roleId === 0 || user?.roleId === 1 ? (
+                  <Button
+                    id="admin-button"
+                    onClick={handleAdminMenuClick}
+                    aria-controls={adminOpen ? "admin-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={adminOpen ? "true" : undefined}
+                  >
+                    Admin
+                  </Button>
+                ) : null}
+                {/* <Button
                   component={Link}
                   to="/terms"
                   variant="text"
                   disableElevation
                 >
                   Terms
-                </Button>
+                </Button> */}
                 {/* Selectively render login or profile dashboard */}
                 {user ? (
                   <Button
                     id="profile-button"
                     onClick={handleProfileMenuClick}
-                    aria-controls={open ? "profile-menu" : undefined}
+                    aria-controls={menuOpen ? "profile-menu" : undefined}
                     aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
+                    aria-expanded={menuOpen ? "true" : undefined}
                   >
-                    Hey {user.email}
+                    Hey {user.preferredName}
                   </Button>
                 ) : (
                   <Button
+                    color="navButton"
                     component={Link}
                     to="/login"
                     variant="text"
@@ -164,10 +205,15 @@ function App() {
               </Stack>
               <Menu
                 id="profile-menu"
-                anchorEl={anchorEl}
-                open={open}
+                anchorEl={menuAnchorEl}
+                open={menuOpen}
                 onClose={handleProfileMenuClose}
                 aria-labelledby="profile-button"
+                sx={{
+                  marginTop: "10px",
+                  borderRadius: 10,
+                  p: 5,
+                }}
               >
                 <MenuItem onClick={handleProfileMenuClose}>My Profile</MenuItem>
                 <MenuItem
@@ -193,6 +239,42 @@ function App() {
                   />
                 </MenuItem>
               </Menu>
+              {user?.roleId === 0 || user?.roleId === 1 ? (
+                <Menu
+                  id="admin-menu"
+                  anchorEl={adminAnchorEl}
+                  open={adminOpen}
+                  onClose={handleAdminMenuClose}
+                  aria-labelledby="admin-button"
+                  sx={{
+                    marginTop: "10px",
+                    borderRadius: 10,
+                    p: 5,
+                  }}
+                >
+                  <MenuItem
+                    onClick={handleAdminMenuClose}
+                    component={Link}
+                    to="/projects"
+                  >
+                    Project
+                  </MenuItem>
+                  <MenuItem
+                    onClick={handleAdminMenuClose}
+                    component={Link}
+                    to="/terms"
+                  >
+                    Terms
+                  </MenuItem>
+                  <MenuItem
+                    onClick={handleAdminMenuClose}
+                    component={Link}
+                    to="/users"
+                  >
+                    Users
+                  </MenuItem>
+                </Menu>
+              ) : null}
             </Toolbar>
           </AppBar>
         </Box>
@@ -200,13 +282,14 @@ function App() {
           {/* <Paper sx={{ p: 0.5, borderRadius: "10px" }}> */}
           <Routes>
             <Route element={<ProtectedRoutes />}>
+              <Route path="/applications" element={<ApplicationView />} />
+            </Route>
+            <Route element={<AdminRoutes />}>
               <Route path="/users" element={<MemberView />} />
               <Route path="/projects" element={<ProjectView />} />
               <Route path="/terms" element={<Terms />} />
-              <Route path="/applications" element={<ApplicationView />} />
             </Route>
-            <Route element={<AdminRoutes />}></Route>
-            <Route path="/" element={<h1>{"Home"}</h1>} />
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
           </Routes>
           {/* </Paper> */}
