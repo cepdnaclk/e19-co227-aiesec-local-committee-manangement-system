@@ -126,4 +126,35 @@ router.delete("/", (req, res, next) => {
   }
 });
 
+router.get("/log/", (req, res, next) => {
+  // if id present send only requested project details
+
+  const getInterviewLog = `CALL GetInterviewLog(${req.query.appId});`;
+
+  execQuery(getInterviewLog)
+    .then((rows) => {
+      // console.log(rows);
+      data = rows[0].map((row) => objectKeysSnakeToCamel(row));
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+router.put("/log/", (req, res, next) => {
+  execQuery(
+    // Enclose the json array in '' to make it a valid json string
+    `CALL UpdateInterviewLog('${JSON.stringify(req.body)}', ${
+      req.query.appId
+    });`
+  )
+    .then((rows) => {
+      res.status(200).json({ message: "Log Updated Successfully" });
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
 module.exports = router;

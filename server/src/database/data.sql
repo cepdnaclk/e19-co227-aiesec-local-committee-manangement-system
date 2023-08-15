@@ -275,6 +275,12 @@ INSERT INTO igv_slot (expa_id, title, start_date, end_date, num_openings) VALUES
     "2"
 );
 
+INSERT INTO igv_question (expa_id, question) VALUES 
+(1234567, "What does the fox say?")
+,(1234567, "Why is gamora?")
+,(1234567, "When we fall asleep where do we go?")
+;
+
 INSERT INTO igv_application (
 ep_id,          
 app_id,         
@@ -329,20 +335,15 @@ approved_date
 );
 
 
-INSERT INTO igv_question (expa_id, question) VALUES 
-(1234567, "What does the fox say?")
-,(1234567, "Why is gamora?")
-,(1234567, "When we fall asleep where do we go?")
-;
 
-INSERT INTO igv_interview_log (app_id, question_id, answer) VALUES
+/*INSERT INTO igv_interview_log (app_id, question_id, answer) VALUES
 
-(12345, 1, "Awoooo")
-,(12345, 2, "What?")
-,(12345, 3, "Ananthayata")
-;
+(1234567, 1, "Awoooo")
+,(1234567, 2, "What?")
+,(1234567, 3, "Ananthayata")
+;*/
 
-INSERT INTO igv_slots (expa_id, title, start_date, end_date, num_openings) VALUES
+INSERT INTO igv_slot (expa_id, title, start_date, end_date, num_openings) VALUES
 
 (1234567, "August - 1", "2023-08-25", "2023-09-10", 3 )
 ,(1234567, "September - 2", "2023-09-10", "2023-10-25" , 5)

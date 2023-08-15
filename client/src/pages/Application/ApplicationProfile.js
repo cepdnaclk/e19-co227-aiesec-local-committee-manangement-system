@@ -3,6 +3,7 @@ import axios from "../../api/axios";
 import { UserContext } from "../../context/UserContext";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
+import InterviewLog from "./InterviewLog";
 import ValidatedTextField from "../../components/ValidatedTextField";
 import ValidatedPasswordField from "../../components/ValidatedPasswordField";
 import ValidatedSelectField from "../../components/ValidatedSelectField";
@@ -306,220 +307,245 @@ const ApplicationProfile = (props) => {
       <Skeleton variant="text" animation="wave" />
     </>
   ) : (
-    <Formik
-      initialValues={initialState}
-      onSubmit={(formData, { setSubmitting, resetForm }) => {
-        setSubmitting(true);
-        if (formState.mode.includes("add")) handleAdd(formData);
-        else if (formState.mode.includes("edit")) handleEdit(formData);
-        else handleDelete(formData);
-        setSubmitting(false);
-      }}
-      validationSchema={formSchema}
-      enableReinitialize
-    >
-      {({ values, errors, touched, isSubmitting, resetForm, handleChange }) => (
-        <Form>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <pre>{JSON.stringify(values, null, 2)}</pre>
+    <>
+      <Formik
+        initialValues={initialState}
+        onSubmit={(formData, { setSubmitting, resetForm }) => {
+          setSubmitting(true);
+          if (formState.mode.includes("add")) handleAdd(formData);
+          else if (formState.mode.includes("edit")) handleEdit(formData);
+          else handleDelete(formData);
+          setSubmitting(false);
+        }}
+        validationSchema={formSchema}
+        enableReinitialize
+      >
+        {({
+          values,
+          errors,
+          touched,
+          isSubmitting,
+          resetForm,
+          handleChange,
+        }) => (
+          <Form>
+            <Grid container spacing={2}>
+              {/* <Grid item xs={12}>
+                <pre>{JSON.stringify(values, null, 2)}</pre>
+              </Grid> */}
+              <Grid item xs={6}>
+                <ValidatedTextField
+                  name="epId"
+                  label="EP ID"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedSelectField
+                  name="appStatus"
+                  label="Status"
+                  options={applicationStatus[values["appStatus"]]}
+                  disabled={
+                    areFieldsDisabled ||
+                    values.appStatus === "REJECTED" ||
+                    values.appStatus === "WITHDRAWN" ||
+                    values.appStatus === "APPROVED"
+                  }
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedTextField
+                  name="epName"
+                  label="EP Name"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedSelectField
+                  name="inchargeMemberId"
+                  label="In Charge Member"
+                  options={members}
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedTextField
+                  // TODO: Load Teams from DB
+                  name="team"
+                  label="Team"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedDateField
+                  name="appliedDate"
+                  label="Applied Date"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedDateField
+                  name="contactedDate"
+                  label="Contacted Date"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedSelectField
+                  name="projectExpaId"
+                  label="Project"
+                  options={projects}
+                  disabled={areFieldsDisabled}
+                  onChange={(e) => {
+                    // Call default Formik handleChange()
+                    handleChange(e);
+                    // Additionally load the related slots
+                    const currProject = projects.find((obj) => {
+                      return obj.key === e.target.value;
+                    });
+                    console.log(currProject);
+                    setSlots(JSON.parse(currProject.slots));
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedSelectField
+                  name="slotId"
+                  label="Slot"
+                  options={slots || []}
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedSelectField
+                  name="gender"
+                  label="Gender"
+                  options={genders}
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedTextField
+                  name="homeMc"
+                  label="Home MC"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedTextField
+                  name="homeLc"
+                  label="Home LC"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedTextField
+                  name="contactNumber"
+                  label="Contact Number"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedTextField
+                  name="email"
+                  label="Email"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <ValidatedTextField
+                  name="notes"
+                  label="Notes"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedDateField
+                  name="interviewDate"
+                  label="Interview Date"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedTextField
+                  name="interviewTime"
+                  label="Interview Time"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedTextField
+                  name="epMngName"
+                  label="EP Manager Name"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedTextField
+                  name="epMngContact"
+                  label="EP Manager Contact"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedTextField
+                  name="epMngEmail"
+                  label="EP Manager Email"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedDateField
+                  name="abhDate"
+                  label="ABH Date"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedDateField
+                  name="acceptedDate"
+                  label="Accepted Date"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedDateField
+                  name="approvedDate"
+                  label="approved Date"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={12} textAlign="right">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  variant="contained"
+                  color={formState.mode.includes("view") ? "error" : "primary"}
+                >
+                  {formState.mode.includes("view") ? "Delete" : "Submit"}
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <ValidatedTextField
-                name="epId"
-                label="EP ID"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedSelectField
-                name="appStatus"
-                label="Status"
-                options={applicationStatus[values["appStatus"]]}
-                disabled={
-                  areFieldsDisabled ||
-                  values.appStatus === "REJECTED" ||
-                  values.appStatus === "WITHDRAWN" ||
-                  values.appStatus === "APPROVED"
-                }
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedTextField
-                name="epName"
-                label="EP Name"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedSelectField
-                name="inchargeMemberId"
-                label="In Charge Member"
-                options={members}
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedTextField
-                // TODO: Load Teams from DB
-                name="team"
-                label="Team"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedDateField
-                name="appliedDate"
-                label="Applied Date"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedDateField
-                name="contactedDate"
-                label="Contacted Date"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedSelectField
-                name="projectExpaId"
-                label="Project"
-                options={projects}
-                disabled={areFieldsDisabled}
-                onChange={(e) => {
-                  // Call default Formik handleChange()
-                  handleChange(e);
-                  // Additionally load the related slots
-                  const currProject = projects.find((obj) => {
-                    return obj.key === e.target.value;
-                  });
-                  console.log(currProject);
-                  setSlots(JSON.parse(currProject.slots));
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedSelectField
-                name="slotId"
-                label="Slot"
-                options={slots || []}
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedSelectField
-                name="gender"
-                label="Gender"
-                options={genders}
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedTextField
-                name="homeMc"
-                label="Home MC"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedTextField
-                name="homeLc"
-                label="Home LC"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedTextField
-                name="contactNumber"
-                label="Contact Number"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedTextField
-                name="email"
-                label="Email"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <ValidatedTextField
-                name="notes"
-                label="Notes"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedDateField
-                name="interviewDate"
-                label="Interview Date"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedTextField
-                name="interviewTime"
-                label="Interview Time"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedTextField
-                name="epMngName"
-                label="EP Manager Name"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedTextField
-                name="epMngContact"
-                label="EP Manager Contact"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedTextField
-                name="epMngEmail"
-                label="EP Manager Email"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedDateField
-                name="abhDate"
-                label="ABH Date"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedDateField
-                name="acceptedDate"
-                label="Accepted Date"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedDateField
-                name="approvedDate"
-                label="approved Date"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={12} textAlign="right">
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                variant="contained"
-                color={formState.mode.includes("view") ? "error" : "primary"}
-              >
-                {formState.mode.includes("view") ? "Delete" : "Submit"}
-              </Button>
-            </Grid>
+          </Form>
+        )}
+      </Formik>
+      {formState.mode === "view" || formState.mode === "edit" ? (
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Divider textAlign="center">
+              <Chip label="Interview Log"></Chip>
+            </Divider>
           </Grid>
-        </Form>
-      )}
-    </Formik>
+          <Grid item xs={12}>
+            <InterviewLog
+              disabled={formState.mode === "view"}
+              appId={focusItem.appId}
+              setSnackbarState={setSnackbarState}
+            />
+          </Grid>
+        </Grid>
+      ) : null}
+    </>
   );
 };
 

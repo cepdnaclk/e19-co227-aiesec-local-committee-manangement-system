@@ -204,6 +204,7 @@ export default function SlotProfile(props) {
           isSubmitting,
           resetForm,
           handleChange,
+          setFieldValue,
         }) => (
           <Form>
             <Grid container spacing={2}>
@@ -220,13 +221,26 @@ export default function SlotProfile(props) {
                   name="startDate"
                   label="Start Date"
                   disabled={areFieldsDisabled}
+                  onChange={(e) => {
+                    // default behaviour
+                    handleChange(e);
+
+                    // calculate end date 6 weeks from now
+                    const startDateString = values.startDate; // input date string
+                    const startDate = new Date(startDateString);
+                    const endDate = new Date(startDate);
+                    endDate.setDate(endDate.getDate() + 6 * 7); // adding 6 weeks in days
+                    // Convert the new date object to a string in 'YYYY-MM-DD' format
+                    const endDateString = endDate.toISOString().split("T")[0];
+                    setFieldValue("endDate", endDateString);
+                  }}
                 />
               </Grid>
               <Grid item xs={4}>
                 <ValidatedDateField
                   name="endDate"
                   label="End Date"
-                  disabled={areFieldsDisabled}
+                  disabled={true}
                 />
               </Grid>
               <Grid item xs={4}>

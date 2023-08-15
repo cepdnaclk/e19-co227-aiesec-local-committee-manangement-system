@@ -101,6 +101,7 @@ FROM
     member;
 END;
 
+/*
 #produre to calculate slot end date after start date is added
 CREATE PROCEDURE CalculateEndDate(IN start_date DATE, OUT end_date DATE)
 BEGIN
@@ -109,3 +110,34 @@ END;
 
 CALL CalculateEndDate('2023-08-14', @output);
 SELECT @output AS calculated_end_date;
+*/
+
+CREATE PROCEDURE GetInterviewLog(IN app_id INT(5))
+BEGIN
+SELECT 
+    q.question_id,
+    q.question,
+    a.answer
+FROM
+    igv_question AS q
+RIGHT JOIN
+    igv_interview_log as a
+ON
+    a.question_id = q.question_id
+WHERE
+    q.expa_id = (SELECT i.project_expa_id 
+    FROM igv_application AS i WHERE i.app_id = app_id); 
+END;
+
+CREATE PROCEDURE UpdateInterviewLog(IN entries JSON, IN app_id INT(5))
+BEGIN
+    DECLARE i INT DEFAULT 0;
+    DECLARE current_entry JSON;
+
+    WHILE i < JSON_LENGTH(entries) DO
+        SET current_entry = JSON_UNQUOTE(JSON_EXTRACT(entries, CONCAT('$[', i, ']')));
+        UPDATE igv_interview_log AS l SET answer = JSON_UNQUOTE(JSON_EXTRACT(current_entry, '$.answer'))
+        WHERE l.app_id = app_id AND l.question_id = JSON_UNQUOTE(JSON_EXTRACT(current_entry, '$.questionId'));
+        SET i = i + 1;
+    END WHILE;
+END;

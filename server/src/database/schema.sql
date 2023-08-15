@@ -231,6 +231,36 @@ CREATE TABLE igv_interview_log (
     question_id     INT(3),
     answer          VARCHAR(200),
 
-    FOREIGN KEY (app_id) REFERENCES igv_application(app_id),
+    FOREIGN KEY (app_id) REFERENCES igv_application(app_id) 
+        ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (question_id) REFERENCES igv_question(question_id)
+        ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+/* Create an empty interview log when a new application is created
+(answers updated later during interview by user)*/
+CREATE TRIGGER CreateInterviewLog
+AFTER INSERT ON igv_application
+FOR EACH ROW
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE question_id INT;
+    
+    /* Get all related question IDs based on the project_expa_id */
+    DECLARE cur CURSOR FOR
+        SELECT q.question_id
+        FROM igv_question AS q
+        WHERE q.expa_id = NEW.project_expa_id;
+    /* Fix for Error: No data - zero rows fetched, selected, or processed */
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    /* Loop through each question and insert into igv_interview_log */
+    OPEN cur;
+    FETCH cur INTO question_id;
+    WHILE question_id IS NOT NULL AND done != 1 DO
+        INSERT INTO igv_interview_log (app_id, question_id, answer)
+        VALUES (NEW.app_id, question_id, "");
+        FETCH cur INTO question_id;
+    END WHILE;
+    CLOSE cur;
+END;
