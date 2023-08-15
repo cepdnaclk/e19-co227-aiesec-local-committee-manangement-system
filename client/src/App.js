@@ -20,8 +20,10 @@ import {
   MenuItem,
   FormControlLabel,
   Switch,
-  ScopedCssBaseline,
-  Paper,
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogContent,
   IconButton,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -36,8 +38,18 @@ import Home from "./pages/Home/Home";
 import DarkLogo from "./assets/White-Black-Logo.png";
 import LightLogo from "./assets/Black-Logo.png";
 import BlueLogo from "./assets/Blue-Logo.png";
+import MemberProfile from "./pages/Member/MemberProfile";
+
+import EditIcon from "@mui/icons-material/Edit";
+import CloseIcon from "@mui/icons-material/Close";
 
 function App() {
+  const snackbarIdleState = { open: false, message: "", severity: "info" };
+  const [snackbarState, setSnackbarState] = useState(snackbarIdleState);
+  const modalIdleState = { open: false, mode: "" };
+  // member profile form visibility
+  const [modalState, setModalState] = useState(modalIdleState);
+
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const menuOpen = Boolean(menuAnchorEl);
   const handleProfileMenuClick = (event) => {
@@ -215,7 +227,16 @@ function App() {
                   p: 5,
                 }}
               >
-                <MenuItem onClick={handleProfileMenuClose}>My Profile</MenuItem>
+                <MenuItem
+                  // onClick={handleProfileMenuClose}
+                  // component={Link}
+                  onClick={() =>
+                    setModalState({ open: true, mode: "user-view" })
+                  }
+                  // to="/profile"
+                >
+                  My Profile
+                </MenuItem>
                 <MenuItem
                   onClick={handleProfileMenuClose}
                   component={Link}
@@ -294,6 +315,52 @@ function App() {
           </Routes>
           {/* </Paper> */}
         </Box>
+        <Dialog open={modalState.open} fullWidth maxWidth="md">
+          <DialogContent dividers>
+            <Box>
+              <Box textAlign="right" sx={{ m: 1, width: "100%" }}>
+                {modalState.mode === "user-view" ? (
+                  <IconButton
+                    onClick={() => {
+                      setModalState({
+                        open: true,
+                        mode: "user-edit",
+                      });
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                ) : null}
+                <IconButton
+                  onClick={() => {
+                    setModalState(modalIdleState);
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+            </Box>
+            <MemberProfile
+              setSnackbarState={setSnackbarState}
+              formState={modalState}
+              setFormState={setModalState}
+              formIdleState={modalIdleState}
+              refreshParent={() => {}}
+              focusItemId={user.id}
+            />
+          </DialogContent>
+        </Dialog>
+        <Snackbar
+          open={snackbarState.open}
+          autoHideDuration={4000}
+          onClose={() => {
+            setSnackbarState(snackbarIdleState);
+          }}
+        >
+          <Alert severity={snackbarState.severity}>
+            {snackbarState.message}
+          </Alert>
+        </Snackbar>
       </div>
     </ThemeProvider>
   );

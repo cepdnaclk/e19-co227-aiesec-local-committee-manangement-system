@@ -36,9 +36,9 @@ export default function MemberView() {
 
   const snackbarIdleState = { open: false, message: "", severity: "info" };
 
-  const [searchText, setSearchText] = useState("");
-
   const [snackbarState, setSnackbarState] = useState(snackbarIdleState);
+
+  const [searchText, setSearchText] = useState("");
 
   const [initialMembers, setInitialMembers] = useState([]);
 

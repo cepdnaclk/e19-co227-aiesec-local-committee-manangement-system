@@ -72,7 +72,9 @@ const EventSlider = () => {
           // background: `linear-gradient(to right, #CACCD1, #52565E)`
           maxHeight: 500,
           overflow: "auto",
+          padding: 2,
         }}
+        variant="outlined"
       >
         {/* <Grid item xs={6} textAlign="center">
           <Box
@@ -93,35 +95,39 @@ const EventSlider = () => {
           <Typography variant="h6">{events[0].title}</Typography>
           <Typography variant="h6">{events[0].event_date}</Typography>
         </Grid> */}
-        {events
-          ? events.map((event, i) => {
+        {events ? (
+          <Grid container spacing={2}>
+            {events.map((event, i) => {
               return (
-                <Card key={i}>
-                  <CardMedia
-                    component="img"
-                    sx={{
-                      height: 300,
-                      display: "block",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                    src={event.postLink
-                      .replace(/file\/d\//g, "uc?id=")
-                      .replace(/\/([^/]+)$/, "&export=download")}
-                    alt="poster"
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h6" component="div">
-                      {event.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {event.eventDate} : {event.eventDescription}
-                    </Typography>
-                  </CardContent>
-                </Card>
+                <Grid item xs={12}>
+                  <Card key={i}>
+                    <CardMedia
+                      component="img"
+                      sx={{
+                        height: 300,
+                        display: "block",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                      }}
+                      src={event.postLink
+                        .replace(/file\/d\//g, "uc?id=")
+                        .replace(/\/([^/]+)$/, "&export=download")}
+                      alt="poster"
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h6" component="div">
+                        {event.title}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {event.eventDate} : {event.eventDescription}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
               );
-            })
-          : null}
+            })}
+          </Grid>
+        ) : null}
       </Paper>
       {/* )}
       </Color> */}

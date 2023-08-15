@@ -107,6 +107,7 @@ export default function MemberProfile(props) {
   });
 
   useEffect(() => {
+    console.log("Initial state: ", formState);
     loadResources();
 
     if (test && formState.mode === "admin-add") {
@@ -151,7 +152,7 @@ export default function MemberProfile(props) {
       console.log("Payload received: ", response.data);
       resources.current = response.data;
 
-      if (formState.mode === "admin-view") {
+      if (formState.mode === "admin-view" || formState.mode === "user-view") {
         const response = await axios.get(MEMBERS_URL, {
           headers: {
             "Content-Type": "application/json",
@@ -549,7 +550,7 @@ export default function MemberProfile(props) {
             <Grid item xs={12} textAlign="right">
               <Button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || formState.mode === "user-view"}
                 variant="contained"
                 color={formState.mode.includes("view") ? "error" : "primary"}
               >

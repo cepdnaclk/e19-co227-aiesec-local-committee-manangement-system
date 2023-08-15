@@ -70,6 +70,7 @@ const UpcomingInterviewList = () => {
           padding: 3,
           background: `linear-gradient(to bottom, #037Ef3BB, #00000000)`,
         }}
+        variant="outlined"
       >
         <Typography variant="h6" component="p">
           You Have {interviews.length} Upcoming Interviews
