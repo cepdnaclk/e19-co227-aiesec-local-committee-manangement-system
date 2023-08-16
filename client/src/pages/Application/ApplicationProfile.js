@@ -30,7 +30,7 @@ const ApplicationProfile = (props) => {
     refreshParent,
     focusItem,
   } = props;
-  const test = true;
+  const test = false;
 
   // TODO: Handle adding token to request globally
   const { token } = useContext(UserContext);
@@ -535,11 +535,11 @@ const ApplicationProfile = (props) => {
             <Divider textAlign="center">
               <Chip
                 label="Interview Log"
-                sx={{
-                  background:
-                    // "linear-gradient(to right bottom, #F3F4F7, #52565E)",
-                    "#7552CC",
-                }}
+                // sx={{
+                //   background:
+                //     // "linear-gradient(to right bottom, #F3F4F7, #52565E)",
+                //     "#7552CC",
+                // }}
               ></Chip>
             </Divider>
           </Grid>

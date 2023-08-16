@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { saveAs } from "file-saver";
 import Color from "color-thief-react";
+import eventSlider from "../styles/eventSlider.css";
 // SELECT title, post_link, event_date FROM lc_event
 
 const EVENTS_URL = "/event/";
@@ -70,7 +71,7 @@ const EventSlider = () => {
       <Paper
         sx={{
           // background: `linear-gradient(to right, #CACCD1, #52565E)`
-          maxHeight: 500,
+          maxHeight: "80vh",
           overflow: "auto",
           padding: 2,
         }}
@@ -102,18 +103,35 @@ const EventSlider = () => {
                 <Grid item xs={12}>
                   <Card key={i}>
                     <CardMedia
-                      component="img"
-                      sx={{
-                        height: 300,
-                        display: "block",
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                      }}
-                      src={event.postLink
-                        .replace(/file\/d\//g, "uc?id=")
-                        .replace(/\/([^/]+)$/, "&export=download")}
-                      alt="poster"
-                    />
+                    // component="img"
+                    // sx={{
+                    //   height: 300,
+                    //   display: "block",
+                    //   marginLeft: "auto",
+                    //   marginRight: "auto",
+                    // }}
+                    // src={event.postLink
+                    //   .replace(/file\/d\//g, "uc?id=")
+                    //   .replace(/\/([^/]+)$/, "&export=download")}
+                    // alt="poster"
+                    >
+                      <div className="img-container">
+                        <img
+                          className="img"
+                          src={event.postLink
+                            .replace(/file\/d\//g, "uc?id=")
+                            .replace(/\/([^/]+)$/, "&export=download")}
+                          alt="poster"
+                        ></img>
+                        <img
+                          className="img-bg"
+                          src={event.postLink
+                            .replace(/file\/d\//g, "uc?id=")
+                            .replace(/\/([^/]+)$/, "&export=download")}
+                          alt="backdrop"
+                        ></img>
+                      </div>
+                    </CardMedia>
                     <CardContent>
                       <Typography gutterBottom variant="h6" component="div">
                         {event.title}

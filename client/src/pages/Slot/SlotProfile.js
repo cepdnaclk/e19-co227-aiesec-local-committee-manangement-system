@@ -14,7 +14,7 @@ const SLOTS_URL = "/slot/";
 export default function SlotProfile(props) {
   const { token } = useContext(UserContext);
 
-  const test = true;
+  const test = false;
 
   const [isLoading, setLoading] = useState(false);
 
@@ -225,14 +225,23 @@ export default function SlotProfile(props) {
                     // default behaviour
                     handleChange(e);
 
-                    // calculate end date 6 weeks from now
-                    const startDateString = values.startDate; // input date string
-                    const startDate = new Date(startDateString);
-                    const endDate = new Date(startDate);
-                    endDate.setDate(endDate.getDate() + 6 * 7); // adding 6 weeks in days
-                    // Convert the new date object to a string in 'YYYY-MM-DD' format
-                    const endDateString = endDate.toISOString().split("T")[0];
-                    setFieldValue("endDate", endDateString);
+                    try {
+                      // calculate end date 6 weeks from now
+                      const startDateString = values.startDate; // input date string
+                      const startDate = new Date(startDateString);
+                      const endDate = new Date(startDate);
+                      endDate.setDate(endDate.getDate() + 6 * 7); // adding 6 weeks in days
+                      // Convert the new date object to a string in 'YYYY-MM-DD' format
+                      const endDateString = endDate.toISOString().split("T")[0];
+                      setFieldValue("endDate", endDateString);
+                    } catch (err) {
+                      console.log(
+                        "Error: ",
+                        err,
+                        "Tried Start Date: ",
+                        values.startDate
+                      );
+                    }
                   }}
                 />
               </Grid>

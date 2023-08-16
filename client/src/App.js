@@ -78,12 +78,12 @@ function App() {
         palette: {
           mode: prefersDarkMode ? "dark" : "light",
           primary: { main: "#037ef3" },
-          navButton: {
-            main: "#E3D026",
-            light: "#E9DB5D",
-            dark: "#A29415",
-            contrastText: "#242105",
-          },
+          // navButton: {
+          //   main: "#E3D026",
+          //   light: "#E9DB5D",
+          //   dark: "#A29415",
+          //   contrastText: "#242105",
+          // },
         },
         components: {
           MuiCssBaseline: {
@@ -154,25 +154,26 @@ function App() {
                 />
               </IconButton> */}
               <Stack direction="row" spacing={2}>
-                <Button component={Link} to="/" variant="text" disableElevation>
-                  Home
-                </Button>
-                {/* <Button
-                  component={Link}
-                  to="/users"
-                  variant="text"
-                  disableElevation
-                >
-                  Users
-                </Button> */}
-                <Button
-                  component={Link}
-                  to="/applications"
-                  variant="text"
-                  disableElevation
-                >
-                  Applications
-                </Button>
+                {user ? (
+                  <>
+                    <Button
+                      component={Link}
+                      to="/"
+                      variant="text"
+                      disableElevation
+                    >
+                      Home
+                    </Button>
+                    <Button
+                      component={Link}
+                      to="/applications"
+                      variant="text"
+                      disableElevation
+                    >
+                      Applications
+                    </Button>
+                  </>
+                ) : null}
                 {user?.roleId === 0 || user?.roleId === 1 ? (
                   <Button
                     id="admin-button"
@@ -201,11 +202,11 @@ function App() {
                     aria-haspopup="true"
                     aria-expanded={menuOpen ? "true" : undefined}
                   >
-                    Hey {user.preferredName}
+                    Hey {user?.preferredName}
                   </Button>
                 ) : (
                   <Button
-                    color="navButton"
+                    // color="navButton"
                     component={Link}
                     to="/login"
                     variant="text"
@@ -304,13 +305,13 @@ function App() {
           <Routes>
             <Route element={<ProtectedRoutes />}>
               <Route path="/applications" element={<ApplicationView />} />
+              <Route path="/" element={<Home />} />
             </Route>
             <Route element={<AdminRoutes />}>
               <Route path="/users" element={<MemberView />} />
               <Route path="/projects" element={<ProjectView />} />
               <Route path="/terms" element={<Terms />} />
             </Route>
-            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
           </Routes>
           {/* </Paper> */}
@@ -346,7 +347,7 @@ function App() {
               setFormState={setModalState}
               formIdleState={modalIdleState}
               refreshParent={() => {}}
-              focusItemId={user.id}
+              focusItemId={user?.id}
             />
           </DialogContent>
         </Dialog>

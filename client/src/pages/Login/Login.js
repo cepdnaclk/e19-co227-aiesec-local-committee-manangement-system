@@ -90,7 +90,7 @@ export default function Login() {
             md={5}
             lg={4}
             xl={3}
-            // component={Paper}
+            component={Paper}
             sx={{ borderRadius: "16px" }}
           >
             <Box

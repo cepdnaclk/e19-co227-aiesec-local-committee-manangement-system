@@ -11,7 +11,7 @@ const AdminRoutes = () => {
   return user?.roleId === 0 || user?.roleId === 1 ? (
     <Outlet />
   ) : (
-    <Navigate to="/" />
+    <Navigate to="/login" />
   );
 };
 

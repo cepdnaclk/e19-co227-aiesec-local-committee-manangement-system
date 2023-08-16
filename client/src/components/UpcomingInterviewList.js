@@ -65,7 +65,7 @@ const UpcomingInterviewList = () => {
     <>
       <Paper
         sx={{
-          maxHeight: 500,
+          maxHeight: "80vh",
           overflow: "auto",
           padding: 3,
           background: `linear-gradient(to bottom, #037Ef3BB, #00000000)`,

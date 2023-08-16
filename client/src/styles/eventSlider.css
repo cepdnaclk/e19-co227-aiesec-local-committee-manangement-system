@@ -1,0 +1,23 @@
+.img-container {
+  position: relative;
+}
+
+.img {
+  height: 50vh;
+  position: relative;
+  display: block;
+  z-index: 2;
+  margin: auto;
+}
+
+.img-bg {
+  position: absolute;
+  z-index: 0;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  object-position: 15%;
+  filter: blur(10px);
+}
