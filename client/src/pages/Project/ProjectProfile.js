@@ -22,7 +22,7 @@ export default function ProjectProfile(props) {
   // TODO: Handle adding token to request globally
   const { token } = useContext(UserContext);
 
-  const test = false;
+  const test = true;
 
   const [isLoading, setLoading] = useState(false);
 

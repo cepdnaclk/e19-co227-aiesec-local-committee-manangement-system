@@ -35,7 +35,7 @@ export default function MemberProfile(props) {
   // TODO: Handle adding token to request globally
   const { token } = useContext(UserContext);
 
-  const test = true;
+  const test = false;
 
   const [isLoading, setLoading] = useState(false);
 
@@ -184,7 +184,7 @@ export default function MemberProfile(props) {
   const formSchema = yup.object().shape({
     email: yup.string().required("Email required").email("Invalid email"),
     passphrase: yup.string().required("Password required"),
-    fullName: yup.string().required("Full name required"),
+    fullName: yup.string(),
     preferredName: yup.string(),
     frontOfficeId: yup.string().required("Front office required"),
     departmentId: yup.string().required("Department required"),
@@ -203,7 +203,7 @@ export default function MemberProfile(props) {
     schoolName: yup.string(),
     homeAddress: yup.string(),
     homeContact: yup.string(),
-    districtId: yup.string(),
+    districtId: yup.string().required("Required"),
     photoLink: yup.string(),
     boardingAddress: yup.string(),
   });
