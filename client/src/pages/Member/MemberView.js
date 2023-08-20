@@ -25,6 +25,7 @@ import Listing from "../../components/Listing";
 
 import MemberCard from "./MemberCard";
 import MemberCardSkeleton from "./MemberCardSkeleton";
+import SearchBar from "../../components/SearchBar/index";
 
 const MEMBERS_URL = "/member/";
 
@@ -37,8 +38,6 @@ export default function MemberView() {
   const snackbarIdleState = { open: false, message: "", severity: "info" };
 
   const [snackbarState, setSnackbarState] = useState(snackbarIdleState);
-
-  const [searchText, setSearchText] = useState("");
 
   const [initialMembers, setInitialMembers] = useState([]);
 
@@ -79,23 +78,6 @@ export default function MemberView() {
     setModalState({ open: true, mode: "admin-view" });
   };
 
-  const handleSearchTextChange = (e) => {
-    setSearchText(e.target.value);
-  };
-
-  useEffect(() => {
-    if (searchText !== "" && initialMembers) {
-      let newMembers = [];
-      initialMembers?.forEach((member) => {
-        if (member["preferredName"].toLowerCase().includes(searchText))
-          newMembers.push(member);
-      });
-      setMembers(newMembers);
-    } else {
-      setMembers(initialMembers);
-    }
-  }, [searchText, initialMembers]);
-
   return (
     <>
       <Box component="main">
@@ -116,23 +98,14 @@ export default function MemberView() {
                 flexDirection: "row",
               }}
             >
-              <TextField
-                onChange={handleSearchTextChange}
-                size="small"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton>
-                        <SearchIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
+              <SearchBar
+                initialData={initialMembers}
+                setFilteredData={setMembers}
+                searchProp="preferredName"
                 sx={{ flexGrow: 1 }}
               />
               <IconButton
                 onClick={() => {
-                  setSearchText("");
                   loadMembers();
                 }}
               >
