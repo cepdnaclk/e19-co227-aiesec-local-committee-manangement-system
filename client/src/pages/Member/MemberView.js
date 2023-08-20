@@ -132,8 +132,8 @@ export default function MemberView() {
               />
               <IconButton
                 onClick={() => {
-                  loadMembers();
                   setSearchText("");
+                  loadMembers();
                 }}
               >
                 <RefreshIcon />

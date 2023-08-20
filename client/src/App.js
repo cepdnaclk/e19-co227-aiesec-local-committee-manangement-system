@@ -43,6 +43,8 @@ import MemberProfile from "./pages/Member/MemberProfile";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { NotificationBar } from "./context/NotificationContext";
+
 function App() {
   const snackbarIdleState = { open: false, message: "", severity: "info" };
   const [snackbarState, setSnackbarState] = useState(snackbarIdleState);
@@ -127,6 +129,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="App">
+        <>
+          <NotificationBar />
+        </>
         <Box component="nav" sx={{ m: 2 }}>
           <AppBar
             position="static"
@@ -141,11 +146,9 @@ function App() {
                 sx={{ maxWidth: "200px" }}
               />
               {/* the empty typography component will grow pushing the stack to the right */}
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{ flexGrow: 1 }}
-              ></Typography>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                {/* AIESEC in Kandy - LC Management System */}
+              </Typography>
               {/* <IconButton edge="start" disabled={true}>
                 <Box
                   component="img"

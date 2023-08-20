@@ -2,9 +2,8 @@ import React, { useContext } from "react";
 import EventSlider from "../../components/EventSlider";
 import UpcomingInterviewList from "../../components/UpcomingInterviewList";
 
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { UserContext } from "../../context/UserContext";
-
 const Home = () => {
   const { user } = useContext(UserContext);
 
