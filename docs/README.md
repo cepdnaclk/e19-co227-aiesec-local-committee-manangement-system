@@ -19,7 +19,7 @@ This is a sample image, to show how to add images to your page. To learn more op
 ![Sample Image](./images/sample.png)
  -->
 <div class="figure container">
-<img class="mx-auto d-block" src="./images/aiesec_logo.png" alt="Sample Image" width="128" />
+<img class="mx-auto d-block" src="./images/aiesec_logo.png" alt="Sample Image" width="300" />
 <!-- <p class="caption text-center">Aiesec</p> -->
 </div>
 
