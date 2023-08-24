@@ -26,7 +26,12 @@ const SearchBar = ({
     } else {
       setFilteredData(initialData);
     }
-  }, [searchText, initialData, searchProp]);
+  }, [searchText, initialData]);
+
+  // reset searchbar when search prop changes
+  useEffect(() => {
+    setSearchText("");
+  }, [searchProp]);
 
   return (
     <TextField

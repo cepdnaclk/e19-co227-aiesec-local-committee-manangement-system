@@ -11,8 +11,7 @@ import {
   CardContent,
   CardMedia,
 } from "@mui/material";
-import { saveAs } from "file-saver";
-import Color from "color-thief-react";
+
 import eventSlider from "../styles/eventSlider.css";
 // SELECT title, post_link, event_date FROM lc_event
 

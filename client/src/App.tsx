@@ -7,7 +7,7 @@ import { UserContext } from "./context/UserContext";
 import { Routes, Route, Link } from "react-router-dom";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 
-import { useContext, useState, useMemo } from "react";
+import React, { useContext, useState, useMemo } from "react";
 
 import {
   Box,
@@ -188,15 +188,6 @@ function App() {
                     Admin
                   </Button>
                 ) : null}
-                {/* <Button
-                  component={Link}
-                  to="/terms"
-                  variant="text"
-                  disableElevation
-                >
-                  Terms
-                </Button> */}
-                {/* Selectively render login or profile dashboard */}
                 {user ? (
                   <Button
                     id="profile-button"
@@ -354,7 +345,7 @@ function App() {
             />
           </DialogContent>
         </Dialog>
-        <Snackbar
+        {/* <Snackbar
           open={snackbarState.open}
           autoHideDuration={4000}
           onClose={() => {
@@ -364,7 +355,7 @@ function App() {
           <Alert severity={snackbarState.severity}>
             {snackbarState.message}
           </Alert>
-        </Snackbar>
+        </Snackbar> */}
       </div>
     </ThemeProvider>
   );

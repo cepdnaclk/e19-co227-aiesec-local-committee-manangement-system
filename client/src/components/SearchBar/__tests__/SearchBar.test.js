@@ -10,7 +10,36 @@ describe("SearchBar Component", () => {
     { id: 3, name: "Cherry" },
   ];
 
-  it("Render SearchBar Component and Mock Data", () => {
+  it("render with empty data", () => {
+    render(
+      <SearchBar initialData={[]} setFilteredData={() => {}} searchProp="" />
+    );
+
+    // check if the component renders without errors
+    expect(screen.getByPlaceholderText("Search")).toBeInTheDocument();
+  });
+
+  it("handle filtering empty data", () => {
+    const setFilteredData = jest.fn();
+
+    render(
+      <SearchBar
+        initialData={[]}
+        setFilteredData={setFilteredData}
+        searchProp=""
+      />
+    );
+
+    const searchInput = screen.getByPlaceholderText("Search");
+
+    // Type 'Banana' into the search input
+    fireEvent.change(searchInput, { target: { value: "Banana" } });
+
+    // Ensure setFilteredData was called with the filtered data
+    expect(setFilteredData).toHaveBeenCalledWith([]);
+  });
+
+  it("render with mock data", () => {
     render(
       <>
         <SearchBar
@@ -26,10 +55,10 @@ describe("SearchBar Component", () => {
       </>
     );
 
-    // Check if the component renders without errors
+    // check if the component renders without errors
     expect(screen.getByPlaceholderText("Search")).toBeInTheDocument();
 
-    // Check if the mock data is displayed in the list
+    // check if the mock data is displayed in the list
     expect(screen.getByText("Apple")).toBeInTheDocument();
     expect(screen.getByText("Banana")).toBeInTheDocument();
     expect(screen.getByText("Cherry")).toBeInTheDocument();
