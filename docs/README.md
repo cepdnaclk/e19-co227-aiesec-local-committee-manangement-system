@@ -31,16 +31,42 @@ This is a sample image, to show how to add images to your page. To learn more op
 
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [Other Sub Topics](#other-sub-topics)
-3. [Links](#links)
+2. [Problem](#problem)
+3. [Solutions](#solutions)
+4. [Main functionalities of the system](#main-functionalities-of-the-system)
+5. [Links](#links)
 
 ---
 
 ## Introduction
 
- description of the real world problem and solution, impact
+AIESEC Local Committee Management System
 
-## Other Sub Topics
+## Problem
+
+We noticed the following problems in current process which uses Google applications.
+
+1. Data insecurity
+2. Lengthy, repetitive processes
+3. Not user friendly and have to use multiple tools to complete one task
+
+## Solutions
+
+1. Data insecurity - 
+    a. Introducing user levels
+    b. Restrictions on user levels to execute certain tasks - ex: Deleting records are only accessible for higher user levels
+
+2. Lengthy, repetitive processes
+    a. Automating repetitive processes - ex: Auto generating/sending emails once the necessary details have been filled.
+
+3. Not user friendly and have to use multiple tools to complete one task
+    a. Using user friendly UIs and create functionalities in such as way that, users can execute the tasks using only this system.
+
+## Main functionalities of the system.
+
+1. Member management
+2. Member progress tracking
+3. Project management
 
 .....
 
