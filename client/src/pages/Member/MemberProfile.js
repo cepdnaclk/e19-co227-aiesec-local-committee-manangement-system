@@ -20,6 +20,8 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 
+import InputField from "../../components/InputField";
+
 const MEMBERS_URL = "/member/";
 const RESOURCES_URL = "/member/resources/";
 
@@ -310,7 +312,15 @@ export default function MemberProfile(props) {
       validationSchema={formSchema}
       enableReinitialize
     >
-      {({ values, errors, touched, isSubmitting, resetForm, handleChange }) => (
+      {({
+        values,
+        errors,
+        touched,
+        isSubmitting,
+        resetForm,
+        handleChange,
+        setFieldValue,
+      }) => (
         <Form>
           <Grid container spacing={2}>
             {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
@@ -353,9 +363,15 @@ export default function MemberProfile(props) {
               />
             </Grid>
             <Grid item xs={4}>
-              <ValidatedSelectField
+              {/* <ValidatedSelectField
                 name="gender"
                 label="Gender"
+                options={genders}
+                disabled={areFieldsDisabled}
+              /> */}
+              <InputField
+                type="select"
+                name="gender"
                 options={genders}
                 disabled={areFieldsDisabled}
               />

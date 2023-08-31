@@ -25,7 +25,7 @@ import Listing from "../../components/Listing";
 
 import MemberCard from "./MemberCard";
 import MemberCardSkeleton from "./MemberCardSkeleton";
-import SearchBar from "../../components/SearchBar/index";
+import SearchBar from "../../components/SearchBar";
 
 const MEMBERS_URL = "/member/";
 

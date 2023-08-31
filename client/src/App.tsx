@@ -118,6 +118,12 @@ function App() {
                   backgroundColor: "#2b2b2b",
                 },
               },
+              input: {
+                // match calender picker indicator and popup to the current theme
+                colorScheme: prefersDarkMode ? "dark" : "light",
+                // "&::-webkit-calendar-picker-indicator": {
+                // },
+              },
             },
           },
         },

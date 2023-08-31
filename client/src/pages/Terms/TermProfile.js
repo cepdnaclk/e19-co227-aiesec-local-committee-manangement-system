@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import axios from "../../api/axios";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form as FormikForm } from "formik";
 import * as yup from "yup";
-import { TextField, Button, Box, Snackbar, Alert } from "@mui/material";
-import ValidatedTextField from "../../components/ValidatedTextField";
-import ValidatedDateField from "../../components/ValidatedDateField";
+import { Snackbar, Alert } from "@mui/material";
 import SubmitButton from "../../components/SubmitButton";
-const TERM_URL = "/term";
 
+// ---------- COMPONENTS IMPORTS ---------- //
+import Form from "./Form";
+
+const TERM_URL = "/term";
 export default function TermProfile(props) {
   // jwt authentication
   const { token } = useContext(UserContext);
@@ -129,34 +130,13 @@ export default function TermProfile(props) {
       >
         {({ values, errors, touched, isSubmitting, resetForm }) => {
           return (
-            <Form as={Box} component="section" sx={{ width: "100%" }}>
-              {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
-              <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <ValidatedTextField
-                  name="title"
-                  label="Title"
-                  disabled={false}
-                />
-              </Box>
-              <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <ValidatedDateField
-                  name="startDate"
-                  label="Start Date"
-                  disabled={false}
-                />
-                <ValidatedDateField
-                  name="endDate"
-                  label="End Date"
-                  disabled={values.startDate === ""}
-                />
-                <ValidatedDateField
-                  name="newbieRecruitmentDate"
-                  label="Newbie Recruitment Date"
-                  disabled={values.startDate === "" || values.endDate === ""}
-                />
-              </Box>
+            <FormikForm>
+              <pre>{JSON.stringify(values, null, 2)}</pre>
+              <pre>{JSON.stringify(touched, null, 2)}</pre>
+              <pre>{JSON.stringify(errors, null, 2)}</pre>
+              <Form values={values} />
               <SubmitButton />
-            </Form>
+            </FormikForm>
           );
         }}
       </Formik>

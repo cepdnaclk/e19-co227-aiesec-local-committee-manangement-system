@@ -9,8 +9,8 @@ COPY package*.json /app
 RUN npm install
 
 # copy over the rest of code
-COPY . /app
+COPY . .
 
 EXPOSE 3000
 
-CMD npm start
+CMD ["npm", "start"]
