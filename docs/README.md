@@ -19,7 +19,7 @@ This is a sample image, to show how to add images to your page. To learn more op
 ![Sample Image](./images/sample.png)
  -->
 <div class="figure container">
-<img class="mx-auto d-block" src="./images/AIESEC_LOGO_glow.png" alt="Sample Image" width="500" />
+<img class="mx-auto d-block" src="./images/AIESEC_LOGO_glow.png" alt="Aiesec Logo" width="500" />
 <!-- <p class="caption text-center">Aiesec</p> -->
 </div>
 
@@ -61,60 +61,60 @@ We're developing a new system focused on:
 
 ## Main functionalities of the system ⚙️:
 
-### Progress So Far ✅:
+- ### Progress So Far ✅:**
 
-1. Member management 
-2. 75% of iGV processes including:
-   - Project management
-   - Slot management
-   - Application management
+    1. Member management 
+    2. 75% of iGV processes including:
+        - Project management
+        - Slot management
+        - Application management
 
-### Upcoming Features ⬆️:
+- ### Upcoming Features ⬆️:
 
-- **iGV (Remaining 25%)**: 
-   1. Email automation system
-   2. Work reminder notifications
-   3. Post-arrival project participant management
-   4. Partner organizations management system
-   
-- **iGT**: 
-   1. Internship opportunities system
-   2. Application management
-   3. Partner organization system 
-   4. New partnership system
+    - **iGV (Remaining 25%)**: 
+        1. Email automation system
+        2. Work reminder notifications
+        3. Post-arrival project participant management
+        4. Partner organizations management system
+    
+    - **iGT**: 
+        1. Internship opportunities system
+        2. Application management
+        3. Partner organization system 
+        4. New partnership system
 
-- **oGT + oGV**: 
-   1. Applicants selection system
-   2. Marketing campaign system
-   3. Opportunities management system
-   4. Auto-suggestions for applicants
+    - **oGT + oGV**: 
+        1. Applicants selection system
+        2. Marketing campaign system
+        3. Opportunities management system
+        4. Auto-suggestions for applicants
 
-- **Marketing**: 
-   1. Campaign management
-   2. Content management (photos, videos, posts, blogs)
+    - **Marketing**: 
+        1. Campaign management
+        2. Content management (photos, videos, posts, blogs)
 
-- **Business Development**: 
-   1. Market research & cold calls system
-   2. Revenue dashboard
-   3. Member target system
-   
+    - **Business Development**: 
+        1. Market research & cold calls system
+        2. Revenue dashboard
+        3. Member target system
+        
 
 
-- **People Management**: 
+    - **People Management**: 
 
-   *Note: Managed by the People Management team but accessible to all members.*
+        *Note: Managed by the People Management team but accessible to all members.*
 
-   1. Task management system (with reminders & member performance metrics)
-   2. Interview management tool
-   3. Opportunities hub (local, national, and international)
-   4. Event and special announcement notifications
-   5. Confidential member feedback (accessible only to President & VPs)
-   6. Achievement badges for member profiles
-   7. Training resources hub 
+        1. Task management system (with reminders & member performance metrics)
+        2. Interview management tool
+        3. Opportunities hub (local, national, and international)
+        4. Event and special announcement notifications
+        5. Confidential member feedback (accessible only to President & VPs)
+        6. Achievement badges for member profiles
+        7. Training resources hub 
 
-- **Finance**: 
-   1. Finance report publishing portal
-   2. Finance data collection (for future budgets and more)
+    - **Finance**: 
+        1. Finance report publishing portal
+        2. Finance data collection (for future budgets and more)
 
 ---
 
