@@ -136,7 +136,7 @@ We're developing a new system focused on:
 ....
 ## Links 🔗:
 
-- ### 🤺Run Locally ? check [installation guide](https://github.com/cepdnaclk/e19-co227-aiesec-local-committee-manangement-system/blob/main/client/README.md)
+- 🤺Run Locally ? check [installation guide](https://github.com/cepdnaclk/e19-co227-aiesec-local-committee-manangement-system/blob/main/client/README.md)
 - [Project Repository](https://github.com/cepdnaclk/{{ page.repository-name }}){:target="_blank"}
 - [Project Page](https://cepdnaclk.github.io/{{ page.repository-name}}){:target="_blank"}
 - [Department of Computer Engineering](http://www.ce.pdn.ac.lk/)
