@@ -61,7 +61,7 @@ We're developing a new system focused on:
 
 ## Main functionalities of the system ⚙️:
 
-- ### Progress So Far ✅:**
+- ### Progress So Far ✅:
 
     1. Member management 
     2. 75% of iGV processes including:
