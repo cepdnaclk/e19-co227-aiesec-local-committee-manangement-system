@@ -4,7 +4,8 @@ import axios from "../../api/axios";
 import { Formik, Form, Field } from "formik";
 import { TextField, Button, Typography, Grid, Paper, Box } from "@mui/material";
 import * as yup from "yup";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 // import loginBanner from "../../assets/login-banner.jpg";
 const LOGIN_URL = "/user/login";
 
@@ -19,7 +20,9 @@ const LOGIN_URL = "/user/login";
  */
 
 export default function Login() {
-  const { user, setUser, setToken } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+
+  const { setAccessToken, setRefreshToken } = useContext(AuthContext);
 
   // Define initial state of login
   const initialState = {
@@ -54,7 +57,10 @@ export default function Login() {
         roleId: response?.data?.roleId,
         id: response?.data?.id,
       });
-      setToken(response?.data?.accessToken);
+      setAccessToken(response?.data?.accessToken);
+      localStorage.setItem("accessToken", response?.data?.accessToken);
+      setRefreshToken(response?.data?.refreshToken);
+      localStorage.setItem("refreshToken", response?.data?.refreshToken);
       // const roles = response?.data?.roles;
       // setAuth({ response.data.email, response.data,password, roles, accessToken });
 
@@ -77,6 +83,7 @@ export default function Login() {
 
   const handleLogout = (event) => {
     localStorage.clear();
+    // TODO: post to logout api to remove refresh token
     window.location.reload();
   };
 

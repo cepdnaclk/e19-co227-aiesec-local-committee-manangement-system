@@ -1,23 +1,28 @@
+const changeCase = require("change-case");
+
 const express = require("express");
 const router = express.Router();
 
-const jwt = require("jsonwebtoken");
-
 const { connection } = require("../database/database");
 
-router.post("/login", (req, res) => {
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../middleware/auth");
+
+let refreshTokens = [];
+
+router.post("/login", (req, res, next) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
     console.log(email, password);
 
-    const queryFindUser = `SELECT id, email, passphrase, role_id, preferred_name 
-                                FROM member 
-                                WHERE email = ?;`;
+    const queryFindUser = `SELECT id, email, passphrase, role_id, preferred_name FROM member WHERE email = ?;`;
 
     connection.query(queryFindUser, [email], (err, result) => {
       if (err) {
-        console.error("Error during login:", err);
+        console.log("Error during login:", err);
         return res.status(500).json({ message: "Internal Server Error" });
       }
       if (result.length === 0) {
@@ -30,20 +35,52 @@ router.post("/login", (req, res) => {
       }
 
       // Successful login, proceed with further actions
-      const accessToken = jwt.sign(user.id, process.env.ACCESS_TOKEN_SECRET);
+
+      // Convert the keys from snake case to camel case and add to response
+      const formattedUser = Object.keys(user).reduce((acc, key) => {
+        // Remove password field
+        if (key === "passphrase") return acc;
+        acc[changeCase.camelCase(key)] = user[key];
+        return acc;
+      }, {});
+
+      const accessToken = generateAccessToken(formattedUser);
+      const refreshToken = generateRefreshToken(formattedUser);
+      refreshTokens.push(refreshToken);
+
       res.json({
-        message: "Login successful",
+        message: "Login Successful",
         accessToken: accessToken,
-        id: user.id,
-        // TODO: snake to camel conversion of query
-        preferredName: user.preferred_name,
-        roleId: user.role_id,
+        refreshToken: refreshToken,
+        ...formattedUser,
       });
     });
-  } catch (error) {
-    console.error("Error during login:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+  } catch (err) {
+    next(err);
   }
+});
+
+router.post("/token", (req, res, next) => {
+  try {
+    const refreshToken = req.body.refreshToken;
+
+    if (refreshToken == null)
+      return res.sendStatus(401).json({ error: "Unauthorized" });
+    if (refreshTokens.includes(refreshToken)) {
+      jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, id) => {
+        if (err) throw err;
+        const accessToken = generateAccessToken(id);
+        return res.status(200).json({ accessToken: accessToken });
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.delete("/logout", (req, res) => {
+  refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
+  res.sendStatus(204);
 });
 
 module.exports = router;

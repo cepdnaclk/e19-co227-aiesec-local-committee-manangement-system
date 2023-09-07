@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/user", require("./src/route/user"));
 
 // jwt authentication
-const authenticateToken = require("./src/middleware/auth");
+const { authenticateToken } = require("./src/middleware/auth");
 app.use(authenticateToken);
 
 // routing

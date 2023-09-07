@@ -8,6 +8,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import { NotificationProvider } from "./context/NotificationContext";
+import { AuthContextProvider } from "./context/AuthContext";
 
 // ReactDOM.render is no longer supported in React 18.
 // ReactDOM.render(<App />, document.getElementById('root'))
@@ -17,11 +18,13 @@ root.render(
   <React.StrictMode>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <NotificationProvider>
-        <UserProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </UserProvider>
+        <AuthContextProvider>
+          <UserProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </UserProvider>
+        </AuthContextProvider>
       </NotificationProvider>
     </LocalizationProvider>
   </React.StrictMode>

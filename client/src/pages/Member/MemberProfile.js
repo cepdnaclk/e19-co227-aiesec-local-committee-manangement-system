@@ -35,7 +35,7 @@ const RESOURCES_URL = "/member/resources/";
 
 export default function MemberProfile(props) {
   // TODO: Handle adding token to request globally
-  const { token } = useContext(UserContext);
+  // const { token } = useContext(UserContext);
 
   const test = false;
 
@@ -148,7 +148,7 @@ export default function MemberProfile(props) {
       const response = await axios.get(RESOURCES_URL, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          // Authorization: "Bearer " + token,
         },
       });
       console.log("Payload received: ", response.data);
@@ -158,7 +158,7 @@ export default function MemberProfile(props) {
         const response = await axios.get(MEMBERS_URL, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
+            // Authorization: "Bearer " + token,
           },
           params: {
             id: focusItemId,
@@ -215,7 +215,7 @@ export default function MemberProfile(props) {
       const response = await axios.post(MEMBERS_URL, formData, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          // Authorization: "Bearer " + token,
         },
       });
       setSnackbarState({
@@ -241,7 +241,7 @@ export default function MemberProfile(props) {
       const response = await axios.put(MEMBERS_URL, formData, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          // Authorization: "Bearer " + token,
         },
       });
       setSnackbarState({
@@ -269,7 +269,7 @@ export default function MemberProfile(props) {
       const response = await axios.delete(MEMBERS_URL, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          // Authorization: "Bearer " + token,
         },
         params: {
           id: focusItemId,

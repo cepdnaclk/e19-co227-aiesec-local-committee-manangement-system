@@ -1,15 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { UserContext } from "../../context/UserContext";
-import axios from "../../api/axios";
+
 import { Formik, Form as FormikForm } from "formik";
-import * as yup from "yup";
-import { Snackbar, Alert } from "@mui/material";
-import SubmitButton from "../../components/SubmitButton";
 
 // ---------- COMPONENTS IMPORTS ---------- //
 import Form from "./Form";
 
-const TERM_URL = "/term";
+import ValidationSchema from "./ValidationSchema";
+
 export default function TermProfile(props) {
   // jwt authentication
   const { token } = useContext(UserContext);
@@ -25,25 +23,7 @@ export default function TermProfile(props) {
   const savedState = props.opt !== "add" ? props.term : null;
 
   // define form validation schema
-  const formSchema = yup.object().shape({
-    title: yup
-      .string()
-      .required("Required")
-      .matches(/^[0-9]{2}-(Summer|Winter)$/, "Enter a valid id"),
-    startDate: yup.date().required("Required"),
-    endDate: yup
-      .date()
-      .required("Required")
-      .min(yup.ref("startDate"), "End date cannot predate the start date"),
-    newbieRecruitmentDate: yup
-      .date()
-      .required("Required")
-      .min(
-        yup.ref("startDate"),
-        "Recruitment date cannot predate the start date"
-      )
-      .max(yup.ref("endDate"), "Recruitment date cannot postdate the end date"),
-  });
+  const validationSchema = useMemo(ValidationSchema, []);
 
   const [snackbarState, setSnackbarState] = useState({
     open: false,
@@ -57,12 +37,12 @@ export default function TermProfile(props) {
 
     try {
       if (props.opt === "add") {
-        const response = await axios.post(TERM_URL, formData, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        });
+        // const response = await axios.post(TERM_URL, formData, {
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //     Authorization: "Bearer " + token,
+        //   },
+        // });
 
         setSnackbarState(() => ({
           open: true,
@@ -74,12 +54,12 @@ export default function TermProfile(props) {
       }
 
       if (props.opt === "edit") {
-        const response = await axios.put(TERM_URL, formData, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        });
+        // const response = await axios.put(TERM_URL, formData, {
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //     Authorization: "Bearer " + token,
+        //   },
+        // });
 
         setSnackbarState(() => ({
           open: true,
@@ -124,33 +104,12 @@ export default function TermProfile(props) {
       <Formik
         initialValues={savedState || initialState}
         onSubmit={handleSubmit}
-        validationSchema={formSchema}
+        validationSchema={validationSchema}
         validateOnChange={false}
         validateOnMount
       >
-        {({ values, errors, touched, isSubmitting, resetForm }) => {
-          return (
-            <FormikForm>
-              <pre>{JSON.stringify(values, null, 2)}</pre>
-              <pre>{JSON.stringify(touched, null, 2)}</pre>
-              <pre>{JSON.stringify(errors, null, 2)}</pre>
-              <Form values={values} />
-              <SubmitButton />
-            </FormikForm>
-          );
-        }}
+        <Form mode={props.opt} />
       </Formik>
-      <Snackbar
-        open={snackbarState.open}
-        autoHideDuration={3000}
-        onClose={() =>
-          setSnackbarState({ open: false, severity: "info", message: "" })
-        }
-      >
-        <Alert severity={snackbarState.severity} sx={{ width: "100%" }}>
-          {snackbarState.message}
-        </Alert>
-      </Snackbar>
     </>
   );
 }

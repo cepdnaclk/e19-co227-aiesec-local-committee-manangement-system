@@ -1,16 +1,38 @@
 const jwt = require("jsonwebtoken");
 
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers.authorization;
-  const token = authHeader?.split(" ")[1];
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.split(" ")[1];
 
-  if (token == null) return res.sendStatus(401).json({ error: "Unauthorized" });
+    if (token == null)
+      return res.sendStatus(401).json({ error: "Unauthorized" });
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, userId) => {
-    if (err) return res.sendStatus(403).json({ error: "Forbidden" });
-    req.userId = userId;
-    next();
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, userId) => {
+      console.log(err);
+      if (err) throw err;
+      req.userId = userId;
+      next();
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+function generateAccessToken(id) {
+  return jwt.sign({ id: id }, process.env.ACCESS_TOKEN_SECRET, {
+    // Expire token in 20 mins
+    expiresIn: "60s",
+    // expiresIn: "1200s",
   });
 }
 
-module.exports = authenticateToken;
+function generateRefreshToken(id) {
+  return jwt.sign({ id: id }, process.env.REFRESH_TOKEN_SECRET);
+}
+
+module.exports = {
+  authenticateToken,
+  generateAccessToken,
+  generateRefreshToken,
+};
