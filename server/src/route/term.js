@@ -6,7 +6,7 @@ const router = express.Router();
 const { execQuery } = require("../database/database");
 // const { getQuery } = require("../utils/sql");
 
-router.get("", (req, res) => {
+router.get("/", (req, res) => {
   execQuery("CALL GetAllTerms()")
     .then((rows) => {
       res.status(200).json(rows[0]);
@@ -16,7 +16,17 @@ router.get("", (req, res) => {
     });
 });
 
-router.post("", (req, res, next) => {
+router.get("/:id", (req, res) => {
+  execQuery(`CALL GetTerm(${req.params.id})`)
+    .then((rows) => {
+      res.status(200).json(rows[0]);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+router.post("/", (req, res, next) => {
   try {
     const [fields, values] = requestBodyToFieldsAndValues(req.body);
     const addTermQuery = `INSERT INTO term (${fields.toString()}) VALUES (${values.toString()})`;
@@ -33,7 +43,7 @@ router.post("", (req, res, next) => {
   }
 });
 
-router.put("", (req, res) => {
+router.put("/", (req, res) => {
   try {
     console.log(req.body);
 

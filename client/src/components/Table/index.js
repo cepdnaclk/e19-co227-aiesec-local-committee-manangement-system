@@ -18,8 +18,8 @@ const Table = ({ rows, fields, headers, keyField, handleRowClick }) => {
   );
 
   // table row click handler
-  const handleClick = (row) => {
-    handleRowClick(row);
+  const handleClick = (key) => {
+    handleRowClick(key);
   };
 
   // create table rows
@@ -27,7 +27,7 @@ const Table = ({ rows, fields, headers, keyField, handleRowClick }) => {
     ? rows.map((row) => {
         let key = row[keyField];
         return (
-          <MuiTableRow key={key} hover onClick={() => handleClick(row)}>
+          <MuiTableRow key={key} hover onClick={() => handleClick(key)}>
             {fields.map((field, currIndex, array) => (
               <MuiTableCell key={currIndex}>{row[field]}</MuiTableCell>
             ))}

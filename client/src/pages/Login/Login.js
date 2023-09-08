@@ -5,7 +5,6 @@ import { Formik, Form, Field } from "formik";
 import { TextField, Button, Typography, Grid, Paper, Box } from "@mui/material";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
 // import loginBanner from "../../assets/login-banner.jpg";
 const LOGIN_URL = "/user/login";
 
@@ -21,8 +20,6 @@ const LOGIN_URL = "/user/login";
 
 export default function Login() {
   const { user, setUser } = useContext(UserContext);
-
-  const { setAccessToken, setRefreshToken } = useContext(AuthContext);
 
   // Define initial state of login
   const initialState = {
@@ -57,9 +54,7 @@ export default function Login() {
         roleId: response?.data?.roleId,
         id: response?.data?.id,
       });
-      setAccessToken(response?.data?.accessToken);
       localStorage.setItem("accessToken", response?.data?.accessToken);
-      setRefreshToken(response?.data?.refreshToken);
       localStorage.setItem("refreshToken", response?.data?.refreshToken);
       // const roles = response?.data?.roles;
       // setAuth({ response.data.email, response.data,password, roles, accessToken });

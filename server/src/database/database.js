@@ -10,12 +10,6 @@ const connection = mysql.createConnection({
   database: "LC_KANDY",
   port: 3306,
   multipleStatements: true,
-  // host: process.env.MYSQL_HOST,
-  // port: process.env.MYSQL_PORT,
-  // user: process.env.MYSQL_USER,
-  // password: process.env.MYSQL_PASSWORD,
-  // database: process.env.MYSQL_DATABASE,
-  // multipleStatements: true,
 });
 
 connection.connect((err) => {

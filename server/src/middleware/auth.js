@@ -9,7 +9,6 @@ function authenticateToken(req, res, next) {
       return res.sendStatus(401).json({ error: "Unauthorized" });
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, userId) => {
-      console.log(err);
       if (err) throw err;
       req.userId = userId;
       next();
@@ -22,8 +21,8 @@ function authenticateToken(req, res, next) {
 function generateAccessToken(id) {
   return jwt.sign({ id: id }, process.env.ACCESS_TOKEN_SECRET, {
     // Expire token in 20 mins
-    expiresIn: "60s",
-    // expiresIn: "1200s",
+    // expiresIn: "60s",
+    expiresIn: "1200s",
   });
 }
 

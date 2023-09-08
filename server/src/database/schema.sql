@@ -109,11 +109,10 @@ CREATE TABLE member (
 
 /* =============== TERMS TABLE =============== */
 CREATE TABLE term (
-
-    title                   VARCHAR(10) PRIMARY KEY NOT NULL, #yy-Summer/Winter
-    start_date              DATE NOT NULL,
-    end_date                DATE NOT NULL,
-    newbie_recruitment_date DATE NOT NULL
+    id                     VARCHAR(10) PRIMARY KEY NOT NULL, #yy-Summer/Winter
+    startDate              DATE NOT NULL,
+    endDate                DATE NOT NULL,
+    newbieRecruitmentDate  DATE NOT NULL
 );
 
 /* =============== UPCOMING EVENTS TABLE =========*/

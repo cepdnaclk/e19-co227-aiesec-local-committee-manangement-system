@@ -25,13 +25,14 @@ import {
   Dialog,
   DialogContent,
   IconButton,
+  Paper,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import AdminRoutes from "./utils/AdminRoutes";
-import Terms from "./pages/Terms/Terms";
+import Terms from "./pages/Terms";
 import ApplicationView from "./pages/Application/ApplicationView";
 import Home from "./pages/Home/Home";
 
@@ -300,8 +301,8 @@ function App() {
             </Toolbar>
           </AppBar>
         </Box>
-        <Box component="main" sx={{ m: 2 }}>
-          {/* <Paper sx={{ p: 0.5, borderRadius: "10px" }}> */}
+        {/* <Box component="main" sx={{ m: 2 }}> */}
+        <Paper component="main" sx={{ m: 2, p: 2, borderRadius: "10px" }}>
           <Routes>
             <Route element={<ProtectedRoutes />}>
               <Route path="/applications" element={<ApplicationView />} />
@@ -314,8 +315,8 @@ function App() {
             </Route>
             <Route path="/login" element={<Login />} />
           </Routes>
-          {/* </Paper> */}
-        </Box>
+        </Paper>
+        {/* </Box> */}
         <Dialog open={modalState.open} fullWidth maxWidth="md">
           <DialogContent dividers>
             <Box>

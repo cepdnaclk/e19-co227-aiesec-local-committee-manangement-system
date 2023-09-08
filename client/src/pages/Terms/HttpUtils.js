@@ -1,13 +1,16 @@
 import axios from "../../api/axios";
 
-const TERM_URL = "/term";
+const URL = "/term";
 
-const loadAll = () => {};
+export const loadAll = async () => {
+  const response = await axios.get(URL);
+  return response.data;
+};
 
-const load = () => {};
+export const loadTerm = () => {};
 
-const handleAdd = (formData, { setSubmitting, resetForm }) => {};
+export const addTerm = () => {};
 
-const handleSave = () => {};
+export const editTerm = () => {};
 
-const handleDelete = () => {};
+export const deleteTerm = () => {};
