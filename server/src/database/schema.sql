@@ -263,3 +263,14 @@ BEGIN
     END WHILE;
     CLOSE cur;
 END;
+
+
+/* =============================================== */
+
+/*table for storing templates of emails*/
+CREATE TABLE email_templates (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    subject VARCHAR(255) NOT NULL,
+    body TEXT NOT NULL
+);

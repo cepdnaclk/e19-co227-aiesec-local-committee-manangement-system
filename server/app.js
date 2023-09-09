@@ -28,7 +28,7 @@ app.use("/slot", require("./src/route/igv_slots"));
 app.use("/question", require("./src/route/igv_question"));
 app.use("/application", require("./src/route/igv_application"));
 app.use("/event", require("./src/route/events"));
-app.use("/send_email", require("./src/route/send_email"));
+app.use("/email", require("./src/route/email"));
 
 
 // error logging
