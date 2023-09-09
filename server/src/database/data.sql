@@ -354,19 +354,3 @@ INSERT INTO lc_event (title, event_description, post_link, event_date) VALUES
 ("Local Committee Meeting - August", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
 ,("Local Committee Meeting - September", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
 ;
-
-INSERT INTO email_templates (name, subject, body) VALUES
-
-("reminder", "Reminder (via LCMS)", 
-
-"<p>This Email is sent to <strong>remind </strong>you that you are assigned to someone :).</p>
-<p>&nbsp;</p>
-<p>Thank You,</p>
-<p>AIESEC local committee management system</p>" ),
-
-("approved", "Your application is approved", 
-
-"<p>Happy to say that your application is approved. yeee !!</p>
-<p>&nbsp;</p>
-<p>Thank You,</p>
-<p>AIESEC local committee management system</p>");

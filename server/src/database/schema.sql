@@ -104,7 +104,7 @@ CREATE TABLE member (
     FOREIGN KEY (department_id)     REFERENCES department(id),
     FOREIGN KEY (district_id)       REFERENCES district(id),
     FOREIGN KEY (role_id)           REFERENCES role(id)
-) ;
+);
 
 
 /* =============== TERMS TABLE =============== */
@@ -263,14 +263,3 @@ BEGIN
     END WHILE;
     CLOSE cur;
 END;
-
-
-/* =============================================== */
-
-/*table for storing templates of emails*/
-CREATE TABLE email_templates (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE,
-    subject VARCHAR(255) NOT NULL,
-    body TEXT NOT NULL
-);
