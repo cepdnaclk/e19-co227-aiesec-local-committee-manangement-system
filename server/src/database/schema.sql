@@ -104,7 +104,7 @@ CREATE TABLE member (
     FOREIGN KEY (department_id)     REFERENCES department(id),
     FOREIGN KEY (district_id)       REFERENCES district(id),
     FOREIGN KEY (role_id)           REFERENCES role(id)
-);
+) ;
 
 
 /* =============== TERMS TABLE =============== */
