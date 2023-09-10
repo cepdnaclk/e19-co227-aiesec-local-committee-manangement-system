@@ -88,7 +88,7 @@ const sendReminders = (receiver) => {
 // routes
 
 // create email template
-router.post('/template/create', (req, res) => {
+router.post('/template/create', (req, res, next) => {
 
     let sql = `INSERT INTO email_templates (name, subject, body) VALUES ('${req.body.name}', '${req.body.subject}', '${req.body.body}')`;
 
@@ -97,13 +97,13 @@ router.post('/template/create', (req, res) => {
             res.status(200).json({ msg: "successfully created" })
         })
         .catch((err) => {
-            res.status(500).json({ msg: err });
+            next(err)
         });
 
 });
 
 // delete email template
-router.delete('/template/:name', (req, res) => {
+router.delete('/template/:name', (req, res, next) => {
 
     let sql = `DELETE FROM email_templates WHERE name = '${req.params.name}'`;
 
@@ -112,13 +112,13 @@ router.delete('/template/:name', (req, res) => {
             res.status(200).json({ msg: "successfully deleted" })
         })
         .catch((err) => {
-            res.status(500).json({ msg: err });
+            next(err)
         });
 
 });
 
 // get email template
-router.get('/template/:name', (req, res) => {
+router.get('/template/:name', (req, res, next) => {
 
     let sql = `SELECT * FROM email_templates WHERE name = '${req.params.name}'`;
 
@@ -127,13 +127,13 @@ router.get('/template/:name', (req, res) => {
             res.status(200).json(rows[0])
         })
         .catch((err) => {
-            res.status(500).json({ msg: err });
+            next(err)
         });
 
 });
 
 // update email template
-router.put('/template/:name', (req, res) => {
+router.put('/template/:name', (req, res, next) => {
 
     let sql = `UPDATE email_templates SET subject = '${req.body.subject}', body = '${req.body.body}' WHERE name = '${req.params.name}'`;
 
@@ -142,7 +142,7 @@ router.put('/template/:name', (req, res) => {
             res.status(200).json({ msg: "template updated" })
         })
         .catch((err) => {
-            res.status(500).json({ msg: err });
+            next(err)
         });
 
 });
@@ -151,21 +151,20 @@ router.put('/template/:name', (req, res) => {
 /*---------------------------------------------------------*/
 
 // send a reminder (for testing)
-router.post('/sendReminders', (req, res) => {
+router.post('/sendReminders', (req, res, next) => {
 
     sendReminders("astromp01@gmail.com")
         .then(() => {
             res.status(200).json({ msg: 'Reminder sent' })
         })
         .catch((err) => {
-            res.status(500).json({ msg: err });
+            next(err)
         })
 
 });
 
-
-router.post('/send6weekChallengeMail', (req, res) => {
-
+router.post('/send6weekChallengeMail', (req, res, next) => {
+    // below code only for testing 
 
     // generate email
     let emailBody = {
@@ -201,7 +200,7 @@ router.post('/send6weekChallengeMail', (req, res) => {
             });
         })
         .catch((err) => {
-            res.status(500).json({ msg: err });
+            next(err)
         });
 
 
