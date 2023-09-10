@@ -1,11 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\client\\src\\utils",
     "\\server",
     "\\server\\src",
     "\\server\\src\\database",
     "\\server\\src\\route"
   ],
-  "SelectedNode": "\\server\\src\\database\\data.sql",
+  "SelectedNode": "\\server\\src\\route\\igv_projects.js",
   "PreviewInSolutionExplorer": false
 }

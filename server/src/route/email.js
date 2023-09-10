@@ -10,7 +10,7 @@ require('dotenv').config();
 const { connection, execQuery } = require("../database/database");
 
 
-const send_email = (reciver, cc, bcc, subject, body, attachements)=>{
+const send_email = (reciver, cc, bcc, subject, body, attachments)=>{
 
     let config = {
         service: 'gmail',
@@ -22,6 +22,16 @@ const send_email = (reciver, cc, bcc, subject, body, attachements)=>{
 
     let transporter = nodemailer.createTransport(config);
 
+    let ProcessedAttachments = attachments ? attachments.map(attachmentPath => {
+        return {
+            filename: path.basename(attachmentPath), // Extract filename from path
+            path: attachmentPath,
+            cid: path.basename(attachmentPath) // Extract filename for CID
+        };
+    }) : [];
+
+/*    console.log(ProcessedAttachments)*/
+
     let message = {
         from: 'manodyasenevirathne0@gmail.com',
         to: reciver, // Assuming this can be a comma-separated list of receivers
@@ -29,7 +39,7 @@ const send_email = (reciver, cc, bcc, subject, body, attachements)=>{
         bcc: bcc,  // BCC receivers
         subject: subject || 'no reply - system email from AIESEC lcms!', // If subject not provided, fallback to default
         html: body,
-        attachments: attachements
+        attachments: ProcessedAttachments
     };
 
     return new Promise((resolve, reject) => {
@@ -55,33 +65,57 @@ let mailGenerator = new Mailgen({
 });
 
 
-const sendReminders = () => {
-
+const sendReminders = (receiver) => {
     let sql = "SELECT * FROM email_templates WHERE name = 'reminder'";
-    let receiver = "astromp01@gmail.com";
     let cc = null;
     let bcc = null;
-    let attachments = null;
 
-
-    execQuery(sql)
+    // Return the Promise from execQuery so it can be used in the Promise chain
+    return execQuery(sql)
         .then((rows) => {
+            let emailData = rows[0];
 
-            let emailData = rows[0]
-            send_email(receiver, cc, bcc, emailData.subject, emailData.body, attachments)
-
-        })
-        .catch((err) => {
-            console.error("Reminder Email sending error : "+ err)
+            return send_email(receiver, cc, bcc, emailData.subject, emailData.body, JSON.parse(emailData.attachments));
         });
 
-}
+};
+
 
 
 
 
 
 // routes
+
+// create email template
+router.post('/template/create', (req, res) => {
+
+    let sql = `INSERT INTO email_templates (name, subject, body) VALUES ('${req.body.name}', '${req.body.subject}', '${req.body.body}')`;
+
+    execQuery(sql)
+        .then((rows) => {
+            res.status(200).json({ msg: "successfully created" })
+        })
+        .catch((err) => {
+            res.status(500).json({ msg: err });
+        });
+
+});
+
+// delete email template
+router.delete('/template/:name', (req, res) => {
+
+    let sql = `DELETE FROM email_templates WHERE name = '${req.params.name}'`;
+
+    execQuery(sql)
+        .then((rows) => {
+            res.status(200).json({ msg: "successfully deleted" })
+        })
+        .catch((err) => {
+            res.status(500).json({ msg: err });
+        });
+
+});
 
 // get email template
 router.get('/template/:name', (req, res) => {
@@ -114,11 +148,18 @@ router.put('/template/:name', (req, res) => {
 });
 
 
+/*---------------------------------------------------------*/
+
 // send a reminder (for testing)
 router.post('/sendReminders', (req, res) => {
 
-    sendReminders()
-    res.status(200).json({ msg: 'Reminder sent' })
+    sendReminders("astromp01@gmail.com")
+        .then(() => {
+            res.status(200).json({ msg: 'Reminder sent' })
+        })
+        .catch((err) => {
+            res.status(500).json({ msg: err });
+        })
 
 });
 
@@ -147,17 +188,11 @@ router.post('/send6weekChallengeMail', (req, res) => {
 
 
     // Process attachments
-    let processedAttachments = req.body.attachments ? req.body.attachments.map(attachmentPath => {
-        return {
-            filename: path.basename(attachmentPath), // Extract filename from path
-            path: attachmentPath,
-            cid: path.basename(attachmentPath) // Extract filename for CID
-        };
-    }) : [];
+    let attachments = req.body.attachments ? req.body.attachments : [];
 
 
 
-    send_email(req.body.email, req.body.cc, req.body.bcc, req.body.subject, generatedemailbody, processedattachments)
+    send_email(req.body.email, req.body.cc, req.body.bcc, req.body.subject, generatedemailbody, attachments)
         .then((info) => {
             res.status(201).json({
                 msg: "email sent",
