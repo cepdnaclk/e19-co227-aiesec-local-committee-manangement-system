@@ -4,9 +4,18 @@ import MenuItem from "@mui/material/MenuItem";
 
 import { capitalCase } from "change-case";
 
-const Field = ({ type, name, label, variant, sx, size, options, ...rest }) => {
-  const { touched, errors } = useFormikContext();
-
+const Field = ({
+  type,
+  name,
+  label,
+  variant,
+  sx,
+  size,
+  options,
+  disabled,
+  ...rest
+}) => {
+  const { touched, errors, isSubmitting } = useFormikContext();
   return (
     <FormikField
       name={name}
@@ -20,6 +29,7 @@ const Field = ({ type, name, label, variant, sx, size, options, ...rest }) => {
       helperText={touched[name] && errors[name]}
       sx={{ m: 1, width: 1, ...sx }}
       size={size || "small"}
+      disabled={isSubmitting || disabled}
       {...rest}
     >
       {options

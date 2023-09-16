@@ -4,18 +4,18 @@ import Button from "@mui/material/Button";
 
 import { useFormikContext } from "formik";
 
-const SubmitButton = ({ mode, disabled }) => {
+const FormSubmitButton = ({ editMode, disabled }) => {
   const { isSubmitting, isValid, isValidating } = useFormikContext();
 
   const buttonText = () => {
-    if (mode.includes("add")) return "Add";
-    else if (mode.includes("view")) return "Delete";
-    else if (mode.includes("edit")) return "Save";
+    if (editMode.includes("add")) return "Add";
+    else if (editMode.includes("view")) return "Delete";
+    else if (editMode.includes("edit")) return "Save";
     else return "";
   };
 
   const buttonColor = () => {
-    if (mode.includes("view")) return "error";
+    if (editMode.includes("view")) return "error";
     else return "primary";
   };
 
@@ -32,4 +32,4 @@ const SubmitButton = ({ mode, disabled }) => {
   );
 };
 
-export default SubmitButton;
+export default FormSubmitButton;

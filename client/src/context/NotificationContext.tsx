@@ -86,44 +86,25 @@ export const NotificationBar: React.FC = () => {
   );
 };
 
-/* Custom hooks for children component to use the notify() function */
-
-export const useNotifySuccess = () => {
+/* Custom hook for children component to use the notify() function */
+export const useNotify = () => {
   const { notify } = useContext(NotificationContext);
 
   const notifySuccess = (message: string) => {
     notify({ type: "success", message });
   };
 
-  return notifySuccess;
-};
-
-export const useNotifyError = () => {
-  const { notify } = useContext(NotificationContext);
-
   const notifyError = (message: string) => {
     notify({ type: "error", message });
   };
-
-  return notifyError;
-};
-
-export const useNotifyWarning = () => {
-  const { notify } = useContext(NotificationContext);
 
   const notifyWarning = (message: string) => {
     notify({ type: "warning", message });
   };
 
-  return notifyWarning;
-};
-
-export const useNotifyInfo = () => {
-  const { notify } = useContext(NotificationContext);
-
   const notifyInfo = (message: string) => {
     notify({ type: "info", message });
   };
 
-  return notifyInfo;
+  return { notifySuccess, notifyError, notifyWarning, notifyInfo };
 };
