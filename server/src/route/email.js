@@ -72,7 +72,7 @@ let mailGenerator = new Mailgen({
 
 
 const sendReminders = (receiver) => {
-    let sql = "SELECT * FROM email_templates WHERE name = 'reminder'";
+    let sql = "SELECT * FROM email_template WHERE name = 'reminder'";
     let cc = null;
     let bcc = null;
 
