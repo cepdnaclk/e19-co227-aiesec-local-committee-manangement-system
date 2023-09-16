@@ -7,10 +7,17 @@ const Mailgen = require('mailgen');
 require('dotenv').config();
 
 
+const { OAuth2Client } = require('google-auth-library');
+const jwt = require("jsonwebtoken");
+
+const REDIRECT_URL = 'http://localhost:8081/email/auth/callback';
+const oAuth2Client = new OAuth2Client(process.env.GMAIL_CLIENT_ID, process.env.GMAIL_CLIENT_SECRET, REDIRECT_URL);
+
+
 const { connection, execQuery } = require("../database/database");
 
 
-const send_email = (reciver, cc, bcc, subject, body, attachments)=>{
+function send_email(reciver, cc, bcc, subject, body, attachments) {
 
     let config = {
         service: 'gmail',
@@ -18,26 +25,25 @@ const send_email = (reciver, cc, bcc, subject, body, attachments)=>{
             user: process.env.GMAIL_APP_USER,
             pass: process.env.GMAIL_APP_PASSWORD
         }
-    }
+    };
 
     let transporter = nodemailer.createTransport(config);
 
     let ProcessedAttachments = attachments ? attachments.map(attachmentPath => {
         return {
-            filename: path.basename(attachmentPath), // Extract filename from path
+            filename: path.basename(attachmentPath),
             path: attachmentPath,
             cid: path.basename(attachmentPath) // Extract filename for CID
         };
     }) : [];
 
-/*    console.log(ProcessedAttachments)*/
 
     let message = {
-        from: 'manodyasenevirathne0@gmail.com',
-        to: reciver, // Assuming this can be a comma-separated list of receivers
-        cc: cc,    // CC receivers
-        bcc: bcc,  // BCC receivers
-        subject: subject || 'no reply - system email from AIESEC lcms!', // If subject not provided, fallback to default
+        from: `no-reply AIESEC LCMS <${process.env.GMAIL_APP_USER}>`,
+        to: reciver,
+        cc: cc,
+        bcc: bcc,
+        subject: subject || 'system message from AIESEC lcms!',
         html: body,
         attachments: ProcessedAttachments
     };
@@ -54,7 +60,7 @@ const send_email = (reciver, cc, bcc, subject, body, attachments)=>{
 
 }
 
-
+// for later usage
 let mailGenerator = new Mailgen({
     theme: 'default',
     product: {
@@ -90,7 +96,7 @@ const sendReminders = (receiver) => {
 // create email template
 router.post('/template/create', (req, res, next) => {
 
-    let sql = `INSERT INTO email_templates (name, subject, body) VALUES ('${req.body.name}', '${req.body.subject}', '${req.body.body}')`;
+    let sql = `INSERT INTO email_template (name, subject, body, attachments) VALUES ('${req.body.name}', '${req.body.subject}', '${req.body.body}', '${req.body.attachments}')`;
 
     execQuery(sql)
         .then((rows) => {
@@ -105,7 +111,7 @@ router.post('/template/create', (req, res, next) => {
 // delete email template
 router.delete('/template/:name', (req, res, next) => {
 
-    let sql = `DELETE FROM email_templates WHERE name = '${req.params.name}'`;
+    let sql = `DELETE FROM email_template WHERE name = '${req.params.name}'`;
 
     execQuery(sql)
         .then((rows) => {
@@ -120,7 +126,7 @@ router.delete('/template/:name', (req, res, next) => {
 // get email template
 router.get('/template/:name', (req, res, next) => {
 
-    let sql = `SELECT * FROM email_templates WHERE name = '${req.params.name}'`;
+    let sql = `SELECT * FROM email_template WHERE name = '${req.params.name}'`;
 
     execQuery(sql)
         .then((rows) => {
@@ -135,7 +141,7 @@ router.get('/template/:name', (req, res, next) => {
 // update email template
 router.put('/template/:name', (req, res, next) => {
 
-    let sql = `UPDATE email_templates SET subject = '${req.body.subject}', body = '${req.body.body}' WHERE name = '${req.params.name}'`;
+    let sql = `UPDATE email_template SET subject = '${req.body.subject}', body = '${req.body.body}', attachments = '${req.body.attachments}' WHERE name = '${req.params.name}'`;
 
     execQuery(sql)
         .then((rows) => {
@@ -148,12 +154,12 @@ router.put('/template/:name', (req, res, next) => {
 });
 
 
-/*---------------------------------------------------------*/
+/*------------------EMAILS THROUGH SYSTEM---------------------------------------*/
 
 // send a reminder (for testing)
 router.post('/sendReminders', (req, res, next) => {
 
-    sendReminders("astromp01@gmail.com")
+    sendReminders(req.body.receiver)
         .then(() => {
             res.status(200).json({ msg: 'Reminder sent' })
         })
@@ -163,6 +169,7 @@ router.post('/sendReminders', (req, res, next) => {
 
 });
 
+// for now testing only
 router.post('/send6weekChallengeMail', (req, res, next) => {
     // below code only for testing 
 
@@ -213,6 +220,157 @@ router.post('/sendApprovedMail', (req, res) => {
 router.post('/sendESEMail', (req, res) => {
 
 });
+
+
+
+
+
+/*------------------EMAILS THROUGH USERS---------------------------------------*/
+
+//google authentication for user's to access data
+router.get('/auth', (req, res) => {
+
+    try {
+
+        const authUrl = oAuth2Client.generateAuthUrl({
+            access_type: 'offline',
+            scope: ['https://mail.google.com/', 'openid', 'email'],
+        });
+        res.redirect(authUrl);
+
+    } catch (err) {
+        res.status(500).send("Google Authentication initialization error");
+    }
+});
+
+
+router.get('/auth/callback', async (req, res) => {
+
+    try {
+        const response = await oAuth2Client.getToken(req.query.code);
+        /*console.log("Token response:", response);*/
+        const tokens = response.tokens;
+
+        /*console.log("tokens: ",tokens);*/
+
+        oAuth2Client.setCredentials(tokens);
+
+        if (!tokens.id_token || (tokens.id_token.split('.').length !== 3)) {
+            throw new Error('Invalid or missing id_token');
+        }
+
+       
+        const decodedToken = jwt.decode(tokens.id_token);
+        const userEmail = decodedToken.email;
+
+        let rows = await execQuery(`SELECT email FROM user_gmail_data WHERE email = '${userEmail}' ;`);
+
+        if (rows.length == 0) {
+            await execQuery(`INSERT INTO user_gmail_data (email, access_token, refresh_token, token_expiry) VALUES ('${userEmail}', '${tokens.access_token}', '${tokens.refresh_token}', '${tokens.expiry_date}')`);
+            
+        } else {  
+            await execQuery(`UPDATE user_gmail_data SET access_token = '${tokens.access_token}', token_expiry = '${tokens.expiry_date}' WHERE email = '${userEmail}'`);
+            
+        }
+       /* res.redirect('http://localhost:8081/email/sendemail');*/
+        res.send("Authenticated successfully!");
+
+    } catch (error) {
+        console.error("Error during authentication:", error);
+        res.status(500).send("Authentication error.");
+    }
+});
+
+
+router.get('/sendEmail', async (req, res, next) => {
+
+    try {
+
+        const email = req.body.userEmail;  // TODO: Set this to the appropriate user email 
+
+        const rows = await execQuery(`SELECT * FROM user_gmail_data WHERE email = '${email}'`);
+
+        if (rows.length === 0) return res.status(404).send("User not found.");
+        const user = rows[0];
+
+
+        let access_token = user.access_token;
+        let refresh_token = user.refresh_token;
+        let token_expiry = user.token_expiry;
+
+
+        if (Date.now() > token_expiry) {
+            const { credentials } = await oAuth2Client.refreshAccessToken();
+
+            access_token = credentials.access_token;
+            refresh_token = credentials.refresh_token;
+            token_expiry = credentials.expiry_date;
+
+            console.log("UPDATED credential :", credentials);
+
+            await execQuery(`UPDATE user_gmail_data SET access_token = '${access_token}', token_expiry = '${token_expiry}' WHERE email = '${email}'`);
+
+        }
+
+        access_token = await new Promise((resolve, reject) => {
+            oAuth2Client.getAccessToken((err, token) => {
+                if (err) {
+                    reject("Failed to create access token :(");
+                }
+                resolve(token);
+            });
+        });
+
+        oAuth2Client.setCredentials({
+            refresh_token: refresh_token
+        });
+
+        let transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+                type: 'OAuth2',
+                user: email,
+                accessToken: access_token,
+                clientId: process.env.GMAIL_CLIENT_ID,
+                clientSecret: process.env.GMAIL_CLIENT_SECRET,
+                refreshToken: refresh_token
+            }
+        });
+
+
+        let ProcessedAttachments = req.body.attachments ? req.body.attachments.map(attachmentPath => {
+            return {
+                filename: path.basename(attachmentPath),
+                path: attachmentPath,
+                cid: path.basename(attachmentPath) // Extract filename for CID
+            };
+        }) : [];
+
+        let message = {
+            from: email,
+            to: req.body.receiver, 
+            cc: req.body.cc,
+            bcc: req.body.bcc,
+            subject: req.body.subject,
+            html: req.body.body,
+            attachments: ProcessedAttachments
+        };
+
+        transporter.sendMail(message, (error, info) => {
+            if (error) {
+                return res.status(500).send(error.message);
+            }
+            res.send('Email sent: ' + info.response);
+        });
+
+
+    } catch (err) {
+        next(err);
+    }
+});
+
 
 
 module.exports = router;

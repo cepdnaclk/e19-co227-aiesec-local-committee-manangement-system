@@ -70,8 +70,8 @@ connection.query(procedureScript, (err) => {
 
 const execQuery = (queryString) => {
   return new Promise((resolve, reject) => {
-    connection.query(queryString, (err, rows, fields) => {
-      if (err) return reject(err);
+      connection.query(queryString, (err, rows, fields) => {
+          if (err) { console.log(err); return reject(err); }
       resolve(rows);
     });
   });

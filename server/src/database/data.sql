@@ -126,7 +126,7 @@ INSERT INTO member
 )
 VALUES 
 (
-    "john@example.com", 
+    "astromp01@gmail.com", 
     123,
     "John Doe",
     "John",
@@ -355,7 +355,7 @@ INSERT INTO lc_event (title, event_description, post_link, event_date) VALUES
 ,("Local Committee Meeting - September", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
 ;
 
-INSERT INTO email_templates (name, subject, body, attachments) VALUES
+INSERT INTO email_template (name, subject, body, attachments) VALUES
 
 ("reminder", "Reminder (via LCMS)", 
 
