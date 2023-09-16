@@ -77,4 +77,14 @@ const execQuery = (queryString) => {
   });
 };
 
-module.exports = { connection, execQuery };
+const execQueryWithValues = (query, values) => {
+    return new Promise((resolve, reject) => {
+        connection.query(query, values, (err, rows, fields) => {
+            if (err) { console.log(err); return reject(err); }
+            resolve(rows);
+        });
+    });
+};
+
+
+module.exports = { connection, execQuery, execQueryWithValues };

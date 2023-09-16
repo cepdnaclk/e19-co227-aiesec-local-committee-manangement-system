@@ -359,7 +359,10 @@ INSERT INTO email_template (name, subject, body, attachments) VALUES
 
 ("reminder", "Reminder (via LCMS)", 
 
-"<p>This Email is sent to <strong>remind </strong>you that you are assigned to someone :).</p>
+"<p>Hi {{member_name}} !</p>
+<p>This Email is sent to <strong>remind </strong>you that you are assigned to an OGV applicant.</p>
+<p style='margin-left:40px'>applicant&#39;s details :&nbsp;</p>
+<p style='margin-left:80px'>{{applicant_details}}</p>
 <p>&nbsp;</p>
 <p>Thank You,</p>
 <p>AIESEC local committee management system</p>",

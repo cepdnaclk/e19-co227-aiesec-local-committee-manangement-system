@@ -29,7 +29,7 @@ app.use("/question", require("./src/route/igv_question"));
 app.use("/application", require("./src/route/igv_application"));
 app.use("/event", require("./src/route/events"));
 app.use("/email", require("./src/route/email"));
-
+app.use("/ogv", require("./src/route/ogv_applicant"));
 
 // error logging
 app.use(require("./src/middleware/errorLogger"));

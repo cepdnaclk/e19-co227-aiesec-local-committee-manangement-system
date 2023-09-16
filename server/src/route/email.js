@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path'); // Added for extracting filename from path
+const cron = require('node-cron');
 
 const nodemailer = require('nodemailer');
 const Mailgen = require('mailgen');
@@ -60,6 +61,14 @@ function send_email(reciver, cc, bcc, subject, body, attachments) {
 
 }
 
+
+function replacePlaceholders(template, data) {
+    return template.replace(/\{\{(\w+)\}\}/g, function (match, placeholder) {
+        return data[placeholder] || '';
+    });
+}
+
+
 // for later usage
 let mailGenerator = new Mailgen({
     theme: 'default',
@@ -71,25 +80,61 @@ let mailGenerator = new Mailgen({
 });
 
 
-const sendReminders = (receiver) => {
-    let sql = "SELECT * FROM email_template WHERE name = 'reminder'";
+/*=======================REMINDERS=================================*/
+function fetchPreSignupMembers(callback) {
+    const query = 'SELECT * FROM DetailsForSendReminders';
+
+    connection.query(query, (error, results) => {
+        if (error) throw error;
+        callback(results);
+    });
+}
+
+
+const sendReminders = (member_email, member_name, applicant_details) => {
+
+
+    let reminder_mail = "SELECT * FROM email_template WHERE name = 'reminder'";
     let cc = null;
     let bcc = null;
 
     // Return the Promise from execQuery so it can be used in the Promise chain
-    return execQuery(sql)
+    return execQuery(reminder_mail)
         .then((rows) => {
             let emailData = rows[0];
 
-            return send_email(receiver, cc, bcc, emailData.subject, emailData.body, JSON.parse(emailData.attachments));
+            template_data = {
+                member_name: member_name,
+                applicant_details: applicant_details
+            };
+
+            let emailBody = replacePlaceholders(emailData.body, template_data);
+
+            return send_email(member_email, cc, bcc, emailData.subject, emailBody, JSON.parse(emailData.attachments));
         });
 
 };
 
+function callReminder() {
 
+    console.log("Sending Reminders");
 
+    fetchPreSignupMembers(rows => {
+        rows.forEach(row => {
 
+            let applicant_details = `<ul><li>id : ${row.id}</li><li>First Name : ${row.first_name}</li><li>Last Name : ${row.last_name}</li><li>Phone No : ${row.phone}</li><li>Campaign ID : ${row.campaign_id}</li>`;
 
+            /*console.log("Reminder: ", row.member_email, row.member_name, applicant_details);*/
+            sendReminders(row.member_email, row.member_name, applicant_details);
+        
+        });
+    });
+};
+
+// sending reminders every 20 sec :: TODO: add suitable time period , formatting email
+/*cron.schedule('20 * * * * *', callReminder);*/
+
+/*=================================================================*/
 
 // routes
 

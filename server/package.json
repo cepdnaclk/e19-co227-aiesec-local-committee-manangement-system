@@ -21,6 +21,7 @@
     "jwt-decode": "^3.1.2",
     "mailgen": "^2.0.27",
     "mysql": "^2.18.1",
+    "node-cron": "^3.0.2",
     "nodemailer": "^6.9.5"
   },
   "devDependencies": {
