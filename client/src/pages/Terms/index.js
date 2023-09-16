@@ -21,13 +21,7 @@ import FormSubmitButton from "../../components/FormSubmitButton";
 
 import { useNotify } from "../../context/NotificationContext";
 
-import {
-  TermList,
-  TermSelected,
-  CreateTerm,
-  UpdateTerm,
-  DeleteTerm,
-} from "./HttpUtils";
+import { TermList, CreateTerm, UpdateTerm, DeleteTerm } from "./HttpUtils";
 
 export default function Terms() {
   // ---------- DATA HANDLING ----------
@@ -96,7 +90,7 @@ function Form({ editMode, setEditMode, selectedItemKey, setSelectedItemKey }) {
   const { notifySuccess, notifyError } = useNotify();
 
   // ---------- DATA HANDLING ----------
-  const termSelected = TermSelected(selectedItemKey, editMode);
+  const termList = TermList();
   const createTerm = CreateTerm();
   const updateTerm = UpdateTerm();
   const deleteTerm = DeleteTerm();
@@ -109,10 +103,9 @@ function Form({ editMode, setEditMode, selectedItemKey, setSelectedItemKey }) {
 
   // ---------- VIEW RENDERING ----------
 
-  if (termSelected.isInitialLoading || termSelected.isFetching)
-    return <FormSkeleton />;
+  if (termList.isLoading || termList.isFetching) return <FormSkeleton />;
 
-  if (termSelected.error) return <ErrorPage error={termSelected.error} />;
+  if (termList.error) return <ErrorPage error={termList.error} />;
 
   return (
     <>
@@ -120,7 +113,7 @@ function Form({ editMode, setEditMode, selectedItemKey, setSelectedItemKey }) {
         initialValues={
           editMode === "add"
             ? { id: "", startDate: "", endDate: "", newbieRecruitmentDate: "" }
-            : termSelected.data
+            : termList.data.find((item) => item.id === selectedItemKey)
         }
         onSubmit={(formData, { setSubmitting }) => {
           setSubmitting(true);

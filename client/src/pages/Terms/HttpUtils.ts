@@ -16,15 +16,15 @@ export const TermList = () => {
   });
 };
 
-export const TermSelected = (id: String, editMode) => {
-  return useQuery({
-    queryKey: ["term-selected"],
-    queryFn: () =>
-      axios.get<{ data: TermType }>(`${url}/${id}`).then((res) => res.data),
-    enabled: editMode !== "add" ? true : false,
-    refetchOnMount: true,
-  });
-};
+// export const TermSelected = (id: String, editMode) => {
+//   return useQuery({
+//     queryKey: ["term-selected"],
+//     queryFn: () =>
+//       axios.get<{ data: TermType }>(`${url}/${id}`).then((res) => res.data),
+//     enabled: editMode !== "add" ? true : false,
+//     refetchOnMount: true,
+//   });
+// };
 
 export const CreateTerm = () => {
   const queryClient = useQueryClient();

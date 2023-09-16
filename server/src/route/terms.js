@@ -14,15 +14,15 @@ router.get("", (req, res, next) => {
     });
 });
 
-router.get("/:id", (req, res, next) => {
-  execQuery(`CALL GetTerm('${req.params.id}')`)
-    .then((rows) => {
-      return res.status(200).json(rows[0][0]);
-    })
-    .catch((err) => {
-      next(err);
-    });
-});
+// router.get("/:id", (req, res, next) => {
+//   execQuery(`CALL GetTerm('${req.params.id}')`)
+//     .then((rows) => {
+//       return res.status(200).json(rows[0][0]);
+//     })
+//     .catch((err) => {
+//       next(err);
+//     });
+// });
 
 router.post("", (req, res, next) => {
   execQuery(
