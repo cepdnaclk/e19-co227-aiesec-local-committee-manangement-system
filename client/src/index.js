@@ -12,7 +12,13 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // ReactDOM.render is no longer supported in React 18.
 // ReactDOM.render(<App />, document.getElementById('root'))
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      cacheTime: 10 * 60 * 1000, // default: 5 min
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -23,7 +29,11 @@ root.render(
           <BrowserRouter>
             <QueryClientProvider client={queryClient}>
               <App />
-              <ReactQueryDevtools />
+              <ReactQueryDevtools
+                initialIsOpen={false}
+                position="bottom-right"
+                panelPosition="right"
+              />
             </QueryClientProvider>
           </BrowserRouter>
         </UserProvider>

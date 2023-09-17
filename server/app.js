@@ -21,7 +21,7 @@ const { authenticateToken } = require("./src/middleware/auth");
 
 // routing
 app.use("/member", require("./src/route/member"));
-app.use("/term", require("./src/route/term"));
+app.use("/terms", require("./src/route/terms"));
 app.use("/resource", require("./src/route/resource"));
 app.use("/project", require("./src/route/igv_projects"));
 app.use("/slot", require("./src/route/igv_slots"));

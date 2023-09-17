@@ -21,8 +21,7 @@ function authenticateToken(req, res, next) {
 function generateAccessToken(id) {
   return jwt.sign({ id: id }, process.env.ACCESS_TOKEN_SECRET, {
     // Expire token in 20 mins
-    // expiresIn: "60s",
-    expiresIn: "1200s",
+    // expiresIn: "1200s",
   });
 }
 
