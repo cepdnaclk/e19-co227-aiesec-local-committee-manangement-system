@@ -202,3 +202,28 @@ WHERE
 AND
     DATE(interview_date) >= CURDATE();
 END;
+
+
+
+
+
+
+
+-- OGV
+
+CREATE PROCEDURE GetApplicantDetailsInDetail(IN applicant_id INT)
+BEGIN
+    SELECT 
+        o.*,
+        m.preferred_name AS member_in_charge
+    FROM 
+        ogv_applicants o
+    LEFT JOIN 
+        member m ON o.member_in_charge_id = m.id
+    WHERE 
+        o.id = applicant_id;
+END;
+
+
+
+

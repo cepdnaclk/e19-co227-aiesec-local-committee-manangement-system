@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "dev": "nodemon app.js",
     "test": "jest"
   },
   "author": "",
@@ -14,11 +15,17 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "google-auth-library": "^9.0.0",
     "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^9.0.1",
-    "mysql": "^2.18.1"
+    "jwt-decode": "^3.1.2",
+    "mailgen": "^2.0.27",
+    "mysql": "^2.18.1",
+    "node-cron": "^3.0.2",
+    "nodemailer": "^6.9.5"
   },
   "devDependencies": {
+    "eslint": "^8.49.0",
     "jest": "^29.5.0",
     "nodemon": "^2.0.22"
   }

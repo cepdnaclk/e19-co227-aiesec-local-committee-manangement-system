@@ -104,7 +104,7 @@ CREATE TABLE member (
     FOREIGN KEY (department_id)     REFERENCES department(id),
     FOREIGN KEY (district_id)       REFERENCES district(id),
     FOREIGN KEY (role_id)           REFERENCES role(id)
-);
+) ;
 
 
 /* =============== TERMS TABLE =============== */
@@ -263,3 +263,104 @@ BEGIN
     END WHILE;
     CLOSE cur;
 END;
+
+
+/* =============================================== */
+
+/*table for storing templates of emails*/
+CREATE TABLE email_template (
+    id          INT             AUTO_INCREMENT PRIMARY KEY,
+    name        VARCHAR(255)    NOT NULL UNIQUE,
+    subject     VARCHAR(255)    NOT NULL,
+    body        TEXT            NOT NULL,
+    attachments JSON
+);
+
+/*table for user's gmail date'*/
+CREATE TABLE user_gmail_data (
+    id              INT             AUTO_INCREMENT PRIMARY KEY,
+    email           VARCHAR(255)    NOT NULL UNIQUE,
+    access_token    TEXT ,
+    refresh_token   TEXT ,
+    token_expiry    BIGINT
+);
+
+CREATE TABLE ogv_applicants (
+    id                  INT NOT NULL AUTO_INCREMENT,
+    notes               TEXT,
+    status              ENUM('pre-signup', 'signup', 'accepted', 'approved', 'realized', 'finished', 'completed', 'approval-broken', 'realization-broken') NOT NULL,
+    
+    -- pre-signup
+    first_name          VARCHAR(255) NOT NULL,
+    last_name           VARCHAR(255) NOT NULL,
+    phone               VARCHAR(20),
+    email               VARCHAR(255) NOT NULL,
+    member_in_charge_id INT,
+    campaign_id         INT,
+
+    -- accepted
+    opportunity_id      INT,
+    opportunity_name    VARCHAR(255),
+    host_mc             VARCHAR(255),
+    host_lc             VARCHAR(255),
+    accepted_start_date DATE,
+    acceptance_date     DATE,
+    is_ese_email_sent   BOOLEAN DEFAULT FALSE,
+
+    -- approved
+    approved_date       DATE,
+    payment_date        DATE,
+    payment_amount      DECIMAL(10,2),
+    proof_link          VARCHAR(1024),
+
+    -- realized
+    realized_start_date DATE,
+
+    -- finished
+    finished_date       DATE,
+
+    -- completed
+    completed_date      DATE,
+
+    -- approval-broken or realization-broken
+    break_note          TEXT,
+
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (member_in_charge_id) REFERENCES member(id),
+    INDEX (status),
+    INDEX (email),
+    INDEX (member_in_charge_id)
+);
+
+
+CREATE VIEW ApplicantDetailsInBrief AS
+SELECT 
+    o.id,
+    o.first_name,
+    o.last_name,
+    o.status,
+    o.phone,
+    o.campaign_id,
+    m.preferred_name AS member_in_charge
+FROM 
+    ogv_applicants o
+LEFT JOIN 
+    member m ON o.member_in_charge_id = m.id;
+
+
+CREATE VIEW DetailsForSendReminders AS
+SELECT 
+    o.id,
+    o.first_name,
+    o.last_name,
+    o.phone,
+    o.campaign_id,
+    m.preferred_name AS member_name,
+    m.email AS member_email
+FROM 
+    ogv_applicants o
+LEFT JOIN 
+    member m ON o.member_in_charge_id = m.id
+WHERE
+    o.status = 'pre-signup';
