@@ -82,7 +82,7 @@ let mailGenerator = new Mailgen({
 
 /*=======================REMINDERS=================================*/
 function fetchPreSignupMembers(callback) {
-    const query = 'SELECT * FROM DetailsForSendReminders';
+    const query = 'SELECT * FROM OGVDetailsForSendReminders';
 
     connection.query(query, (error, results) => {
         if (error) throw error;

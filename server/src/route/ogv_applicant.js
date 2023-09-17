@@ -31,7 +31,7 @@ router.get(`/members`, (req, res, next) => {
 // get details(selected) of all
 router.get(`/`, (req, res, next) => {
 
-    execQuery("SELECT * FROM ApplicantDetailsInBrief")
+    execQuery("SELECT * FROM OGVApplicantDetailsInBrief")
         .then((rows) => {
             res.status(200).json(rows);
         })
@@ -44,7 +44,7 @@ router.get(`/`, (req, res, next) => {
 // get all details of one applicant
 router.get(`/:id`, (req, res, next) => {
 
-    execQuery(`CALL GetApplicantDetailsInDetail(${req.params.id})`)
+    execQuery(`CALL GetOGVApplicantDetailsInDetail(${req.params.id})`)
         .then((rows) => {
             res.status(200).json(rows[0][0]);
         })

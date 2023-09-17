@@ -211,7 +211,7 @@ END;
 
 -- OGV
 
-CREATE PROCEDURE GetApplicantDetailsInDetail(IN applicant_id INT)
+CREATE PROCEDURE GetOGVApplicantDetailsInDetail(IN applicant_id INT)
 BEGIN
     SELECT 
         o.*,

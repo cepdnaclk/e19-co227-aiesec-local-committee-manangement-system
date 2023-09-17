@@ -334,7 +334,7 @@ CREATE TABLE ogv_applicants (
 );
 
 
-CREATE VIEW ApplicantDetailsInBrief AS
+CREATE VIEW OGVApplicantDetailsInBrief AS
 SELECT 
     o.id,
     o.firstName,
@@ -349,7 +349,7 @@ LEFT JOIN
     member m ON o.memberInChargeId = m.id;
 
 
-CREATE VIEW DetailsForSendReminders AS
+CREATE VIEW OGVDetailsForSendReminders AS
 SELECT 
     o.id,
     o.firstName,
@@ -364,3 +364,10 @@ LEFT JOIN
     member m ON o.memberInChargeId = m.id
 WHERE
     o.status = 'pre-signup';
+
+
+
+
+
+
+
