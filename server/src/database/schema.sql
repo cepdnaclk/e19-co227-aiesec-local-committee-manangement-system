@@ -323,7 +323,7 @@ CREATE TABLE ogv_applicants (
     completedDate       DATE,
 
     -- approval-broken or realization-broken
-    break_note          TEXT,
+    breakNote          TEXT,
 
 
     PRIMARY KEY (id),
