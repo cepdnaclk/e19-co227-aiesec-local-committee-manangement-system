@@ -215,11 +215,11 @@ CREATE PROCEDURE GetApplicantDetailsInDetail(IN applicant_id INT)
 BEGIN
     SELECT 
         o.*,
-        m.preferred_name AS member_in_charge
+        m.preferred_name AS memberInCharge
     FROM 
         ogv_applicants o
     LEFT JOIN 
-        member m ON o.member_in_charge_id = m.id
+        member m ON o.memberInChargeId = m.id
     WHERE 
         o.id = applicant_id;
 END;

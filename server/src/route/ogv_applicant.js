@@ -60,7 +60,7 @@ router.get(`/:id`, (req, res, next) => {
 router.post("/", (req, res, next) => {
     try {
 
-        const [fields, values] = requestBodyToFieldsAndValues(req.body);
+        const [fields, values] = [Object.keys(req.body), Object.values(req.body).map(value => `'${value}'`)];
         const query = `INSERT INTO ogv_applicants (${fields.toString()}) VALUES (${values.toString()})`;
 
 
@@ -83,7 +83,7 @@ router.post("/", (req, res, next) => {
 router.put("/", (req, res, next) => {
     try {
 
-        const [fields, values] = requestBodyToFieldsAndValues(req.body);
+        const [fields, values] = [Object.keys(req.body), Object.values(req.body).map(value => `'${value}'`)];
 
         // Combine the two arrays into a single array.
         let updateString = "";

@@ -117,15 +117,17 @@ const sendReminders = (member_email, member_name, applicant_details) => {
 
 function callReminder() {
 
-    console.log("Sending Reminders");
+    console.log("Sending Reminders to: ");
 
     fetchPreSignupMembers(rows => {
         rows.forEach(row => {
 
-            let applicant_details = `<ul><li>id : ${row.id}</li><li>First Name : ${row.first_name}</li><li>Last Name : ${row.last_name}</li><li>Phone No : ${row.phone}</li><li>Campaign ID : ${row.campaign_id}</li>`;
+            console.log(row.memberEmail);
+
+            let applicant_details = `<ul><li>id : ${row.id}</li><li>First Name : ${row.firstName}</li><li>Last Name : ${row.lastName}</li><li>Phone No : ${row.phone}</li><li>Campaign ID : ${row.campaignId}</li>`;
 
             /*console.log("Reminder: ", row.member_email, row.member_name, applicant_details);*/
-            sendReminders(row.member_email, row.member_name, applicant_details);
+            sendReminders(row.memberEmail, row.memberName, applicant_details);
         
         });
     });
@@ -311,10 +313,10 @@ router.get('/auth/callback', async (req, res) => {
         let rows = await execQuery(`SELECT email FROM user_gmail_data WHERE email = '${userEmail}' ;`);
 
         if (rows.length == 0) {
-            await execQuery(`INSERT INTO user_gmail_data (email, access_token, refresh_token, token_expiry) VALUES ('${userEmail}', '${tokens.access_token}', '${tokens.refresh_token}', '${tokens.expiry_date}')`);
+            await execQuery(`INSERT INTO user_gmail_data (email, accessToken, refreshToken, tokenExpiry) VALUES ('${userEmail}', '${tokens.access_token}', '${tokens.refresh_token}', '${tokens.expiry_date}')`);
             
         } else {  
-            await execQuery(`UPDATE user_gmail_data SET access_token = '${tokens.access_token}', token_expiry = '${tokens.expiry_date}' WHERE email = '${userEmail}'`);
+            await execQuery(`UPDATE user_gmail_data SET accessToken = '${tokens.access_token}', tokenExpiry = '${tokens.expiry_date}' WHERE email = '${userEmail}'`);
             
         }
        /* res.redirect('http://localhost:8081/email/sendemail');*/
@@ -339,9 +341,9 @@ router.get('/sendEmail', async (req, res, next) => {
         const user = rows[0];
 
 
-        let access_token = user.access_token;
-        let refresh_token = user.refresh_token;
-        let token_expiry = user.token_expiry;
+        let access_token = user.accessToken;
+        let refresh_token = user.refreshToken;
+        let token_expiry = user.tokenExpiry;
 
 
         if (Date.now() > token_expiry) {
@@ -353,7 +355,7 @@ router.get('/sendEmail', async (req, res, next) => {
 
             console.log("UPDATED credential :", credentials);
 
-            await execQuery(`UPDATE user_gmail_data SET access_token = '${access_token}', token_expiry = '${token_expiry}' WHERE email = '${email}'`);
+            await execQuery(`UPDATE user_gmail_data SET accessToken = '${access_token}', tokenExpiry = '${token_expiry}' WHERE email = '${email}'`);
 
         }
 
