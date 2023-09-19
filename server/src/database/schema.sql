@@ -277,6 +277,8 @@ CREATE TABLE email_template (
     name        VARCHAR(255)    NOT NULL UNIQUE,
     subject     VARCHAR(255)    NOT NULL,
     body        TEXT            NOT NULL,
+    cc          JSON,
+    bcc         JSON,
     attachments JSON
 );
 
@@ -298,7 +300,7 @@ CREATE TABLE ogv_applicants (
     firstName               VARCHAR(255) NOT NULL,
     lastName                VARCHAR(255) NOT NULL,
     phone                   VARCHAR(20),
-    email                   VARCHAR(255) NOT NULL,
+    email                   VARCHAR(255) NOT NULL UNIQUE,
     memberInChargeId        INT(5) NOT NULL,
     campaignId              VARCHAR(255),
 
@@ -376,7 +378,7 @@ FROM
 LEFT JOIN 
     member m ON o.memberInChargeId = m.id
 WHERE
-    o.status = 'pre-signup';
+    o.status = 'Pre-Signup';
 
 
 

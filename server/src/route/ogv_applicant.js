@@ -193,19 +193,64 @@ router.post("/send6weekChallengeMail", (req, res, next) => {
 
 router.post("/sendApprovedMail", (req, res) => {});
 
-router.get("/sendESEMail", (req, res) => {
-  // TODO ::
-  //      fetch email ESE mail template
-  //      replace placeholders data
-  //      send that mail data to client
+// send ese mail template to client , placeholders replaced with req.data
+router.get("/sendESEMail", (req, res, next) => {
+
+    let eseMailQuery = "SELECT * FROM email_template WHERE name = 'ese'";
+
+    return execQuery(eseMailQuery)
+        .then((rows) => {
+            let emailData = rows[0];
+
+            template_data = {
+
+            // UPDATE THIS for placeholders
+
+                //member_name: member_name,
+                //applicant_details: applicant_details
+            };
+
+            let emailBody = replacePlaceholders(emailData.body, template_data);
+
+            let email = {
+                name: emailData.name,
+                subject: emailData.subject, 
+                body: emailBody,
+                cc: emailData.cc,
+                bcc: emailData.bcc,
+                attachments: JSON.parse( emailData.attachments )
+            }
+
+            res.status(200).json(email);
+        })
+        .catch((err) => {
+            next(err);
+        });
+
+
+
 });
 
-router.post("/sendESEMail", (req, res) => {
-  // TODO ::
-  //      call sendUserEmail fn with req data
-  //      error handling
-  //      update member table
-  //      send back response
+// send ese email to req.receiver from req.userEmail and update db
+router.post("/sendESEMail", async (req, res, next) => {
+    try {
+        const { userEmail, attachments, receiver, cc, bcc, subject, body } = req.body;
+
+        const response = await sendUserEmail(userEmail, attachments, receiver, cc, bcc, subject, body);
+
+        // Using a parameterized query to prevent SQL injection
+        await execQueryWithValues(`UPDATE ogv_applicants SET isEseEmailSent = 1 WHERE email = ?`, [receiver]);
+
+        res.send("Email sent: " + response);
+
+    } catch (err) {
+        if (err.message === "User Email is not Authenticated.") {
+            res.status(404).send(err.message);
+        } else {
+            next(err);
+        }
+    }
 });
+
 
 module.exports = router;

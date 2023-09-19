@@ -14,7 +14,7 @@ const {
 
 // create email template
 router.post("/template/create", (req, res, next) => {
-  let sql = `INSERT INTO email_template (name, subject, body, attachments) VALUES ('${req.body.name}', '${req.body.subject}', '${req.body.body}', '${req.body.attachments}')`;
+    let sql = `INSERT INTO email_template (name, subject, body, cc, bcc ,attachments) VALUES ('${req.body.name}', '${req.body.subject}', '${req.body.body}','${req.body.cc ? req.body.cc : null}','${req.body.bcc ? req.body.bcc:null}', '${req.body.attachments}')`;
 
   execQuery(sql)
     .then((rows) => {
@@ -53,7 +53,7 @@ router.get("/template/:name", (req, res, next) => {
 
 // update email template
 router.put("/template/:name", (req, res, next) => {
-  let sql = `UPDATE email_template SET subject = '${req.body.subject}', body = '${req.body.body}', attachments = '${req.body.attachments}' WHERE name = '${req.params.name}'`;
+    let sql = `UPDATE email_template SET subject = '${req.body.subject}', body = '${req.body.body}', attachments = '${req.body.attachments}' ,cc = '${req.body.cc ? req.body.cc : null}',bcc = '${req.body.bcc ? req.body.bcc : null}'  WHERE name = '${req.params.name}'`;
 
   execQuery(sql)
     .then((rows) => {

@@ -368,12 +368,12 @@ INSERT INTO email_template (name, subject, body, attachments) VALUES
 <p>AIESEC local committee management system</p>",
 '["https://ichef.bbci.co.uk/news/976/cpsprodpb/16620/production/_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg"]'),
 
-("approved", "Your application is approved", 
+("ese", "Test Ese email subject", 
 
-"<p>Happy to say that your application is approved. yeee !!</p>
+"<p>Test Email Body!! </p>
 <p>&nbsp;</p>
 <p>Thank You,</p>
-<p>AIESEC local committee management system</p>", '[]');
+<p>AIESEC local committee management system</p>", '["https://ichef.bbci.co.uk/news/976/cpsprodpb/16620/production/_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg"]');
 
 INSERT INTO ogv_applicants (
     status,
