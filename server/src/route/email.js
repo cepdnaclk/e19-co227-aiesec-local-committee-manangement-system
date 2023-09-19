@@ -3,11 +3,14 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 
 const { connection, execQuery } = require("../database/database");
-const { sendSystemEmail, sendUserEmail, replacePlaceholders, oAuth2Client } = require("../utils/email_functions");
-
+const {
+  sendSystemEmail,
+  sendUserEmail,
+  replacePlaceholders,
+  oAuth2Client,
+} = require("../utils/email_functions");
 
 /*------------------ TEMPLATES ---------------------------------------*/
-
 
 // create email template
 router.post("/template/create", (req, res, next) => {
@@ -61,27 +64,29 @@ router.put("/template/:name", (req, res, next) => {
     });
 });
 
-
 /*------------------ EMAILS THROUGH USERS ---------------------------------------*/
 
-
 //google authentication for user's to access data
-router.get('/auth', (req, res) => {
-
-    try {
-        const authUrl = oAuth2Client.generateAuthUrl({
-            access_type: 'offline',
-            scope: ['https://mail.google.com/', 'openid', 'email'],
-        });
-        res.status(200).send(authUrl);
-
-    } catch (err) {
-        res.status(500).send("Google Authentication initialization error");
-    }
+router.get("/auth", (req, res) => {
+  try {
+    const authUrl = oAuth2Client.generateAuthUrl({
+      access_type: "offline",
+      scope: ["https://mail.google.com/", "openid", "email"],
+    });
+    res.status(200).send(authUrl);
+  } catch (err) {
+    res.status(500).send("Google Authentication initialization error");
+  }
 });
 
 // google redirects to this endpoint
-router.get('/auth/callback', async (req, res) => {
+router.get("/auth/callback", async (req, res) => {
+  try {
+    const response = await oAuth2Client.getToken(req.query.code);
+    /*console.log("Token response:", response);*/
+    const tokens = response.tokens;
+
+    /*console.log("tokens: ",tokens);*/
 
     oAuth2Client.setCredentials(tokens);
 
@@ -106,7 +111,7 @@ router.get('/auth/callback', async (req, res) => {
       );
     }
     /* res.redirect('http://localhost:8081/email/sendemail');*/
-    res.send("Authenticated successfully! You can exit this page now.");
+    res.send("Authenticated successfully!");
   } catch (error) {
     console.error("Error during authentication:", error);
     res.status(500).send("Authentication error.");
@@ -115,79 +120,25 @@ router.get('/auth/callback', async (req, res) => {
 
 router.get("/sendEmail", async (req, res, next) => {
   try {
-    const email = req.body.userEmail; // TODO: Set this to the appropriate user email
-
-router.get('/sendEmail', async (req, res, next) => {
-    try {
-        const { userEmail, attachments, receiver, cc, bcc, subject, body } = req.body;
-        const response = await sendUserEmail(userEmail, attachments, receiver, cc, bcc, subject, body);
-        res.send('Email sent: ' + response);
-    } catch (err) {
-        if (err.message === "User Email is not Authenticated.") {
-            res.status(404).send(err.message);
-        } else {
-            next(err);
-        }
-    }
-
-    access_token = await new Promise((resolve, reject) => {
-      oAuth2Client.getAccessToken((err, token) => {
-        if (err) {
-          reject("Failed to create access token :(");
-        }
-        resolve(token);
-      });
-    });
-
-    oAuth2Client.setCredentials({
-      refresh_token: refresh_token,
-    });
-
-    let transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        type: "OAuth2",
-        user: email,
-        accessToken: access_token,
-        clientId: process.env.GMAIL_CLIENT_ID,
-        clientSecret: process.env.GMAIL_CLIENT_SECRET,
-        refreshToken: refresh_token,
-      },
-    });
-
-    let ProcessedAttachments = req.body.attachments
-      ? req.body.attachments.map((attachmentPath) => {
-          return {
-            filename: path.basename(attachmentPath),
-            path: attachmentPath,
-            cid: path.basename(attachmentPath), // Extract filename for CID
-          };
-        })
-      : [];
-
-    let message = {
-      from: email,
-      to: req.body.receiver,
-      cc: req.body.cc,
-      bcc: req.body.bcc,
-      subject: req.body.subject,
-      html: req.body.body,
-      attachments: ProcessedAttachments,
-    };
-
-    transporter.sendMail(message, (error, info) => {
-      if (error) {
-        return res.status(500).send(error.message);
-      }
-      res.send("Email sent: " + info.response);
-    });
+    const { userEmail, attachments, receiver, cc, bcc, subject, body } =
+      req.body;
+    const response = await sendUserEmail(
+      userEmail,
+      attachments,
+      receiver,
+      cc,
+      bcc,
+      subject,
+      body
+    );
+    res.send("Email sent: " + response);
   } catch (err) {
-    next(err);
+    if (err.message === "User Email is not Authenticated.") {
+      res.status(404).send(err.message);
+    } else {
+      next(err);
+    }
   }
 });
 
-
-
-module.exports =  router;
+module.exports = router;

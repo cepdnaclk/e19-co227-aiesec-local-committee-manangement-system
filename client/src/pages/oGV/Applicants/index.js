@@ -31,7 +31,7 @@ export default function Applicants() {
   const [groupedData, setGroupedData] = useState();
   const [emailModalState, setEmailModalState] = useState(false);
 
-  const [currTabValue, setCurrTabValue] = React.useState(0);
+  // const [currTabValue, setCurrTabValue] = React.useState(0);
 
   // ---------- VIEW RENDERING ----------
   if (applicantList.isLoading || applicantList.isFetching)
