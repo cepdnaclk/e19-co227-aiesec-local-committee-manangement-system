@@ -70,14 +70,14 @@ function replacePlaceholders(template, data) {
 
 
 // for later usage
-let mailGenerator = new Mailgen({
+/* let mailGenerator = new Mailgen({
     theme: 'default',
     product: {
         // Appears in header & footer of e-mails
         name: 'AIESEC local committee management system',
         link: 'https://test.test/'
     }
-});
+}); */
 
 
 /*=======================REMINDERS=================================*/
@@ -237,7 +237,7 @@ router.post('/send6weekChallengeMail', (req, res, next) => {
     };
 
     // Using mailGenerator to generate the email body
-    let generatedEmailBody = mailGenerator.generate(emailBody);
+    //let generatedEmailBody = mailGenerator.generate(emailBody);
 
 
     // Process attachments

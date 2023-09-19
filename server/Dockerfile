@@ -1,13 +1,13 @@
 FROM node:18
 
-WORKDIR /app
+WORKDIR /server
 
-COPY package*.json ./
+COPY package*.json .
 
 RUN npm install
 
 COPY . .
 
-EXPOSE 8080
+EXPOSE 8081
 
-CMD ["node", "app.js"]
+CMD ["npm", "run", "dev"]

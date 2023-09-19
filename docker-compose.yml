@@ -1,30 +1,18 @@
 version: "3"
+
 services:
-  client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000" # map container port 3000 to host port 3000
-    depends_on:
-      - server
 
   server:
-    build:
-      context: ./server
+    build: server/
+    command: ./app.js
     ports:
-      - "8080:8080"
-    environment:
-      MYSQL_HOST: mysql
-      MYSQL_PORT: 3306
-      MYSQL_USER: root
-      MYSQL_DATABASE: lc_kandy
+      - "8081:8081"
 
-  mysql:
-    image: mysql:8.0
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_ROOT_PASSWORD: ""
-      MYSQL_DATABASE: lc_kandy
-    ports:
-      - "3306:3306"
+  client:
+    build: client/
+
+    command: ./src/index.js
+    #networks_mode: host
+
+    depends_on:
+      - server
