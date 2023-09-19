@@ -30,36 +30,40 @@ CREATE TABLE district (
 );
 
 CREATE TABLE role (
-    id INT(2)       PRIMARY KEY,
+    -- id INT(2)       PRIMARY KEY,
     title           VARCHAR(50),
-    abbreviation    VARCHAR(4)
+    -- abbreviation    VARCHAR(4) PRIMARY KEY
+    id    VARCHAR(4) PRIMARY KEY
 );
 
 /* =============== FRONT OFFICE TABLE =============== */
 CREATE TABLE front_office (
-    id              INT(2) PRIMARY KEY,
+    -- id              INT(2) PRIMARY KEY,
     title           VARCHAR(50),
-    abbreviation    VARCHAR(4)
+    -- abbreviation    VARCHAR(4)
+    id    VARCHAR(4) PRIMARY KEY
 );
 
 /* =============== BACK OFFICE TABLE =============== */
 CREATE TABLE back_office (
-    id              INT(2) PRIMARY KEY,
+    -- id              INT(2) PRIMARY KEY,
     title           VARCHAR(50),
-    abbreviation    VARCHAR(4)
+    -- abbreviation    VARCHAR(4)
+    id    VARCHAR(4) PRIMARY KEY
 );
 
 /* =============== DEPARTMENTS TABLE =============== */
 CREATE TABLE department (
-    id              INT(2) PRIMARY KEY,
+    -- id              INT(2) PRIMARY KEY,
     title           VARCHAR(25),
-    abbreviation    VARCHAR(10)
+    -- abbreviation    VARCHAR(10)
+    id    VARCHAR(4) PRIMARY KEY
 );
 
 /* =============== VALID PAIRS (FUNCTS-DEPTS) TABLE =============== */
-CREATE TABLE valid_pair (
-    office_id INT(2),
-    department_id INT(2),
+CREATE TABLE front_valid_pair (
+    office_id VARCHAR(4),
+    department_id VARCHAR(4),
 
     FOREIGN KEY (office_id)     REFERENCES front_office(id),
     FOREIGN KEY (department_id) REFERENCES department(id)
@@ -77,12 +81,12 @@ CREATE TABLE member (
     -- member details
     full_name           VARCHAR(100),
     preferred_name      VARCHAR(30),
-    front_office_id     INT(2),
-    department_id       INT(2),
-    back_office_id      INT(2),
+    front_office_id     VARCHAR(4),
+    department_id       VARCHAR(4),
+    back_office_id      VARCHAR(4),
     -- TODO Find term using joined date
     joined_date         CHAR(10),
-    role_id             INT(2),
+    role_id             VARCHAR(4),
     contact_no          VARCHAR(12),
     aiesec_email        VARCHAR(255),
     gender              CHAR(1),
@@ -288,24 +292,19 @@ CREATE TABLE user_gmail_data (
 CREATE TABLE ogv_applicants (
     id                  INT NOT NULL AUTO_INCREMENT,
     notes               TEXT,
-    status              ENUM('pre-signup', 'signup', 'accepted', 'approved', 'realized', 'finished', 'completed', 'approval-broken', 'realization-broken') NOT NULL,
+    status              ENUM('Pre-Signup', 'Signup', 'Accepted', 'Approved', 'Realized', 'Finished', 'Completed', 'Approval-Broken', 'Realization-Broken') NOT NULL,
     
-    -- Pre-signup
+    -- Pre-Signup
     firstName               VARCHAR(255) NOT NULL,
     lastName                VARCHAR(255) NOT NULL,
     phone                   VARCHAR(20),
     email                   VARCHAR(255) NOT NULL,
-    memberInChargeId        INT NOT NULL,
+    memberInChargeId        INT(5) NOT NULL,
     campaignId              VARCHAR(255),
 
-    -- accepted
-    opportunityId       INT,
-    opportunityName     VARCHAR(255),
-    hostMc              VARCHAR(255),
-    hostLc              VARCHAR(255),
-    acceptedStartDate   DATE,
-    acceptanceDate      DATE,
-    isEseEmailSent      BOOLEAN DEFAULT FALSE,
+    -- Signup
+    sentLinks               VARCHAR(1024),
+    signupNotes             VARCHAR(255),
 
     -- Accepted
     opportunityId           CHAR(7), -- 7 digit id
@@ -317,19 +316,29 @@ CREATE TABLE ogv_applicants (
     isEseEmailSent          BOOLEAN DEFAULT FALSE,
     acceptedNotes           VARCHAR(255),
 
-    -- realized
-    realizedStartDate   DATE,
+    -- Approved
+    approvedDate            DATE,
+    paymentDate             DATE,
+    paymentAmount           DECIMAL(10, 2),
+    proofLink               VARCHAR(1024),
+    approvedNotes           VARCHAR(255),
 
-    -- finished
-    finishedDate        DATE,
+    -- Realized
+    realizedStartDate       DATE,
+    realizedNotes           VARCHAR(255),
 
-    -- completed
-    completedDate       DATE,
+    -- Finished
+    finishedDate            DATE,
 
-    -- approval-broken or realization-broken
-    breakNote          TEXT,
+    -- Completed
+    completedDate           DATE,
 
-
+    -- Approval-Broken
+    approvalBreakNote       VARCHAR(255),
+    
+    -- Realization-Broken
+    realizationBreakNote    VARCHAR(255),
+    
     PRIMARY KEY (id),
     FOREIGN KEY (memberInChargeId) REFERENCES member(id),
     INDEX (status),

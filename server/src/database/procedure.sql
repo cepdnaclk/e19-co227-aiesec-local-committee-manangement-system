@@ -161,6 +161,7 @@ CALL CalculateEndDate('2023-08-14', @output);
 SELECT @output AS calculated_end_date;
 */
 
+
 CREATE PROCEDURE GetInterviewLog(IN app_id INT(5))
 BEGIN
 SELECT 
