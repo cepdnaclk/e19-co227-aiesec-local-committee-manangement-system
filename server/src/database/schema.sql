@@ -290,13 +290,13 @@ CREATE TABLE ogv_applicants (
     notes               TEXT,
     status              ENUM('pre-signup', 'signup', 'accepted', 'approved', 'realized', 'finished', 'completed', 'approval-broken', 'realization-broken') NOT NULL,
     
-    -- pre-signup
-    firstName           VARCHAR(255) NOT NULL,
-    lastName            VARCHAR(255) NOT NULL,
-    phone               VARCHAR(20),
-    email               VARCHAR(255) NOT NULL,
-    memberInChargeId    INT,
-    campaignId          INT,
+    -- Pre-signup
+    firstName               VARCHAR(255) NOT NULL,
+    lastName                VARCHAR(255) NOT NULL,
+    phone                   VARCHAR(20),
+    email                   VARCHAR(255) NOT NULL,
+    memberInChargeId        INT NOT NULL,
+    campaignId              VARCHAR(255),
 
     -- accepted
     opportunityId       INT,
@@ -307,11 +307,15 @@ CREATE TABLE ogv_applicants (
     acceptanceDate      DATE,
     isEseEmailSent      BOOLEAN DEFAULT FALSE,
 
-    -- approved
-    approvedDate        DATE,
-    paymentDate         DATE,
-    paymentAmount       DECIMAL(10,2),
-    proofLink           VARCHAR(1024),
+    -- Accepted
+    opportunityId           CHAR(7), -- 7 digit id
+    opportunityName         VARCHAR(255),
+    hostMc                  VARCHAR(255),
+    hostLc                  VARCHAR(255),
+    acceptedStartDate       DATE,
+    acceptanceDate          DATE,
+    isEseEmailSent          BOOLEAN DEFAULT FALSE,
+    acceptedNotes           VARCHAR(255),
 
     -- realized
     realizedStartDate   DATE,

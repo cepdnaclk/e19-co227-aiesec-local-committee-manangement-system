@@ -30,49 +30,63 @@ const { sendSystemEmail, sendUserEmail, replacePlaceholders } = require("../util
 
 // get member details for 'select member' dropdown menu 
 router.get(`/members`, (req, res, next) => {
-
-    execQuery(`SELECT id, preferred_name FROM member`)
-        .then((rows) => {
-            res.status(200).json(rows);
-        })
-        .catch((err) => {
-            next(err);
-        });
-
+  execQuery(`
+    SELECT m.id as 'key', m.preferred_name as 'value' 
+    FROM member as m WHERE m.front_office_id = "oGV" AND m.department_id="CXP";`)
+    .then((rows) => {
+      res.status(200).json(rows);
+    })
+    .catch((err) => {
+      next(err);
+    });
 });
 
 // get details(selected) of all
-router.get(`/`, (req, res, next) => {
-
-    execQuery("SELECT * FROM OGVApplicantDetailsInBrief")
-        .then((rows) => {
-            res.status(200).json(rows);
-        })
-        .catch((err) => {
-            next(err);
-        });
-
+router.get(`/applicants`, (req, res, next) => {
+  execQuery("SELECT * FROM OGVApplicantDetailsInBrief")
+    .then((rows) => {
+      res.status(200).json(rows);
+    })
+    .catch((err) => {
+      next(err);
+    });
 });
 
 // get all details of one applicant
-router.get(`/:id`, (req, res, next) => {
-
-    execQuery(`CALL GetOGVApplicantDetailsInDetail(${req.params.id})`)
-        .then((rows) => {
-            res.status(200).json(rows[0][0]);
-        })
-        .catch((err) => {
-            next(err);
-        });
-
+router.get(`/applicants/:id`, (req, res, next) => {
+  execQuery(`CALL GetOGVApplicantDetailsInDetail(${req.params.id})`)
+    .then((rows) => {
+      res.status(200).json(rows[0][0]);
+    })
+    .catch((err) => {
+      next(err);
+    });
 });
 
 // new applicant
-router.post("/", (req, res, next) => {
-    try {
+router.post("/applicants", (req, res, next) => {
+  try {
+    const [fields, values] = [
+      Object.keys(req.body),
+      Object.values(req.body).map((value) => (value ? `'${value}'` : `NULL`)),
+    ];
+    const insertQuery = `INSERT INTO ogv_applicants (${fields.toString()}) VALUES (${values.toString()})`;
 
-        const [fields, values] = [Object.keys(req.body), Object.values(req.body).map(value => `'${value}'`)];
-        const query = `INSERT INTO ogv_applicants (${fields.toString()}) VALUES (${values.toString()})`;
+    execQuery(insertQuery)
+      .then((rows) => {
+        // console.log(rows.insertId);
+        // retrieve and send the newly added record in response for client side updates
+        const selectQuery = `CALL OGVApplicantDetailsInBrief('${rows.insertId}')`;
+        execQuery(selectQuery)
+          .then((rows) => {
+            res.status(200).json(rows[0][0]);
+          })
+          .catch((err) => {
+            // TODO: Rollback insert or retry select query if fails
+            // Else figure out a way to run both queries in one go
+            next(err);
+          });
+      })
 
 
         execQuery(query)
@@ -91,8 +105,12 @@ router.post("/", (req, res, next) => {
 });
 
 // update existing one
-router.put("/", (req, res, next) => {
-    try {
+router.put("/applicants/:id", (req, res, next) => {
+  try {
+    const [fields, values] = [
+      Object.keys(req.body),
+      Object.values(req.body).map((value) => (value ? `'${value}'` : `NULL`)),
+    ];
 
         const [fields, values] = [Object.keys(req.body), Object.values(req.body).map(value => `'${value}'`)];
 
@@ -104,8 +122,12 @@ router.put("/", (req, res, next) => {
             updateString += values[i] + ", ";
         }
 
-        // remove last trailling ", "
-        updateString = updateString.substring(0, updateString.length - 2);
+    const query = `UPDATE ogv_applicants  SET ${updateString} WHERE id='${req.params.id}'; CALL OGVApplicantDetailsInBrief('${req.params.id}');`;
+    execQuery(query)
+      .then((rows) => {
+        console.log(rows);
+        res.status(200).json(rows[1][0]);
+      })
 
         const query = `UPDATE ogv_applicants  SET ${updateString} WHERE id=${values[0]};`;
         execQuery(query)
@@ -124,17 +146,15 @@ router.put("/", (req, res, next) => {
 });
 
 //delete application
-router.delete("/", (req, res, next) => {
-    try {
-        const deleteQuery = `DELETE FROM ogv_applicants WHERE id=${req.query.id}`;
-        execQuery(deleteQuery)
-            .then((rows) => {
-                res.status(200).json({ message: "OGV application deleted Sucessfully" });
-            })
-            .catch((err) => {
-                next(err);
-            });
-    } catch (err) {
+router.delete("/applicants/:id", (req, res, next) => {
+  try {
+    const deleteQuery = `DELETE FROM ogv_applicants WHERE id=${req.params.id}`;
+    execQuery(deleteQuery)
+      .then((rows) => {
+        console.log(rows);
+        res.status(200).json({ id: req.params.id, message: "Ok" });
+      })
+      .catch((err) => {
         next(err);
     }
 });

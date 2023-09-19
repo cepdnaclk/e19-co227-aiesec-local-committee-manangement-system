@@ -373,4 +373,184 @@ INSERT INTO email_template (name, subject, body, attachments) VALUES
 "<p>Happy to say that your application is approved. yeee !!</p>
 <p>&nbsp;</p>
 <p>Thank You,</p>
+<<<<<<< HEAD
 <p>AIESEC local committee management system</p>", '[]');
+=======
+<p>AIESEC local committee management system</p>", '[]');
+
+INSERT INTO ogv_applicants (
+    status,
+    firstName,
+    lastName,
+    phone,
+    email,
+    memberInChargeId,
+    campaignId,
+    sentLinks,
+    signupNotes,
+    opportunityId,
+    opportunityName,
+    hostMc,
+    hostLc,
+    acceptedStartDate,
+    acceptanceDate,
+    isEseEmailSent,
+    acceptedNotes,
+    approvedDate,
+    paymentDate,
+    paymentAmount,
+    proofLink,
+    approvedNotes,
+    realizedStartDate,
+    realizedNotes,
+    finishedDate,
+    completedDate,
+    approvalBreakNote,
+    realizationBreakNote
+) VALUES (
+    'Signup',
+    'John',
+    'Doe',
+    '+1234567890',
+    'johndoe@example.com',
+    2, -- Assuming memberInChargeId corresponds to an existing member with ID 1
+    'Campaign123',
+    'http://link1.com,http://link2.com',
+    'Notes about the signup',
+    1234567, -- Assuming opportunityId corresponds to an existing opportunity with ID 1234567
+    'Opportunity Name',
+    'Host MC',
+    'Host LC',
+    '2023-09-18',
+    '2023-09-20',
+    1, -- Assuming isEseEmailSent should be set to TRUE
+    'Notes about acceptance',
+    '2023-09-25',
+    '2023-09-26',
+    500.00, -- Assuming paymentAmount
+    'http://prooflink.com',
+    'Notes about approval',
+    '2023-10-01',
+    'Notes about realization',
+    '2023-10-10',
+    '2023-10-15',
+    'Notes about approval break',
+    'Notes about realization break'
+), (
+    'Accepted',
+    'Alice',
+    'Smith',
+    '+9876543210',
+    'alicesmith@example.com',
+    3, -- Assuming memberInChargeId corresponds to an existing member with ID 2
+    'Campaign456',
+    'http://link3.com,http://link4.com',
+    'Notes about the signup',
+    7654321, -- Assuming opportunityId corresponds to an existing opportunity with ID 7654321
+    'Another Opportunity',
+    'Another Host MC',
+    'Another Host LC',
+    '2023-09-22',
+    '2023-09-24',
+    0, -- Assuming isEseEmailSent should be set to FALSE
+    'Additional notes about acceptance',
+    '2023-09-28',
+    '2023-09-29',
+    750.50, -- Assuming paymentAmount
+    'http://anotherprooflink.com',
+    'Additional notes about approval',
+    '2023-10-05',
+    'Additional notes about realization',
+    '2023-10-12',
+    '2023-10-18',
+    'Additional notes about approval break',
+    'Additional notes about realization break'
+), (
+    'Realized',
+    'Sarah',
+    'Johnson',
+    '+5551234567',
+    'sarahjohnson@example.com',
+    4, -- Assuming memberInChargeId corresponds to an existing member with ID 3
+    'Campaign789',
+    'http://link5.com,http://link6.com',
+    'Notes about the signup',
+    9876543, -- Assuming opportunityId corresponds to an existing opportunity with ID 9876543
+    'Realized Opportunity',
+    'MC for Realized',
+    'LC for Realized',
+    '2023-09-10',
+    '2023-09-15',
+    1, -- Assuming isEseEmailSent should be set to TRUE
+    'Notes about acceptance',
+    '2023-09-20',
+    '2023-09-22',
+    900.75, -- Assuming paymentAmount
+    'http://realizedprooflink.com',
+    'Notes about approval',
+    '2023-10-01',
+    'Notes about realization',
+    '2023-10-10',
+    '2023-10-20',
+    'Notes about approval break',
+    'Notes about realization break'
+), (
+    'Pre-Signup',
+    'Michael',
+    'Brown',
+    '+1234567890',
+    'michaelbrown@example.com',
+    5, -- Assuming memberInChargeId corresponds to an existing member with ID 4
+    'Campaign101',
+    NULL, -- No sentLinks for pre-signup
+    'Notes about the pre-signup',
+    NULL, -- No opportunityId for pre-signup
+    NULL, -- No opportunityName for pre-signup
+    NULL, -- No hostMc for pre-signup
+    NULL, -- No hostLc for pre-signup
+    NULL, -- No acceptedStartDate for pre-signup
+    NULL, -- No acceptanceDate for pre-signup
+    NULL, -- No isEseEmailSent for pre-signup
+    NULL, -- No acceptedNotes for pre-signup
+    NULL, -- No approvedDate for pre-signup
+    NULL, -- No paymentDate for pre-signup
+    NULL, -- No paymentAmount for pre-signup
+    NULL, -- No proofLink for pre-signup
+    NULL, -- No approvedNotes for pre-signup
+    NULL, -- No realizedStartDate for pre-signup
+    NULL, -- No realizedNotes for pre-signup
+    NULL, -- No finishedDate for pre-signup
+    NULL, -- No completedDate for pre-signup
+    NULL, -- No approvalBreakNote for pre-signup
+    NULL -- No realizationBreakNote for pre-signup
+), (
+    'Approved',
+    'Emily',
+    'Johnson',
+    '+9876543210',
+    'emilyjohnson@example.com',
+    2, -- Assuming memberInChargeId corresponds to an existing member with ID 5
+    'CampaignXYZ',
+    'http://link7.com,http://link8.com',
+    'Notes about the signup',
+    8765432, -- Assuming opportunityId corresponds to an existing opportunity with ID 8765432
+    'Approved Opportunity',
+    'Approved MC',
+    'Approved LC',
+    '2023-09-12',
+    '2023-09-14',
+    1, -- Assuming isEseEmailSent should be set to TRUE
+    'Notes about acceptance',
+    '2023-09-19',
+    '2023-09-21',
+    1200.99, -- Assuming paymentAmount
+    'http://approvedprooflink.com',
+    'Notes about approval',
+    NULL, -- No realizedStartDate for Approved status
+    NULL, -- No realizedNotes for Approved status
+    NULL, -- No finishedDate for Approved status
+    NULL, -- No completedDate for Approved status
+    NULL, -- No approvalBreakNote for Approved status
+    NULL -- No realizationBreakNote for Approved status
+);
+>>>>>>> 97af706 (added ogv crud)
