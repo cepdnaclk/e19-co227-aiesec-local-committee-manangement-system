@@ -4,6 +4,25 @@ const url = "ogv";
 
 const twentyFourHoursInMs = 1000 * 60 * 60 * 24;
 
+export const EseEmailTemplate = () => {
+  return useQuery({
+    queryKey: ["ese-email-template"],
+    queryFn: () => axios.get(`${url}/sendESEMail`).then((res) => res.data),
+    // refetch only on page refresh
+    refetchOnWindowFocus: false,
+    refetchOnmount: false,
+    refetchOnReconnect: false,
+    staleTime: twentyFourHoursInMs,
+  });
+};
+
+export const PostEseEmail = () => {
+  return useMutation({
+    mutationFn: (formData) =>
+      axios.post(`${url}/sendESEMail`, formData).then((res) => res.data),
+  });
+};
+
 export const ApplicantList = () => {
   return useQuery({
     queryKey: ["ogv-applicant-list"],
@@ -32,12 +51,7 @@ export const ApplicantSelected = (id, editMode) => {
   });
 };
 
-export const CreateApplicant = (
-  setEditMode,
-  setSelectedItemKey,
-  notifySuccess,
-  notifyError
-) => {
+export const CreateApplicant = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -50,7 +64,7 @@ export const CreateApplicant = (
   });
 };
 
-export const UpdateApplicant = (setEditMode, notifySuccess, notifyError) => {
+export const UpdateApplicant = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -72,7 +86,7 @@ export const UpdateApplicant = (setEditMode, notifySuccess, notifyError) => {
   });
 };
 
-export const DeleteApplicant = (setEditMode, notifySuccess, notifyError) => {
+export const DeleteApplicant = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

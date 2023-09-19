@@ -1,14 +1,11 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { Outlet, Navigate } from "react-router-dom";
 
-const AdminRoutes = () => {
+const AdminRoutes: React.FC = () => {
   const { user } = useContext(UserContext);
 
-  // 0 - LCP
-  // 1 - LCVP
-  console.log(user.roleId);
-  return user?.roleId === 0 || user?.roleId === 1 ? (
+  return user?.roleId === "LCP" || user?.roleId === "VP" ? (
     <Outlet />
   ) : (
     <Navigate to="/login" />

@@ -152,8 +152,8 @@ VALUES
     "No.3 Kings Street, Kandy"
 )
 ,(
-    'jane.smith@example.com',
-    'pass123',
+    'sankapeeris360@gmail.com',
+    '123',
     'Jane Smith', 
     'Janie', 
     "oGV", 
@@ -409,7 +409,7 @@ INSERT INTO ogv_applicants (
     'John',
     'Doe',
     '+1234567890',
-    'johndoe@example.com',
+    'sankapeeris360@gmail.com',
     2, -- Assuming memberInChargeId corresponds to an existing member with ID 1
     'Campaign123',
     'http://link1.com,http://link2.com',

@@ -46,6 +46,16 @@ import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { NotificationBar } from "./context/NotificationContext";
+import OGVRoutes from "./utils/OGVRoutes";
+import IGVRoutes from "./utils/IGVRoutes";
+
+const NavbarButton = ({ href, label }) => {
+  return (
+    <Button component={Link} to={href} variant="text" disableElevation>
+      {label}
+    </Button>
+  );
+};
 
 function App() {
   const snackbarIdleState = { open: false, message: "", severity: "info" };
@@ -167,25 +177,29 @@ function App() {
               <Stack direction="row" spacing={2}>
                 {user ? (
                   <>
-                    <Button
-                      component={Link}
-                      to="/"
-                      variant="text"
-                      disableElevation
-                    >
-                      Home
-                    </Button>
-                    <Button
-                      component={Link}
-                      to="/applications"
-                      variant="text"
-                      disableElevation
-                    >
-                      Applications
-                    </Button>
+                    <NavbarButton href="/" label="Home" />
                   </>
                 ) : null}
-                {user?.roleId === 0 || user?.roleId === 1 ? (
+                {/* ~~~~~~~~~~~~~~~ iGV ~~~~~~~~~~~~~~~*/}
+                {user.frontOfficeId === "iGV" ? (
+                  <>
+                    {user.roleId === "VP" ? (
+                      <NavbarButton href="/igv/projects" label="Projects" />
+                    ) : null}
+                    <NavbarButton
+                      href="/igv/applications"
+                      label="Applications"
+                    />
+                  </>
+                ) : null}
+                {/* ~~~~~~~~~~~~~~~ oGV ~~~~~~~~~~~~~~~*/}
+                {user.frontOfficeId === "oGV" ? (
+                  <>
+                    <NavbarButton href="/ogv/applicants" label="Applicants" />
+                  </>
+                ) : null}
+                {/* ~~~~~~~~~~~~~~~ Admin ~~~~~~~~~~~~~~~*/}
+                {user?.roleId === "LCP" || user?.roleId === "VP" ? (
                   <Button
                     id="admin-button"
                     onClick={handleAdminMenuClick}
@@ -263,7 +277,7 @@ function App() {
                   />
                 </MenuItem>
               </Menu>
-              {user?.roleId === 0 || user?.roleId === 1 ? (
+              {user?.roleId === "LCP" || user?.roleId === "VP" ? (
                 <Menu
                   id="admin-menu"
                   anchorEl={adminAnchorEl}
@@ -279,13 +293,6 @@ function App() {
                   <MenuItem
                     onClick={handleAdminMenuClose}
                     component={Link}
-                    to="/projects"
-                  >
-                    Project
-                  </MenuItem>
-                  <MenuItem
-                    onClick={handleAdminMenuClose}
-                    component={Link}
                     to="/terms"
                   >
                     Terms
@@ -297,13 +304,6 @@ function App() {
                   >
                     Users
                   </MenuItem>
-                  <MenuItem
-                    onClick={handleAdminMenuClose}
-                    component={Link}
-                    to="/ogv/applicants"
-                  >
-                    OGV Applications
-                  </MenuItem>
                 </Menu>
               ) : null}
             </Toolbar>
@@ -313,15 +313,19 @@ function App() {
         <Paper component="main" sx={{ m: 2, p: 2, borderRadius: "10px" }}>
           <Routes>
             <Route element={<ProtectedRoutes />}>
-              <Route path="/applications" element={<ApplicationView />} />
               <Route path="/" element={<Home />} />
             </Route>
             <Route element={<AdminRoutes />}>
               <Route path="/users" element={<MemberView />} />
-              <Route path="/projects" element={<ProjectView />} />
               <Route path="/terms" element={<Terms />} />
+            </Route>
+            <Route element={<IGVRoutes />}>
+              <Route path="/igv/projects" element={<ProjectView />} />
+              <Route path="/igv/applications" element={<ApplicationView />} />
+            </Route>
+            <Route element={<OGVRoutes />}>
               <Route
-                path="ogv/applicants"
+                path="/ogv/applicants"
                 element={<OGVApplications />}
               ></Route>
             </Route>
