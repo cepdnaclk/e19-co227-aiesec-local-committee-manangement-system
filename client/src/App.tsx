@@ -35,6 +35,7 @@ import AdminRoutes from "./utils/AdminRoutes";
 import Terms from "./pages/Terms";
 import ApplicationView from "./pages/Application/ApplicationView";
 import Home from "./pages/Home/Home";
+import OGVApplications from "./pages/oGV/Applicants";
 
 import DarkLogo from "./assets/White-Black-Logo.png";
 import LightLogo from "./assets/Black-Logo.png";
@@ -296,6 +297,13 @@ function App() {
                   >
                     Users
                   </MenuItem>
+                  <MenuItem
+                    onClick={handleAdminMenuClose}
+                    component={Link}
+                    to="/ogv/applicants"
+                  >
+                    OGV Applications
+                  </MenuItem>
                 </Menu>
               ) : null}
             </Toolbar>
@@ -312,6 +320,10 @@ function App() {
               <Route path="/users" element={<MemberView />} />
               <Route path="/projects" element={<ProjectView />} />
               <Route path="/terms" element={<Terms />} />
+              <Route
+                path="ogv/applicants"
+                element={<OGVApplications />}
+              ></Route>
             </Route>
             <Route path="/login" element={<Login />} />
           </Routes>

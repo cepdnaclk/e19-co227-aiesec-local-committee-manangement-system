@@ -37,13 +37,13 @@ connection.query(schemaScript, (err) => {
   }
   console.log("Created DB Schema");
 
-  // write the time schema file was last executed
-  const filePath = path.join(__dirname, "meta.json");
-  const fileData = fs.readFileSync(filePath, "utf8");
-  const jsonData = JSON.parse(fileData);
-  // TODO: (new Date).toUTCString()
-  jsonData["schema-last-run"] = Date.now();
-  fs.writeFileSync(filePath, JSON.stringify(jsonData));
+  // // write the time schema file was last executed
+  // const filePath = path.join(__dirname, "meta.json");
+  // const fileData = fs.readFileSync(filePath, "utf8");
+  // const jsonData = JSON.parse(fileData);
+  // // TODO: (new Date).toUTCString()
+  // jsonData["schema-last-run"] = Date.now();
+  // fs.writeFileSync(filePath, JSON.stringify(jsonData));
 });
 
 // populate database
@@ -70,21 +70,26 @@ connection.query(procedureScript, (err) => {
 
 const execQuery = (queryString) => {
   return new Promise((resolve, reject) => {
-      connection.query(queryString, (err, rows, fields) => {
-          if (err) { console.log(err); return reject(err); }
+    connection.query(queryString, (err, rows, fields) => {
+      if (err) {
+        console.log(err);
+        return reject(err);
+      }
       resolve(rows);
     });
   });
 };
 
 const execQueryWithValues = (query, values) => {
-    return new Promise((resolve, reject) => {
-        connection.query(query, values, (err, rows, fields) => {
-            if (err) { console.log(err); return reject(err); }
-            resolve(rows);
-        });
+  return new Promise((resolve, reject) => {
+    connection.query(query, values, (err, rows, fields) => {
+      if (err) {
+        console.log(err);
+        return reject(err);
+      }
+      resolve(rows);
     });
+  });
 };
-
 
 module.exports = { connection, execQuery, execQueryWithValues };

@@ -5,7 +5,7 @@ import Alert from "@mui/material/Alert";
 const ErrorPage = ({ error }) => {
   return (
     <Alert severity="error">
-      An Error has Occurred. Please Retry.
+      An error has occurred. Please retry.
       <br />
       Message: {error?.message}
     </Alert>

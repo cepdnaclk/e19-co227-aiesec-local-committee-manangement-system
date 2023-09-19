@@ -41,54 +41,54 @@ INSERT INTO district (id, title) VALUES
 ,(25, 'Vavuniya')
 ;
 
-INSERT INTO role (id, title, abbreviation) VALUES
-(0, "Local Committee President", "LCP")
-,(1, "Local Committee Vice President", "LCVP")
-,(2, "Manager", "MGR")
-,(3, "Specialist", "SPL")
-,(4, "Team Leader", "TL")
-,(5, "Team Member", "TM")
-,(6, "Coordinator", "CDN")
+INSERT INTO role (title, id) VALUES
+("Local Committee President", "LCP")
+,("Local Committee Vice President", "LCVP")
+,("Manager", "MGR")
+,("Specialist", "SPL")
+,("Team Leader", "TL")
+,("Team Member", "TM")
+,("Coordinator", "CDN")
 ;
 
-INSERT INTO front_office (id, title, abbreviation) VALUES
-(0, "Local Committee President", "LCP")
-,(1, "incoming Global Volunteer", "iGV")
-,(2, "outgoing Global Volunteer", "oGV")
-,(3, "incoming Global Talent/Teacher", "iGT")
-,(4, "outgoing Global Talent/Teacher", "oGT")
-,(5, "Back Office Vice President", "BOVP")
+INSERT INTO front_office (title, id) VALUES
+("Local Committee President", "LCP")
+,("incoming Global Volunteer", "iGV")
+,("outgoing Global Volunteer", "oGV")
+,("incoming Global Talent/Teacher", "iGT")
+,("outgoing Global Talent/Teacher", "oGT")
+,("Back Office Vice President", "BOVP")
 ;
 
-INSERT INTO back_office (id, title, abbreviation) VALUES
-(1, "BRAND", "BND")
-,(2, "Finance and Legal", "FnL")
-,(3, "Business Development", "BD")
-,(4, "People Management", "PM")
-,(5, "Information Management", "IM")
-,(6, "Expansions Management", "EM")
-,(7, "Public Relations and Engage with AIESEC", "PnE")
+INSERT INTO back_office (title, id) VALUES
+("BRAND", "BND")
+,("Finance and Legal", "FnL")
+,("Business Development", "BD")
+,("People Management", "PM")
+,("Information Management", "IM")
+,("Expansions Management", "EM")
+,("Public Relations and Engage with AIESEC", "PnE")
 ;
 
-INSERT INTO department (id, title, abbreviation) VALUES
-(0, "Local Committee President", "LCP")
-,(1, "Vice President", "VP")
-,(2, "International Relations", "IR")
-,(3, "Matching", "M")
-,(4, "Business to Business", "B2B")
-,(5, "Value Delivery", "VD")
-,(6, "Marketing", "MKT")
-,(7, "Business to Customer", "B2C")
-,(8, "Customer Experience", "CXP")
+INSERT INTO department (title, id) VALUES
+("Local Committee President", "LCP")
+,("Vice President", "VP")
+,("International Relations", "IR")
+,("Matching", "M")
+,("Business to Business", "B2B")
+,("Value Delivery", "VD")
+,("Marketing", "MKT")
+,("Business to Customer", "B2C")
+,("Customer Experience", "CXP")
 ;
 
 /* commenting with -- gives a parse error in node */
-INSERT INTO valid_pair (office_id, department_id) VALUES
-(0,0) /* president */
-,(1,1),(1,2),(1,3),(1,4),(1,5),(1,6) /* igv */
-,(2,1),(2,2),(2,4),(2,6),(2,7),(2,8) /* ogv */
-,(3,1),(3,2),(3,3),(3,4),(3,5),(3,6) /* igt */
-,(4,1),(4,2),(4,4),(4,6),(4,7),(4,8) /* ogt */
+INSERT INTO front_valid_pair (office_id, department_id) VALUES
+("LCP","LCP") /* president */
+,("iGV","VP"),("iGV","IR"),("iGV","M"),("iGV","B2B"),("iGV","VD"),("iGV","MKT") /* igv */
+,("oGV","VP"),("oGV","IR"),("oGV","B2B"),("oGV","MKT"),("oGV","B2C"),("oGV","CXP") /* ogv */
+,("iGV","VP"),("iGV","IR"),("iGV","M"),("iGV","B2B"),("iGV","VD"),("iGV","MKT") /* igt */
+,("oGT","VP"),("oGT","IR"),("oGT","B2B"),("oGT","MKT"),("oGT","B2C"),("oGT","CXP") /* ogt */
 ;
 
 INSERT INTO igv_application_status (status_id, status_name) VALUES
@@ -130,11 +130,11 @@ VALUES
     123,
     "John Doe",
     "John",
-    "1",
-    "1",
-    "1",
+    "LCP",
+    "LCP",
+    NULL,
     "2019-01-01",
-    "1",
+    "LCP",
     "1234567890",
     "john@example.com",
     "M",
@@ -156,11 +156,11 @@ VALUES
     'pass123',
     'Jane Smith', 
     'Janie', 
-    2, 
-    1, 
-    3, 
+    "oGV", 
+    "CXP", 
+    NULL, 
     '2022-08-20', 
-    3, 
+    "SPL", 
     '555-123-4567', 
     'jane.smith@aiesec.org', 
     'F', 
@@ -182,11 +182,11 @@ VALUES
     'mikepass', 
     'Michael Johnson', 
     'Mike', 
-    3, 
-    1, 
-    2, 
+    "oGV", 
+    "CXP", 
+    NULL, 
     '2021-05-03', 
-    2, 
+    "SPL", 
     '999-555-1212', 
     'michael.johnson@aiesec.org', 
     'M', 
@@ -208,11 +208,11 @@ VALUES
     'alexpass', 
     'Alexandra Jackson', 
     'Alex', 
-    2, 
-    2, 
-    1, 
+    "oGV", 
+    "CXP", 
+    NULL,
     '2020-11-28', 
-    4, 
+    "TM", 
     '111-222-3333', 
     'alexandra.jackson@aiesec.org', 
     'M', 
@@ -234,11 +234,11 @@ VALUES
     123,
     "mizu123",
     "Giyuu",
-    "1",
-    "1",
-    "1",
+    "oGV", 
+    "CXP", 
+    NULL,
     "2019-01-01",
-    "4",
+    "TL",
     "1234567890",
     "tomioka@example.com",
     "M",
@@ -368,9 +368,185 @@ INSERT INTO email_template (name, subject, body, attachments) VALUES
 <p>AIESEC local committee management system</p>",
 '["https://ichef.bbci.co.uk/news/976/cpsprodpb/16620/production/_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg"]'),
 
-("approved", "Your application is approved", 
+("ese", "Test Ese email subject", 
 
-"<p>Happy to say that your application is approved. yeee !!</p>
+"<p>Test Email Body!! </p>
 <p>&nbsp;</p>
 <p>Thank You,</p>
-<p>AIESEC local committee management system</p>", '[]');
+<p>AIESEC local committee management system</p>", '["https://ichef.bbci.co.uk/news/976/cpsprodpb/16620/production/_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg"]');
+
+INSERT INTO ogv_applicants (
+    status,
+    firstName,
+    lastName,
+    phone,
+    email,
+    memberInChargeId,
+    campaignId,
+    sentLinks,
+    signupNotes,
+    opportunityId,
+    opportunityName,
+    hostMc,
+    hostLc,
+    acceptedStartDate,
+    acceptanceDate,
+    isEseEmailSent,
+    acceptedNotes,
+    approvedDate,
+    paymentDate,
+    paymentAmount,
+    proofLink,
+    approvedNotes,
+    realizedStartDate,
+    realizedNotes,
+    finishedDate,
+    completedDate,
+    approvalBreakNote,
+    realizationBreakNote
+) VALUES (
+    'Signup',
+    'John',
+    'Doe',
+    '+1234567890',
+    'johndoe@example.com',
+    2, -- Assuming memberInChargeId corresponds to an existing member with ID 1
+    'Campaign123',
+    'http://link1.com,http://link2.com',
+    'Notes about the signup',
+    1234567, -- Assuming opportunityId corresponds to an existing opportunity with ID 1234567
+    'Opportunity Name',
+    'Host MC',
+    'Host LC',
+    '2023-09-18',
+    '2023-09-20',
+    1, -- Assuming isEseEmailSent should be set to TRUE
+    'Notes about acceptance',
+    '2023-09-25',
+    '2023-09-26',
+    500.00, -- Assuming paymentAmount
+    'http://prooflink.com',
+    'Notes about approval',
+    '2023-10-01',
+    'Notes about realization',
+    '2023-10-10',
+    '2023-10-15',
+    'Notes about approval break',
+    'Notes about realization break'
+), (
+    'Accepted',
+    'Alice',
+    'Smith',
+    '+9876543210',
+    'alicesmith@example.com',
+    3, -- Assuming memberInChargeId corresponds to an existing member with ID 2
+    'Campaign456',
+    'http://link3.com,http://link4.com',
+    'Notes about the signup',
+    7654321, -- Assuming opportunityId corresponds to an existing opportunity with ID 7654321
+    'Another Opportunity',
+    'Another Host MC',
+    'Another Host LC',
+    '2023-09-22',
+    '2023-09-24',
+    0, -- Assuming isEseEmailSent should be set to FALSE
+    'Additional notes about acceptance',
+    '2023-09-28',
+    '2023-09-29',
+    750.50, -- Assuming paymentAmount
+    'http://anotherprooflink.com',
+    'Additional notes about approval',
+    '2023-10-05',
+    'Additional notes about realization',
+    '2023-10-12',
+    '2023-10-18',
+    'Additional notes about approval break',
+    'Additional notes about realization break'
+), (
+    'Realized',
+    'Sarah',
+    'Johnson',
+    '+5551234567',
+    'sarahjohnson@example.com',
+    4, -- Assuming memberInChargeId corresponds to an existing member with ID 3
+    'Campaign789',
+    'http://link5.com,http://link6.com',
+    'Notes about the signup',
+    9876543, -- Assuming opportunityId corresponds to an existing opportunity with ID 9876543
+    'Realized Opportunity',
+    'MC for Realized',
+    'LC for Realized',
+    '2023-09-10',
+    '2023-09-15',
+    1, -- Assuming isEseEmailSent should be set to TRUE
+    'Notes about acceptance',
+    '2023-09-20',
+    '2023-09-22',
+    900.75, -- Assuming paymentAmount
+    'http://realizedprooflink.com',
+    'Notes about approval',
+    '2023-10-01',
+    'Notes about realization',
+    '2023-10-10',
+    '2023-10-20',
+    'Notes about approval break',
+    'Notes about realization break'
+), (
+    'Pre-Signup',
+    'Michael',
+    'Brown',
+    '+1234567890',
+    'michaelbrown@example.com',
+    5, -- Assuming memberInChargeId corresponds to an existing member with ID 4
+    'Campaign101',
+    NULL, -- No sentLinks for pre-signup
+    'Notes about the pre-signup',
+    NULL, -- No opportunityId for pre-signup
+    NULL, -- No opportunityName for pre-signup
+    NULL, -- No hostMc for pre-signup
+    NULL, -- No hostLc for pre-signup
+    NULL, -- No acceptedStartDate for pre-signup
+    NULL, -- No acceptanceDate for pre-signup
+    NULL, -- No isEseEmailSent for pre-signup
+    NULL, -- No acceptedNotes for pre-signup
+    NULL, -- No approvedDate for pre-signup
+    NULL, -- No paymentDate for pre-signup
+    NULL, -- No paymentAmount for pre-signup
+    NULL, -- No proofLink for pre-signup
+    NULL, -- No approvedNotes for pre-signup
+    NULL, -- No realizedStartDate for pre-signup
+    NULL, -- No realizedNotes for pre-signup
+    NULL, -- No finishedDate for pre-signup
+    NULL, -- No completedDate for pre-signup
+    NULL, -- No approvalBreakNote for pre-signup
+    NULL -- No realizationBreakNote for pre-signup
+), (
+    'Approved',
+    'Emily',
+    'Johnson',
+    '+9876543210',
+    'emilyjohnson@example.com',
+    2, -- Assuming memberInChargeId corresponds to an existing member with ID 5
+    'CampaignXYZ',
+    'http://link7.com,http://link8.com',
+    'Notes about the signup',
+    8765432, -- Assuming opportunityId corresponds to an existing opportunity with ID 8765432
+    'Approved Opportunity',
+    'Approved MC',
+    'Approved LC',
+    '2023-09-12',
+    '2023-09-14',
+    1, -- Assuming isEseEmailSent should be set to TRUE
+    'Notes about acceptance',
+    '2023-09-19',
+    '2023-09-21',
+    1200.99, -- Assuming paymentAmount
+    'http://approvedprooflink.com',
+    'Notes about approval',
+    NULL, -- No realizedStartDate for Approved status
+    NULL, -- No realizedNotes for Approved status
+    NULL, -- No finishedDate for Approved status
+    NULL, -- No completedDate for Approved status
+    NULL, -- No approvalBreakNote for Approved status
+    NULL -- No realizationBreakNote for Approved status
+);

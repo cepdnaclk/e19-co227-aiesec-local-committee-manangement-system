@@ -14,6 +14,7 @@ import {
   Chip,
   InputAdornment,
   Skeleton,
+  Box,
 } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -21,6 +22,8 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 
 import InputField from "../../components/InputField";
+
+import { useNotify } from "../../context/NotificationContext";
 
 const MEMBERS_URL = "/member/";
 const RESOURCES_URL = "/member/resources/";
@@ -36,6 +39,8 @@ const RESOURCES_URL = "/member/resources/";
 export default function MemberProfile(props) {
   // TODO: Handle adding token to request globally
   // const { token } = useContext(UserContext);
+
+  const { notifySuccess, notifyError } = useNotify();
 
   const test = false;
 
@@ -300,282 +305,311 @@ export default function MemberProfile(props) {
       <Skeleton variant="text" animation="wave" />
     </>
   ) : (
-    <Formik
-      initialValues={initialState}
-      onSubmit={(formData, { setSubmitting, resetForm }) => {
-        setSubmitting(true);
-        if (formState.mode.includes("add")) handleAdd(formData);
-        else if (formState.mode.includes("edit")) handleEdit(formData);
-        else handleDelete(formData);
-        setSubmitting(false);
-      }}
-      validationSchema={formSchema}
-      enableReinitialize
-    >
-      {({
-        values,
-        errors,
-        touched,
-        isSubmitting,
-        resetForm,
-        handleChange,
-        setFieldValue,
-      }) => (
-        <Form>
-          <Grid container spacing={2}>
-            {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
-            <Grid item xs={12}>
-              <Divider textAlign="center">
-                <Chip label="Credentials"></Chip>
-              </Divider>
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedTextField
-                name="email"
-                label="Email"
-                disabled={areFieldsDisabled || formState.mode === "admin-edit"}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedPasswordField
-                name="passphrase"
-                label="Password"
-                disabled={areFieldsDisabled || formState.mode === "admin-edit"}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Divider textAlign="center">
-                <Chip label="Personal Information"></Chip>
-              </Divider>
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedTextField
-                name="fullName"
-                label="Full Name"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedTextField
-                name="preferredName"
-                label="Preferred Name"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              {/* <ValidatedSelectField
+    <>
+      <Formik
+        initialValues={initialState}
+        onSubmit={(formData, { setSubmitting, resetForm }) => {
+          setSubmitting(true);
+          if (formState.mode.includes("add")) handleAdd(formData);
+          else if (formState.mode.includes("edit")) handleEdit(formData);
+          else handleDelete(formData);
+          setSubmitting(false);
+        }}
+        validationSchema={formSchema}
+        enableReinitialize
+      >
+        {({
+          values,
+          errors,
+          touched,
+          isSubmitting,
+          resetForm,
+          handleChange,
+          setFieldValue,
+        }) => (
+          <Form>
+            <Grid container spacing={2}>
+              {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
+              <Grid item xs={12}>
+                <Divider textAlign="center">
+                  <Chip label="Credentials"></Chip>
+                </Divider>
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedTextField
+                  name="email"
+                  label="Email"
+                  disabled={
+                    areFieldsDisabled || formState.mode === "admin-edit"
+                  }
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedPasswordField
+                  name="passphrase"
+                  label="Password"
+                  disabled={
+                    areFieldsDisabled || formState.mode === "admin-edit"
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Divider textAlign="center">
+                  <Chip label="Personal Information"></Chip>
+                </Divider>
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedTextField
+                  name="fullName"
+                  label="Full Name"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedTextField
+                  name="preferredName"
+                  label="Preferred Name"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                {/* <ValidatedSelectField
                 name="gender"
                 label="Gender"
                 options={genders}
                 disabled={areFieldsDisabled}
               /> */}
-              <InputField
-                type="select"
-                name="gender"
-                options={genders}
-                disabled={areFieldsDisabled}
-              />
+                <InputField
+                  type="select"
+                  name="gender"
+                  options={genders}
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedDateField
+                  name="birthDate"
+                  label="Birth Date"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedTextField
+                  name="nic"
+                  label="NIC"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedTextField
+                  name="contactNo"
+                  label="Contact No"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedTextField
+                  name="homeContact"
+                  label="Home Contact"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <ValidatedSelectField
+                  name="districtId"
+                  label="District"
+                  options={resources.current.districts}
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedTextField
+                  name="homeAddress"
+                  label="Home Address"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedTextField
+                  name="boardingAddress"
+                  label="Boarding Address"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <ValidatedTextField
+                  name="facebookLink"
+                  label="Facebook Link"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <FacebookIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <ValidatedTextField
+                  name="linkedinLink"
+                  label="Linkedin Link"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LinkedInIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <ValidatedTextField
+                  name="instagramLink"
+                  label="Instagram Link"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <InstagramIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <ValidatedTextField
+                  name="photoLink"
+                  label="Photo Link"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <InsertPhotoIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Divider textAlign="center">
+                  <Chip label="Academic Details"></Chip>
+                </Divider>
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedTextField
+                  name="registerNo"
+                  label="Register No"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedTextField
+                  name="schoolName"
+                  label="School Name"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Divider textAlign="center">
+                  <Chip label="AIESEC Details"></Chip>
+                </Divider>
+              </Grid>
+              <Grid item xs={3}>
+                <ValidatedSelectField
+                  name="frontOfficeId"
+                  label="Front Office"
+                  options={resources.current.frontOffices}
+                  onChange={(e) => {
+                    // Call default Formik handleChange()
+                    handleChange(e);
+                    // Additionally load the related departments
+                    const currFrontOffice = resources.current.frontOffices.find(
+                      (element) => element.key === e.target.value
+                    );
+                    // setDepartments(JSON.parse(currFrontOffice.departments));
+                    departments.current = JSON.parse(
+                      currFrontOffice.departments
+                    );
+                  }}
+                  disabled={areFieldsDisabled || formState.mode === "user-edit"}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                {/* TODO: Department doesn't load on view */}
+                <ValidatedSelectField
+                  name="departmentId"
+                  label="Department"
+                  options={departments.current}
+                  disabled={areFieldsDisabled || formState.mode === "user-edit"}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <ValidatedSelectField
+                  name="backOfficeId"
+                  label="Back Office"
+                  options={resources.current.backOffices}
+                  disabled={areFieldsDisabled || formState.mode === "user-edit"}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <ValidatedSelectField
+                  name="roleId"
+                  label="Role"
+                  options={resources.current.roles}
+                  disabled={areFieldsDisabled || formState.mode === "user-edit"}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedDateField
+                  name="joinedDate"
+                  label="Joined Date"
+                  disabled={areFieldsDisabled || formState.mode === "user-edit"}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <ValidatedTextField
+                  name="aiesecEmail"
+                  label="AISEC Email"
+                  disabled={areFieldsDisabled}
+                />
+              </Grid>
+              <Grid item xs={12} textAlign="right">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting || formState.mode === "user-view"}
+                  variant="contained"
+                  color={formState.mode.includes("view") ? "error" : "primary"}
+                >
+                  {formState.mode.includes("view") ? "Delete" : "Submit"}
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={4}>
-              <ValidatedDateField
-                name="birthDate"
-                label="Birth Date"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedTextField
-                name="nic"
-                label="NIC"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedTextField
-                name="contactNo"
-                label="Contact No"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedTextField
-                name="homeContact"
-                label="Home Contact"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ValidatedSelectField
-                name="districtId"
-                label="District"
-                options={resources.current.districts}
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedTextField
-                name="homeAddress"
-                label="Home Address"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedTextField
-                name="boardingAddress"
-                label="Boarding Address"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <ValidatedTextField
-                name="facebookLink"
-                label="Facebook Link"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <FacebookIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <ValidatedTextField
-                name="linkedinLink"
-                label="Linkedin Link"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LinkedInIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <ValidatedTextField
-                name="instagramLink"
-                label="Instagram Link"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <InstagramIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <ValidatedTextField
-                name="photoLink"
-                label="Photo Link"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <InsertPhotoIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Divider textAlign="center">
-                <Chip label="Academic Details"></Chip>
-              </Divider>
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedTextField
-                name="registerNo"
-                label="Register No"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedTextField
-                name="schoolName"
-                label="School Name"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Divider textAlign="center">
-                <Chip label="AIESEC Details"></Chip>
-              </Divider>
-            </Grid>
-            <Grid item xs={3}>
-              <ValidatedSelectField
-                name="frontOfficeId"
-                label="Front Office"
-                options={resources.current.frontOffices}
-                onChange={(e) => {
-                  // Call default Formik handleChange()
-                  handleChange(e);
-                  // Additionally load the related departments
-                  const currFrontOffice = resources.current.frontOffices.find(
-                    (element) => element.key === e.target.value
-                  );
-                  // setDepartments(JSON.parse(currFrontOffice.departments));
-                  departments.current = JSON.parse(currFrontOffice.departments);
-                }}
-                disabled={areFieldsDisabled || formState.mode === "user-edit"}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              {/* TODO: Department doesn't load on view */}
-              <ValidatedSelectField
-                name="departmentId"
-                label="Department"
-                options={departments.current}
-                disabled={areFieldsDisabled || formState.mode === "user-edit"}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <ValidatedSelectField
-                name="backOfficeId"
-                label="Back Office"
-                options={resources.current.backOffices}
-                disabled={areFieldsDisabled || formState.mode === "user-edit"}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <ValidatedSelectField
-                name="roleId"
-                label="Role"
-                options={resources.current.roles}
-                disabled={areFieldsDisabled || formState.mode === "user-edit"}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedDateField
-                name="joinedDate"
-                label="Joined Date"
-                disabled={areFieldsDisabled || formState.mode === "user-edit"}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <ValidatedTextField
-                name="aiesecEmail"
-                label="AISEC Email"
-                disabled={areFieldsDisabled}
-              />
-            </Grid>
-            <Grid item xs={12} textAlign="right">
-              <Button
-                type="submit"
-                disabled={isSubmitting || formState.mode === "user-view"}
-                variant="contained"
-                color={formState.mode.includes("view") ? "error" : "primary"}
-              >
-                {formState.mode.includes("view") ? "Delete" : "Submit"}
-              </Button>
-            </Grid>
-          </Grid>
-        </Form>
-      )}
-    </Formik>
+          </Form>
+        )}
+      </Formik>
+      {formState.mode === "user-view" ? (
+        <Box>
+          <Button
+            color="success"
+            onClick={() => {
+              axios
+                .get("email/auth")
+                .then((response) => {
+                  // console.log(response);
+                  window.open(response.data.url);
+                })
+                .catch((err) => {
+                  console.log(err);
+                  notifyError("Error: ", err.message);
+                });
+            }}
+          >
+            Authenticate Email
+          </Button>
+        </Box>
+      ) : null}
+    </>
   );
 }
