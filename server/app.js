@@ -37,6 +37,10 @@ app.use(require("./src/middleware/errorLogger"));
 // error response handling
 app.use(require("./src/middleware/errorHandler"));
 
+// scheduled Tasks
+const scheduledTasks = require('./src/utils/scheduledTasks');
+/*scheduledTasks.start();*/
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
