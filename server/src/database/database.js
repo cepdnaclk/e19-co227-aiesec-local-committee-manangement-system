@@ -51,8 +51,8 @@ const initDatabase = async () => {
         const procedurePath = path.join(__dirname, "procedure.sql");
         await executeScriptFromFile(procedurePath, "Procedures Addition");
 
-        const procedurePath = path.join(__dirname, "view.sql");
-        await executeScriptFromFile(procedurePath, "Views Addition");
+        const viewPath = path.join(__dirname, "view.sql");
+        await executeScriptFromFile(viewPath, "Views Addition");
 
         console.info("\x1b[32m%s\x1b[0m", "Database Initialization Done!");
 
