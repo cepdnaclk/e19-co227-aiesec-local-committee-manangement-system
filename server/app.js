@@ -16,12 +16,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // public endpoints
+app.get("/", (req, res) => { res.status(200).send("Backend is Online!") });
 // user authentication
 app.use("/user", require("./src/route/user"));
+
+
 
 // jwt authentication
 const { authenticateToken } = require("./src/middleware/auth");
 //app.use(authenticateToken);
+
+
 
 // protected endpoints
 // routing 
