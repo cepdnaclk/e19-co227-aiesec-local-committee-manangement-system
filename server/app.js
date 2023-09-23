@@ -37,10 +37,6 @@ app.use("", require("./src/mainRouter"));
 // close connection to database before exiting on keyboard interrup
 const connection = require("./src/database/database");
 
-// scheduled Tasks
-const scheduledTasks = require("./src/utils/scheduledTasks");
-/*scheduledTasks.start();*/
-
 // error logging
 app.use(require("./src/middleware/errorLogger"));
 
@@ -49,7 +45,7 @@ app.use(require("./src/middleware/errorHandler"));
 
 // scheduled Tasks
 const scheduledTasks = require("./src/utils/scheduledTasks");
-scheduledTasks.start();
+// scheduledTasks.start();
 
 // Start server
 app.listen(port, () => {

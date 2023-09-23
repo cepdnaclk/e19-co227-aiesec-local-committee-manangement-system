@@ -181,9 +181,9 @@ function App() {
                   </>
                 ) : null}
                 {/* ~~~~~~~~~~~~~~~ iGV ~~~~~~~~~~~~~~~*/}
-                {user.frontOfficeId === "iGV" ? (
+                {user?.frontOfficeId === "iGV" ? (
                   <>
-                    {user.roleId === "VP" ? (
+                    {user?.roleId === "VP" ? (
                       <NavbarButton href="/igv/projects" label="Projects" />
                     ) : null}
                     <NavbarButton
@@ -193,7 +193,7 @@ function App() {
                   </>
                 ) : null}
                 {/* ~~~~~~~~~~~~~~~ oGV ~~~~~~~~~~~~~~~*/}
-                {user.frontOfficeId === "oGV" ? (
+                {user?.frontOfficeId === "oGV" ? (
                   <>
                     <NavbarButton href="/ogv/applicants" label="Applicants" />
                   </>
