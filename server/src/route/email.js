@@ -111,10 +111,12 @@ router.get("/auth/callback", async (req, res) => {
             );
         }
         /* res.redirect('http://localhost:8081/email/sendemail');*/
-        res.send("Authenticated successfully!");
+        /*res.send("Authenticated successfully!");*/
+        res.render('./gmailResponse', { code: 200, message1: "Authenticated successfully!", message2:"You can close this tab" });
     } catch (error) {
         console.error("Error during authentication:", error);
-        res.status(500).send("Authentication error.");
+        /* res.status(500).send("Authentication error.");*/
+        res.render('./gmailResponse', { code: 500, message1: "Authentication error!", message2: "Please Try Again" });
     }
 });
 

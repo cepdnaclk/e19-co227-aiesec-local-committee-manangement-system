@@ -15,8 +15,14 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Set view engine to EJS
+app.set('view engine', 'ejs');
+app.set('views', "./src/static/views");
+app.use(express.static('./src/static/'));
+
+
 // public endpoints
-app.get("/", (req, res) => { res.status(200).send("Backend is Online!") });
+app.get("/", (req, res) => { res.render('./welcome')});
 // user authentication
 app.use("/user", require("./src/route/user"));
 
