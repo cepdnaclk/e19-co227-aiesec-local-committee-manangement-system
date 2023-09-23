@@ -2,7 +2,7 @@ const Mailgen = require('mailgen');
 const cron = require('node-cron');
 
 
-const { connection, execQuery, execQueryWithValues } = require("../database/database");
+const { connection, execQuery} = require("../database/database");
 const { sendSystemEmail, sendUserEmail, replacePlaceholders } = require("../utils/email_functions");
 
 

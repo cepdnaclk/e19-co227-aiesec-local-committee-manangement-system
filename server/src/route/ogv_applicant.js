@@ -9,8 +9,7 @@ const {
 
 const {
   connection,
-  execQuery,
-  execQueryWithValues,
+  execQuery
 } = require("../database/database");
 const {
   sendSystemEmail,
@@ -239,7 +238,7 @@ router.post("/sendESEMail", async (req, res, next) => {
         const response = await sendUserEmail(userEmail, attachments, receiver, cc, bcc, subject, body);
 
         // Using a parameterized query to prevent SQL injection
-        await execQueryWithValues(`UPDATE ogv_applicants SET isEseEmailSent = 1 WHERE email = ?`, [receiver]);
+        await execQuery(`UPDATE ogv_applicants SET isEseEmailSent = 1 WHERE email = ?`, [receiver]);
 
         res.send("Email sent: " + response);
 
