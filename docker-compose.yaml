@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+
+  server:
+    build: ./server
+    container_name: server_container
+    #command: ./app.js
+    ports:
+      - "8081:8081"
+
+  client:
+    build: ./client
+    container_name: client_container
+    #command: ./src/index.js
+    #networks_mode: host
+
+    ports:
+      - "3000:3000"
+      
+    depends_on:
+      - server
