@@ -10,6 +10,6 @@ ENV MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 COPY ./my.cnf /etc/mysql/conf.d/custom.cnf
 
 # COPY ./scripts/init.sql /docker-entrypoint-initdb.d
-COPY ./scripts/member.sql /docker-entrypoint-initdb.d
+ADD ./scripts /docker-entrypoint-initdb.d/
 
 EXPOSE 3306

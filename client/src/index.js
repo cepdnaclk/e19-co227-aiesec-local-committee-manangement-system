@@ -11,7 +11,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // ReactDOM.render is no longer supported in React 18.
 // ReactDOM.render(<App />, document.getElementById('root'))
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

@@ -20,6 +20,24 @@ services:
       timeout: 5s
       retries: 10
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-dev
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+      PMA_VERBOSES: 0
+      PMA_VERBOSE: 0
+    networks:
+      - private
+    restart: always
+    ports:
+      - 8080:80
+
   server:
     container_name: server-dev
     build:
@@ -62,6 +80,7 @@ services:
         target: /app
       - /app/node_modules
     environment:
+      - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
     restart: unless-stopped
 
