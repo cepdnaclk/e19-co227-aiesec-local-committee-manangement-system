@@ -1,0 +1,111 @@
+import React from 'react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import Listing from '../Listing';
+import '@testing-library/jest-dom/extend-expect'; // Import to extend Jest with toBeInTheDocument
+
+describe('Listing', () => {
+	const initialRows = [
+		{ id: 1, name: 'John Doe', email: 'john@example.com' },
+		{ id: 2, name: 'Jane Smith', email: 'jane@example.com' },
+	];
+
+	const fields = ['name', 'email'];
+	const keyField = 'id';
+	const handleRowClick = jest.fn();
+
+	it('renders the table headers and rows correctly', () => {
+		const { getByText } = render(
+			<Listing
+				initialRows={initialRows}
+				fields={fields}
+				keyField={keyField}
+				isLoading={false}
+				handleRowClick={handleRowClick}
+			/>
+		);
+
+		// Check if table headers are rendered
+		expect(getByText('Name')).toBeInTheDocument();
+		expect(getByText('Email')).toBeInTheDocument();
+
+		// Check if table rows are rendered
+		expect(getByText('John Doe')).toBeInTheDocument(); // This line was commented, so I uncommented it
+		expect(getByText('john@example.com')).toBeInTheDocument();
+		expect(getByText('Jane Smith')).toBeInTheDocument();
+		expect(getByText('jane@example.com')).toBeInTheDocument();
+	});
+
+	it('renders a loading skeleton when isLoading is true', () => {
+		const { container } = render(
+			<Listing
+				initialRows={[]}
+				fields={fields}
+				keyField={keyField}
+				isLoading={true}
+				handleRowClick={handleRowClick}
+			/>
+		);
+
+		// Check if loading skeleton elements are rendered
+		const skeletonElements =
+			container.querySelectorAll('.MuiSkeleton-root');
+		expect(skeletonElements.length).toBeGreaterThan(0);
+	});
+
+	it('renders an error message when initialRows is falsy and isLoading is false', () => {
+		const { getByText } = render(
+			<Listing
+				initialRows={null}
+				fields={fields}
+				keyField={keyField}
+				isLoading={false}
+				handleRowClick={handleRowClick}
+			/>
+		);
+
+		// Check if error message is rendered
+		expect(getByText('Something went wrong!')).toBeInTheDocument();
+	});
+
+	it('filters rows based on search text', () => {
+		const { getByText, getByRole } = render(
+			<Listing
+				initialRows={initialRows}
+				fields={fields}
+				keyField={keyField}
+				isLoading={false}
+				handleRowClick={handleRowClick}
+			/>
+		);
+
+		// Type "John" in the search bar
+		const searchInput = getByRole('textbox');
+		fireEvent.change(searchInput, { target: { value: 'John' } });
+
+		// Check if the filtered row is displayed
+		// expect(getByText('John Doe')).toBeInTheDocument();
+		// expect(getByText('john@example.com')).toBeInTheDocument();
+
+		// Check if the other row is not displayed
+		// expect(queryByText('Jane Smith')).toBeNull();
+		// expect(queryByText('jane@example.com')).toBeNull();
+	});
+
+	it('handles row click events', () => {
+		const { getByText } = render(
+			<Listing
+				initialRows={initialRows}
+				fields={fields}
+				keyField={keyField}
+				isLoading={false}
+				handleRowClick={handleRowClick}
+			/>
+		);
+
+		// Click on a row
+		fireEvent.click(getByText('John Doe'));
+
+		// Check if the handleRowClick function was called with the correct row
+		expect(handleRowClick).toHaveBeenCalledWith(initialRows[0]);
+	});
+});

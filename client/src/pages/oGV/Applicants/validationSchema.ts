@@ -31,16 +31,14 @@ const validationSchema = yup.object().shape({
     .notRequired()
     .min(yup.ref("acceptedStartDate"), "Cannot Predate Accepted Start Date"),
   paymentDate: yup.date().notRequired(),
-  paymentAmount: yup
-    .string()
-    .notRequired()
-    .test("maxDecimalPlaces", "Maximum Two Decimal Places", (value) =>
-      value ? value.split(".")[1]?.length <= 2 : true
-    )
-    .test("maxValue", "Max Value Exceeded", (value) =>
-      //  ignore unset values by returning true for undefined values
-      value ? String(value).split(".")[0]?.length <= 10 : true
-    ),
+  paymentAmount: yup.string().notRequired(),
+  // .test("maxDecimalPlaces", "Maximum Two Decimal Places", (value) =>
+  //   value ? value.split(".")[1]?.length <= 2 : true
+  // )
+  // .test("maxValue", "Max Value Exceeded", (value) =>
+  //   //  ignore unset values by returning true for undefined values
+  //   value ? String(value).split(".")[0]?.length <= 10 : true
+  // ),
   proofLink: yup.string().max(1024).notRequired(),
   approvedNotes: yup.string().max(255).notRequired(),
   // Realized

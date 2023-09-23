@@ -20,7 +20,7 @@ router.post("/login", (req, res, next) => {
     const password = req.body.password;
     console.log(email, password);
 
-    const queryFindUser = `SELECT id, email, passphrase, role_id, preferred_name FROM member WHERE email = ?;`;
+    const queryFindUser = `SELECT id, email, passphrase, front_office_id, department_id, back_office_id, role_id, preferred_name FROM member WHERE email = ?;`;
 
     connection.query(queryFindUser, [email], (err, result) => {
       if (err) {

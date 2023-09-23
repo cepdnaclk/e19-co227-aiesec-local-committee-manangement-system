@@ -17,6 +17,7 @@ import ErrorPage from "../../../components/ErrorPage";
 import SearchBar from "../../../components/SearchBar";
 import Table from "../../../components/Table";
 import Form from "./Form";
+import Mail from "./Mail";
 
 import { ApplicantList } from "./HttpUtils";
 
@@ -91,7 +92,7 @@ export default function Applicants() {
                 </IconButton>
               </Box>
             </Box>
-            <div>Email</div>
+            <Mail setEmailModalState={setEmailModalState} />
           </DialogContent>
         </Dialog>
         {/* </TabPanel>

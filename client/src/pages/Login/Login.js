@@ -49,10 +49,13 @@ export default function Login() {
       console.log(JSON.stringify(response.data));
 
       setUser({
+        id: response?.data?.id,
         email: credentials.email,
         preferredName: response?.data?.preferredName,
         roleId: response?.data?.roleId,
-        id: response?.data?.id,
+        frontOfficeId: response?.data?.frontOfficeId,
+        departmentId: response?.data?.departmentId,
+        backOfficeId: response?.data?.backOfficeId,
       });
       localStorage.setItem("accessToken", response?.data?.accessToken);
       localStorage.setItem("refreshToken", response?.data?.refreshToken);

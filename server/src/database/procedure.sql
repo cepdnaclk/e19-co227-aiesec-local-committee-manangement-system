@@ -6,9 +6,9 @@ CONCAT('(', f.id, ') ', f.title) as 'value',
 JSON_ARRAYAGG(JSON_OBJECT('key',d.id,'value', CONCAT('(',d.id,') ', d.title))) as 'departments'
 FROM front_valid_pair AS v, front_office AS f, department AS d
 WHERE f.id = v.office_id AND d.id = v.department_id
-GROUP BY f.id, f.title, f.abbreviation;
-SELECT id as 'key', CONCAT('(',abbreviation,') ', title) as 'value' from back_office;
-SELECT id as 'key', CONCAT('(',abbreviation,') ', title) as 'value' from role;
+GROUP BY f.id, f.title;
+SELECT id as 'key', CONCAT('(',id,') ', title) as 'value' from back_office;
+SELECT id as 'key', CONCAT('(',id,') ', title) as 'value' from role;
 END;
 
 CREATE PROCEDURE GetAllTerms()

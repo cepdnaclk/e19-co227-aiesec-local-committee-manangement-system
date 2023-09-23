@@ -1,0 +1,58 @@
+import React from 'react';
+import { render, waitFor, screen } from '@testing-library/react';
+import EventSlider from '../EventSlider';
+import { UserContext } from '../../context/UserContext';
+import '@testing-library/jest-dom/extend-expect';
+
+// Mock the useContext hook
+jest.mock('./../../../context/UserContext');
+
+describe('EventSlider', () => {
+	it('renders loading skeleton when isLoading is true', () => {
+		// Mock useContext to provide a loading state
+		UserContext.mockReturnValue({ token: 'your-token' });
+
+		render(<EventSlider />);
+
+		// Use screen queries to assert the presence of Skeleton components
+		expect(screen.getByText('Loading...')).toBeInTheDocument();
+	});
+
+	it('renders event cards when isLoading is false', async () => {
+		// Mock useContext to provide a token
+		UserContext.mockReturnValue({ token: 'your-token' });
+
+		// Mock the axios.get function to return sample data
+		const sampleEvents = [
+			{
+				id: 1,
+				title: 'Event 1',
+				eventDate: '2023-09-19',
+				eventDescription: 'Description 1',
+				postLink: 'your-link-1',
+			},
+			{
+				id: 2,
+				title: 'Event 2',
+				eventDate: '2023-09-20',
+				eventDescription: 'Description 2',
+				postLink: 'your-link-2',
+			},
+		];
+
+		jest.spyOn(require('./../api/axios'), 'default').mockResolvedValue({
+			data: sampleEvents,
+		});
+
+		render(<EventSlider />);
+
+		// Wait for the component to finish rendering with data
+		await waitFor(() => {
+			// Use screen queries to assert the presence of event cards
+			expect(screen.getByText('Event 1')).toBeInTheDocument();
+			expect(screen.getByText('Event 2')).toBeInTheDocument();
+			expect(screen.getByText('Description 1')).toBeInTheDocument();
+			expect(screen.getByText('Description 2')).toBeInTheDocument();
+		});
+	});
+});

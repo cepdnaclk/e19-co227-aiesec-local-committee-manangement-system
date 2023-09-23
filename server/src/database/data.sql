@@ -152,8 +152,8 @@ VALUES
     "No.3 Kings Street, Kandy"
 )
 ,(
-    'jane.smith@example.com',
-    'pass123',
+    'sankapeeris360@gmail.com',
+    '123',
     'Jane Smith', 
     'Janie', 
     "oGV", 
@@ -366,14 +366,14 @@ INSERT INTO email_template (name, subject, body, attachments) VALUES
 <p>&nbsp;</p>
 <p>Thank You,</p>
 <p>AIESEC local committee management system</p>",
-'["https://ichef.bbci.co.uk/news/976/cpsprodpb/16620/production/_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg"]'),
+'["https://assets.website-files.com/60a2e3be4c28b25f35f6a54a/621bcef94c58054c38ae8305_AIESEC_OG.jpg"]'),
 
 ("ese", "Test Ese email subject", 
 
 "<p>Test Email Body!! </p>
 <p>&nbsp;</p>
 <p>Thank You,</p>
-<p>AIESEC local committee management system</p>", '["https://ichef.bbci.co.uk/news/976/cpsprodpb/16620/production/_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg"]');
+<p>AIESEC local committee management system</p>", '["https://assets.website-files.com/60a2e3be4c28b25f35f6a54a/621bcef94c58054c38ae8305_AIESEC_OG.jpg"]');
 
 INSERT INTO ogv_applicants (
     status,
@@ -409,7 +409,7 @@ INSERT INTO ogv_applicants (
     'John',
     'Doe',
     '+1234567890',
-    'johndoe@example.com',
+    'sankapeeris360@gmail.com',
     2, -- Assuming memberInChargeId corresponds to an existing member with ID 1
     'Campaign123',
     'http://link1.com,http://link2.com',
