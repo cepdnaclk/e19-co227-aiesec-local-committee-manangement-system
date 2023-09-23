@@ -127,8 +127,8 @@ const Form = ({
     >
       {({ values, errors, handleChange, resetForm }) => (
         <>
-          {JSON.stringify(values, null, 2)}
-          {JSON.stringify(errors, null, 2)}
+          {/* {JSON.stringify(values, null, 2)}
+          {JSON.stringify(errors, null, 2)} */}
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             {editMode === "view" ? (
               <IconButton
@@ -150,6 +150,7 @@ const Form = ({
             )}
             <IconButton
               onClick={() => {
+                setSelectedItemKey(null);
                 setEditMode(null);
               }}
             >

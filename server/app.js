@@ -16,27 +16,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // public endpoints
-app.get("/", (req, res) => { res.status(200).send("Backend is Online!") });
+app.get("/", (req, res) => {
+  res.status(200).send("Backend is Online!");
+});
 // user authentication
 app.use("/user", require("./src/route/user"));
-
-
 
 // jwt authentication
 const { authenticateToken } = require("./src/middleware/auth");
 //app.use(authenticateToken);
 
-
-
 // protected endpoints
-// routing 
+// routing
 app.use("", require("./src/mainRouter"));
 
 // close connection to database before exiting on keyboard interrup
 const connection = require("./src/database/database");
 
 // scheduled Tasks
-const scheduledTasks = require('./src/utils/scheduledTasks');
+const scheduledTasks = require("./src/utils/scheduledTasks");
 /*scheduledTasks.start();*/
 
 // error logging
@@ -45,16 +43,19 @@ app.use(require("./src/middleware/errorLogger"));
 // error response handling
 app.use(require("./src/middleware/errorHandler"));
 
+// scheduled Tasks
+const scheduledTasks = require("./src/utils/scheduledTasks");
+scheduledTasks.start();
 
 // Start server
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+  console.log(`Example app listening on port ${port}`);
 });
 
 // Graceful shutdown on keyboard interrupt
 process.on("SIGINT", function () {
-    console.log("Caught interrupt signal");
-    // Uncomment to end the connection on interrupt
-    // connection.end();
-    process.exit(0);
+  console.log("Caught interrupt signal");
+  // Uncomment to end the connection on interrupt
+  // connection.end();
+  process.exit(0);
 });
