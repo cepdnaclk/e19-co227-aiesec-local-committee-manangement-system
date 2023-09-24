@@ -6,7 +6,7 @@ import { TextField, Button, Typography, Grid, Paper, Box } from "@mui/material";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 // import loginBanner from "../../assets/login-banner.jpg";
-const LOGIN_URL = "user/login";
+const LOGIN_URL = "/user/login";
 
 /* TODO
  * [x] Integrate Formik to form

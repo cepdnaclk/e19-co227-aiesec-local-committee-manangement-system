@@ -111,23 +111,31 @@ router.get("/auth/callback", async (req, res) => {
       `SELECT email FROM user_gmail_data WHERE email = '${userEmail}' ;`
     );
 
-        if (rows.length == 0) {
-            await execQuery(
-                `INSERT INTO user_gmail_data (email, accessToken, refreshToken, tokenExpiry) VALUES ('${userEmail}', '${tokens.access_token}', '${tokens.refresh_token}', '${tokens.expiry_date}')`
-            );
-        } else {
-            await execQuery(
-                `UPDATE user_gmail_data SET accessToken = '${tokens.access_token}', tokenExpiry = '${tokens.expiry_date}' WHERE email = '${userEmail}'`
-            );
-        }
-        /* res.redirect('http://localhost:8081/email/sendemail');*/
-        /*res.send("Authenticated successfully!");*/
-        res.render('./gmailResponse', { code: 200, message1: "Authenticated successfully!", message2:"You can close this tab" });
-    } catch (error) {
-        console.error("Error during authentication:", error);
-        /* res.status(500).send("Authentication error.");*/
-        res.render('./gmailResponse', { code: 500, message1: "Authentication error!", message2: "Please Try Again" });
+    if (rows.length == 0) {
+      await execQuery(
+        `INSERT INTO user_gmail_data (email, accessToken, refreshToken, tokenExpiry) VALUES ('${userEmail}', '${tokens.access_token}', '${tokens.refresh_token}', '${tokens.expiry_date}')`
+      );
+    } else {
+      await execQuery(
+        `UPDATE user_gmail_data SET accessToken = '${tokens.access_token}', tokenExpiry = '${tokens.expiry_date}' WHERE email = '${userEmail}'`
+      );
     }
+    /* res.redirect('http://localhost:8081/email/sendemail');*/
+    /*res.send("Authenticated successfully!");*/
+    res.render("./gmailResponse", {
+      code: 200,
+      message1: "Authenticated successfully!",
+      message2: "You can close this tab",
+    });
+  } catch (error) {
+    console.error("Error during authentication:", error);
+    /* res.status(500).send("Authentication error.");*/
+    res.render("./gmailResponse", {
+      code: 500,
+      message1: "Authentication error!",
+      message2: "Please Try Again",
+    });
+  }
 });
 
 router.get("/sendEmail", async (req, res, next) => {

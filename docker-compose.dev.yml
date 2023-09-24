@@ -7,16 +7,10 @@ services:
       context: ./mysql
       dockerfile: Dockerfile.dev
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=LC_KANDY
       - MYSQL_ROOT_PASSWORD=root
-    # volumes:
-    # - ./scripts:/docker-entrypoint-initdb.d/
-    # - mysql-volume:/var/lib/mysql:rw
     expose:
       - 3306
-    networks:
-      - private
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 5s
@@ -35,10 +29,6 @@ services:
       PMA_PORT: 3306
       PMA_USER: root
       PMA_PASSWORD: root
-      PMA_VERBOSES: 0
-      PMA_VERBOSE: 0
-    networks:
-      - private
     restart: always
     ports:
       - 8080:80
@@ -47,15 +37,12 @@ services:
     container_name: server-dev
     build:
       context: ./server
-      dockerfile: Dockerfile.dev
+    command: npm run dev
     ports:
       - 8081:8081
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - public
-      - private
     environment:
       - DATABASE_HOST=db
       - DATABASE_USER=root
@@ -73,23 +60,16 @@ services:
     container_name: client-dev
     build:
       context: ./client
-      dockerfile: Dockerfile.dev
+      target: development
     ports:
       - 3000:3000
     depends_on:
       - server
-    networks:
-      - public
     volumes:
       - type: bind
         source: ./client
         target: /app
       - /app/node_modules
     environment:
-      - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
     restart: always
-
-networks:
-  public:
-  private:
