@@ -42,10 +42,14 @@ export default function Login() {
   const handleSubmit = async (credentials, { setSubmitting, resetForm }) => {
     setSubmitting(true);
     try {
-      const response = await axios.post(LOGIN_URL, credentials, {
-        headers: { "Content-Type": "application/json" },
-        //   withCredentials: true,
-      });
+      const response = await axios.post(
+        `http://localhost:8081/${LOGIN_URL}`,
+        credentials,
+        {
+          headers: { "Content-Type": "application/json" },
+          //   withCredentials: true,
+        }
+      );
       console.log(JSON.stringify(response.data));
 
       setUser({

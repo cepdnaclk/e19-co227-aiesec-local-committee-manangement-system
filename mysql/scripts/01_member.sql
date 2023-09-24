@@ -1,3 +1,5 @@
+USE LC_KANDY;
+
 /* ~~~~~~~~~~~~~~~~~~~~ FACULTIES ~~~~~~~~~~~~~~~~~~~~ */
 CREATE TABLE faculty (
     id              VARCHAR(3) PRIMARY KEY,

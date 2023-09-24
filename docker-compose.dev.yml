@@ -10,15 +10,20 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=LC_KANDY
       - MYSQL_ROOT_PASSWORD=root
-    # restart: always
-    ports:
-      - 3306:3306
+    # volumes:
+    # - ./scripts:/docker-entrypoint-initdb.d/
+    # - mysql-volume:/var/lib/mysql:rw
+    expose:
+      - 3306
     networks:
       - private
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 5s
       retries: 10
+    restart: always
+    cap_add:
+      - SYS_NICE
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -56,6 +61,7 @@ services:
       - DATABASE_USER=root
       - DATABASE_PASSWORD=root
       - DATABASE_DB=LC_KANDY
+      - DATABASE_PORT=3306
       - CHOKIDAR_USEPOLLING=true
     volumes:
       - type: bind
@@ -82,7 +88,7 @@ services:
     environment:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
-    restart: unless-stopped
+    restart: always
 
 networks:
   public:
