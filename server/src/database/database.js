@@ -72,6 +72,6 @@ const execQuery = (query, values = []) => {
   });
 };
 
-initDatabase();
+// initDatabase();
 
 module.exports = { connection, execQuery };

@@ -1,5 +1,7 @@
 FROM mysql:8.0.34-debian
 
+RUN chown -R mysql:mysql /docker-entrypoint-initdb.d/
+
 ARG MYSQL_DATABASE
 ARG MYSQL_ROOT_PASSWORD
 
@@ -7,9 +9,9 @@ ENV MYSQL_DATABASE=${MYSQL_DATABASE}
 ENV MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 
 # Copy over custom config file
-COPY ./my.cnf /etc/mysql/conf.d/custom.cnf
+COPY ./custom.cnf /etc/mysql/conf.d/custom.cnf
 
-# COPY ./scripts/init.sql /docker-entrypoint-initdb.d
-ADD ./scripts /docker-entrypoint-initdb.d/
+COPY ./scripts /docker-entrypoint-initdb.d/
+COPY ./dummy_data.sql /docker-entrypoint-initdb.d/dummy_data.sql
 
 EXPOSE 3306
