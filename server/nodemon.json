@@ -1,3 +1,4 @@
-{   
-    "ignore": ["database/meta.json"] 
+{
+  "ignore": ["database/meta.json"],
+  "ext": "*"
 }

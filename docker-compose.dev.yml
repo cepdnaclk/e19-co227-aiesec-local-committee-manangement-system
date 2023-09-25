@@ -3,12 +3,14 @@ version: "3.8"
 services:
   db:
     container_name: db-dev
-    build:
-      context: ./mysql
-      dockerfile: Dockerfile.dev
+    image: mysql:8.0.34-debian
+    networks:
+      - server-net
+    command: "--default-authentication-plugin=mysql_native_password"
     environment:
       - MYSQL_DATABASE=LC_KANDY
       - MYSQL_ROOT_PASSWORD=root
+      - LOG_LEVEL=error
     expose:
       - 3306
     healthcheck:
@@ -18,10 +20,14 @@ services:
     restart: always
     cap_add:
       - SYS_NICE
+    volumes:
+      - ./db/custom.cnf:/etc/mysql/conf.d/custom.cnf # custom settings file
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin-dev
+    networks:
+      - server-net
     links:
       - db
     environment:
@@ -37,9 +43,11 @@ services:
     container_name: server-dev
     build:
       context: ./server
-    command: npm run dev
+      target: development
     ports:
       - 8081:8081
+    networks:
+      - server-net
     depends_on:
       db:
         condition: service_healthy
@@ -73,3 +81,6 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
     restart: always
+
+networks:
+  server-net:

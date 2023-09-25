@@ -280,6 +280,7 @@ CREATE TABLE email_template (
     cc          JSON,
     bcc         JSON,
     attachments JSON
+
 );
 
 /*table for user's gmail date'*/
