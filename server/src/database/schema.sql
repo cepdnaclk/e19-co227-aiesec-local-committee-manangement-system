@@ -273,13 +273,15 @@ END;
 
 /*table for storing templates of emails*/
 CREATE TABLE email_template (
-    id          INT             AUTO_INCREMENT PRIMARY KEY,
-    name        VARCHAR(255)    NOT NULL UNIQUE,
-    subject     VARCHAR(255)    NOT NULL,
-    body        TEXT            NOT NULL,
-    cc          JSON,
-    bcc         JSON,
-    attachments JSON
+    id              INT             AUTO_INCREMENT PRIMARY KEY,
+    name            VARCHAR(255)    NOT NULL UNIQUE,
+    frontOfficeId   VARCHAR(4),
+    backOfficeId    VARCHAR(4),
+    subject         VARCHAR(255)    NOT NULL,
+    body            TEXT            NOT NULL,
+    cc              JSON,
+    bcc             JSON,
+    attachments     JSON
 
 );
 
@@ -316,7 +318,6 @@ CREATE TABLE ogv_applicants (
     hostLc                  VARCHAR(255),
     acceptedStartDate       DATE,
     acceptanceDate          DATE,
-    isEseEmailSent          BOOLEAN DEFAULT FALSE,
     acceptedNotes           VARCHAR(255),
 
     -- Approved
@@ -348,6 +349,17 @@ CREATE TABLE ogv_applicants (
     INDEX (email),
     INDEX (memberInChargeId)
 );
+
+
+CREATE TABLE email_to_ogv_applicants (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    applicantId INT,
+    mailtemplateId INT,
+
+    FOREIGN KEY (applicantId) REFERENCES ogv_applicants(id),
+    FOREIGN KEY (mailtemplateId) REFERENCES email_template(id)
+);
+
 
 
 

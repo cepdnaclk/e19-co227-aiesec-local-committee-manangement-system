@@ -391,7 +391,6 @@ INSERT INTO ogv_applicants (
     hostLc,
     acceptedStartDate,
     acceptanceDate,
-    isEseEmailSent,
     acceptedNotes,
     approvedDate,
     paymentDate,
@@ -420,7 +419,6 @@ INSERT INTO ogv_applicants (
     'Host LC',
     '2023-09-18',
     '2023-09-20',
-    1, -- Assuming isEseEmailSent should be set to TRUE
     'Notes about acceptance',
     '2023-09-25',
     '2023-09-26',
@@ -449,7 +447,6 @@ INSERT INTO ogv_applicants (
     'Another Host LC',
     '2023-09-22',
     '2023-09-24',
-    0, -- Assuming isEseEmailSent should be set to FALSE
     'Additional notes about acceptance',
     '2023-09-28',
     '2023-09-29',
@@ -478,7 +475,6 @@ INSERT INTO ogv_applicants (
     'LC for Realized',
     '2023-09-10',
     '2023-09-15',
-    1, -- Assuming isEseEmailSent should be set to TRUE
     'Notes about acceptance',
     '2023-09-20',
     '2023-09-22',
@@ -507,7 +503,6 @@ INSERT INTO ogv_applicants (
     NULL, -- No hostLc for pre-signup
     NULL, -- No acceptedStartDate for pre-signup
     NULL, -- No acceptanceDate for pre-signup
-    NULL, -- No isEseEmailSent for pre-signup
     NULL, -- No acceptedNotes for pre-signup
     NULL, -- No approvedDate for pre-signup
     NULL, -- No paymentDate for pre-signup
@@ -536,7 +531,6 @@ INSERT INTO ogv_applicants (
     'Approved LC',
     '2023-09-12',
     '2023-09-14',
-    1, -- Assuming isEseEmailSent should be set to TRUE
     'Notes about acceptance',
     '2023-09-19',
     '2023-09-21',

@@ -14,19 +14,25 @@ const {
 
 // create email template
 router.post("/template/create", (req, res, next) => {
-  let sql = `INSERT INTO email_template (name, subject, body, cc, bcc ,attachments) VALUES ('${
-    req.body.name
-  }', '${req.body.subject}', '${req.body.body}','${
-    req.body.cc ? req.body.cc : null
-  }','${req.body.bcc ? req.body.bcc : null}', '${req.body.attachments}')`;
 
-  execQuery(sql)
-    .then((rows) => {
-      res.status(200).json({ msg: "successfully created" });
-    })
-    .catch((err) => {
-      next(err);
-    });
+    try {
+        const [fields, values] = [
+            Object.keys(req.body),
+            Object.values(req.body).map((value) => (value ? `'${value}'` : `NULL`)),
+        ];
+
+        const insertQuery = `INSERT INTO email_template (${fields.toString()}) VALUES (${values.toString()})`;
+
+        execQuery(insertQuery)
+            .then((rows) => {
+                res.status(200).json({ msg: "successfully created" });
+            })
+            .catch((err) => {
+                next(err);
+            });
+    } catch (e) {
+        next(e);
+    }
 });
 
 // delete email template
@@ -44,34 +50,53 @@ router.delete("/template/:name", (req, res, next) => {
 
 // get email template
 router.get("/template/:name", (req, res, next) => {
-  let sql = `SELECT * FROM email_template WHERE name = '${req.params.name}'`;
+    try {
+        let sql = `SELECT * FROM email_template WHERE name = '${req.params.name}'`;
 
-  execQuery(sql)
-    .then((rows) => {
-      res.status(200).json(rows[0]);
-    })
-    .catch((err) => {
-      next(err);
-    });
+        execQuery(sql)
+            .then((rows) => {
+                res.status(200).json(rows[0]);
+            })
+            .catch((err) => {
+                next(err);
+            });
+    } catch (e) {
+        next(e);
+    }
 });
 
 // update email template
 router.put("/template/:name", (req, res, next) => {
-  let sql = `UPDATE email_template SET subject = '${
-    req.body.subject
-  }', body = '${req.body.body}', attachments = '${
-    req.body.attachments
-  }' ,cc = '${req.body.cc ? req.body.cc : null}',bcc = '${
-    req.body.bcc ? req.body.bcc : null
-  }'  WHERE name = '${req.params.name}'`;
 
-  execQuery(sql)
-    .then((rows) => {
-      res.status(200).json({ msg: "template updated" });
-    })
-    .catch((err) => {
-      next(err);
-    });
+    try {
+        const [fields, values] = [
+            Object.keys(req.body),
+            Object.values(req.body).map((value) => (value ? `'${value}'` : `NULL`)),
+        ];
+
+        // Combine the two arrays into a single array.
+        let updateString = "";
+
+        for (let i = 0; i < fields.length; i++) {
+            updateString += fields[i] + " = ";
+            updateString += values[i] + ", ";
+        }
+
+        // remove last trailling ", "
+        updateString = updateString.substring(0, updateString.length - 2);
+
+        const query = `UPDATE email_template SET ${updateString} WHERE id='${req.params.id}';`;
+        execQuery(query)
+            .then((rows) => {
+                res.status(200).json({ msg: "template updated" });
+            })
+            .catch((err) => {
+                next(err);
+            });
+    } catch (err) {
+        next(err);
+    }
+
 });
 
 /*------------------ EMAILS THROUGH USERS ---------------------------------------*/

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Mailgen = require("mailgen");
 
+
 const {
   requestBodyToFieldsAndValues,
   objectKeysSnakeToCamel,
@@ -13,6 +14,8 @@ const {
   sendUserEmail,
   replacePlaceholders,
 } = require("../utils/email_functions");
+
+const { getUserDataFromToken } = require("../utils/helpers");
 
 ///////////////utility functions
 
@@ -93,6 +96,7 @@ router.post("/applicants", (req, res, next) => {
 
 // update existing one
 router.put("/applicants/:id", (req, res, next) => {
+
   try {
     const [fields, values] = [
       Object.keys(req.body),
@@ -152,48 +156,14 @@ router.delete("/applicants/:id", (req, res, next) => {
 
 //});
 
-// for now testing only
-router.post("/send6weekChallengeMail", (req, res, next) => {
-  // below code only for testing
-  //// generate email
-  //let emailBody = {
-  //    body: {
-  //        name: 'User',
-  //        intro: 'Reminder',
-  //        action: {
-  //            instructions: 'This is a test email :',
-  //            button: {
-  //                color: 'green',
-  //                text: 'Check',
-  //                link: 'https://test.test'
-  //            }
-  //        }
-  //    }
-  //};
-  //// Using mailGenerator to generate the email body
-  //let generatedEmailBody = mailGenerator.generate(emailBody);
-  //// Process attachments
-  //let attachments = req.body.attachments ? req.body.attachments : [];
-  //sendSystemEmail(req.body.email, req.body.cc, req.body.bcc, req.body.subject, generatedemailbody, attachments)
-  //    .then((info) => {
-  //        res.status(201).json({
-  //            msg: "email sent",
-  //            info: info.messageid,
-  //            preview: nodemailer.gettestmessageurl(info)
-  //        });
-  //    })
-  //    .catch((err) => {
-  //        next(err)
-  //    });
-});
 
-router.post("/sendApprovedMail", (req, res) => {});
 
-// send ese mail template to client , placeholders replaced with req.data
-router.get("/sendESEMail", (req, res, next) => {
-  let eseMailQuery = "SELECT * FROM email_template WHERE name = 'ese'";
 
-  return execQuery(eseMailQuery)
+// send mail template to client , placeholders replaced with req.data
+router.get("/mail/:id", (req, res, next) => {
+    let mailQuery = `SELECT * FROM email_template WHERE id = '${req.params.id}'`;
+
+    return execQuery(mailQuery)
     .then((rows) => {
       let emailData = rows[0];
 
@@ -221,36 +191,49 @@ router.get("/sendESEMail", (req, res, next) => {
     });
 });
 
-// send ese email to req.receiver from req.userEmail and update db
-router.post("/sendESEMail", async (req, res, next) => {
-  try {
-    const { userEmail, attachments, receiver, cc, bcc, subject, body } =
-      req.body;
 
-    const response = await sendUserEmail(
-      userEmail,
-      attachments,
-      receiver,
-      cc,
-      bcc,
-      subject,
-      body
-    );
+// send email to req.body.receiverId's email
+router.post("/mail/:id", async (req, res, next) => {
+    try {
+        const userDetails = getUserDataFromToken(req);
 
-    // Using a parameterized query to prevent SQL injection
-    await execQueryWithValues(
-      `UPDATE ogv_applicants SET isEseEmailSent = 1 WHERE email = ?`,
-      [receiver]
-    );
+        const userEmail = userDetails.email;
+        let receiver;
+        const { attachments, receiverId, cc, bcc, subject, body } = req.body;
+        
+        const result = await new Promise((resolve, reject) => {
+            connection.query("SELECT email FROM ogv_applicants WHERE id = ?", [receiverId], (err, result) => {
+                if (err) reject(err);
+                resolve(result);
+            });
+        });
 
-    res.send("Email sent: " + response);
-  } catch (err) {
-    if (err.message === "User Email is not Authenticated.") {
-      res.status(404).send(err.message);
-    } else {
-      next(err);
+        receiver = result[0].email;
+
+        const response = await sendUserEmail(
+            userEmail,
+            attachments,
+            receiver,
+            cc,
+            bcc,
+            subject,
+            body
+        );
+
+        await execQuery(
+            `INSERT INTO email_to_ogv_applicants (applicantId,mailtemplateId) VALUES (?,?);`,
+            [receiverId, req.params.id]
+        );
+
+        res.send("Email sent: " + response);
+    } catch (err) {
+        if (err.message === "User Email is not Authenticated.") {
+            res.status(404).send(err.message);
+        } else {
+            next(err);
+        }
     }
-  }
 });
+
 
 module.exports = router;
