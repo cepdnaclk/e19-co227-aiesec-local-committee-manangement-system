@@ -1,128 +1,33 @@
 USE LC_KANDY;
 
-/* =============== STATIC DATA =============== */
-INSERT INTO faculty (id, title) VALUES
-('AG', 'Faculty of Agriculture')
-,('A', 'Faculty of Arts')
-,('D', 'Faculty of Dental Sciences')
-,('E', 'Faculty of Engineering')
-,('M', 'Faculty of Medicine')
-,('S', 'Faculty of Science')
-,('V', 'Faculty of Veterinary Medicine and Animal Science')
-,('AHS', 'Faculty of Allied Health Sciences')
-,('MG', 'Faculty of Management')
-;
-
-INSERT INTO district (id, title) VALUES
-(1, 'Ampara')
-,(2, 'Anuradhapura')
-,(3, 'Badulla')
-,(4, 'Batticaloa')
-,(5, 'Colombo')
-,(6, 'Galle')
-,(7, 'Gampaha')
-,(8, 'Hambantota')
-,(9, 'Jaffna')
-,(10, 'Kalutara')
-,(11, 'Kandy')
-,(12, 'Kegalle')
-,(13, 'Kilinochchi')
-,(14, 'Kurunegala')
-,(15, 'Mannar')
-,(16, 'Matale')
-,(17, 'Matara')
-,(18, 'Monaragala')
-,(19, 'Mullaitivu')
-,(20, 'Nuwara Eliya')
-,(21, 'Polonnaruwa')
-,(22, 'Puttalam')
-,(23, 'Ratnapura')
-,(24, 'Trincomalee')
-,(25, 'Vavuniya')
-;
-
-INSERT INTO role (title, id) VALUES
-("Local Committee President", "LCP")
-,("Local Committee Vice President", "LCVP")
-,("Manager", "MGR")
-,("Specialist", "SPL")
-,("Team Leader", "TL")
-,("Team Member", "TM")
-,("Coordinator", "CDN")
-;
-
-INSERT INTO front_office (title, id) VALUES
-("Local Committee President", "LCP")
-,("incoming Global Volunteer", "iGV")
-,("outgoing Global Volunteer", "oGV")
-,("incoming Global Talent/Teacher", "iGT")
-,("outgoing Global Talent/Teacher", "oGT")
-,("Back Office Vice President", "BOVP")
-;
-
-INSERT INTO back_office (title, id) VALUES
-("BRAND", "BND")
-,("Finance and Legal", "FnL")
-,("Business Development", "BD")
-,("People Management", "PM")
-,("Information Management", "IM")
-,("Expansions Management", "EM")
-,("Public Relations and Engage with AIESEC", "PnE")
-;
-
-INSERT INTO department (title, id) VALUES
-("Local Committee President", "LCP")
-,("Vice President", "VP")
-,("International Relations", "IR")
-,("Matching", "M")
-,("Business to Business", "B2B")
-,("Value Delivery", "VD")
-,("Marketing", "MKT")
-,("Business to Customer", "B2C")
-,("Customer Experience", "CXP")
-;
-
-/* commenting with -- gives a parse error in node */
-INSERT INTO front_valid_pair (office_id, department_id) VALUES
-("LCP","LCP") /* president */
-,("iGV","VP"),("iGV","IR"),("iGV","M"),("iGV","B2B"),("iGV","VD"),("iGV","MKT") /* igv */
-,("oGV","VP"),("oGV","IR"),("oGV","B2B"),("oGV","MKT"),("oGV","B2C"),("oGV","CXP") /* ogv */
-,("iGV","VP"),("iGV","IR"),("iGV","M"),("iGV","B2B"),("iGV","VD"),("iGV","MKT") /* igt */
-,("oGT","VP"),("oGT","IR"),("oGT","B2B"),("oGT","MKT"),("oGT","B2C"),("oGT","CXP") /* ogt */
-;
-
-INSERT INTO igv_application_status (status_id, status_name) VALUES
-(0, "Open"),(1,"Rejected"), (2, "Withdrawn"),(3,"Accepted By Host"),(4, "Accepted"),
-(5, "Approved"),(6, "Approval Broken"),(7,"Realized"),(8,"Realizaiton Broken"),
-(9,"Finished"),(10, "Completed");
 
 /* =============== DUMMY DATA =============== */
 INSERT INTO member 
 (
     email, 
     passphrase,
-    full_name,
-    preferred_name,
-    front_office_id,
-    department_id,
-    back_office_id,
-    joined_date,
-    role_id,
-    contact_no,
-    aiesec_email,
+    fullName,
+    preferredName,
+    frontOfficeId,
+    departmentId,
+    backOfficeId,
+    joinedDate,
+    roleId,
+    contactNo,
+    aiesecEmail,
     gender,
     nic,
-    birth_date,
-    facebook_link,
-    linkedin_link,
-    instagram_link,
-    register_no,
-    school_name,
-    home_address,
-    home_contact,
-    district_id,
-    photo_link,
-    boarding_address
+    birthDate,
+    facebookLink,
+    linkedinLink,
+    instagramLink,
+    registerNo,
+    schoolName,
+    homeAddress,
+    homeContact,
+    districtId,
+    photoLink,
+    boardingAddress
 )
 VALUES 
 (
@@ -234,8 +139,8 @@ VALUES
     123,
     "mizu123",
     "Giyuu",
-    "oGV", 
-    "CXP", 
+    "iGV", 
+    "IR", 
     NULL,
     "2019-01-01",
     "TL",
@@ -262,12 +167,44 @@ INSERT INTO term VALUES
 ,('22-Winter', '2022-06-01', '2022-12-01', '2022-07-01')
 ;
 
-INSERT INTO igv_project (expa_id, project_name, sdg, jd, opp_provider, food, transportation, accommodation, notes) VALUES
-(1234567, "Global Classroom - Kandy", 4, 
-"1. Participate in activites to teach English to children. 
-2. Conduct practical activites", "Britshway English Acadamy", "Provided", "Covered", "Provided and Covered", "Only for europeans" );
-INSERT INTO igv_slot (expa_id, title, start_date, end_date, num_openings) VALUES 
-(
+INSERT INTO igv_project (
+    expaId, 
+    projectName, 
+    sdg, 
+    jd, 
+    oppProvider, 
+    food, 
+    transportation, 
+    accommodation, 
+    notes) 
+VALUES (
+    1234567, 
+    "Global Classroom - Kandy", 
+    4, 
+    "1. Participate in activites to teach English to children. 2. Conduct practical activites", 
+    "Britshway English Acadamy", 
+    "Provided", 
+    "Covered", "Provided & Covered", 
+    "Only for europeans"
+), (
+    2345678, 
+    "Test - Test", 
+    17, 
+    "Goal 1, Goal 2", 
+    "Test Acadamy", 
+    "Provided & Covered", 
+    "Provided", 
+    "Covered", 
+    "Test Notes"
+);
+
+INSERT INTO igv_slot (
+    expaId, 
+    slotName, 
+    startDate, 
+    endDate, 
+    numOpenings) 
+VALUES (
     1234567,
     "Slot 1",
     "2020-01-01",
@@ -275,42 +212,42 @@ INSERT INTO igv_slot (expa_id, title, start_date, end_date, num_openings) VALUES
     "2"
 );
 
-INSERT INTO igv_question (expa_id, question) VALUES 
+INSERT INTO igv_question (expaId, question) VALUES 
 (1234567, "What does the fox say?")
 ,(1234567, "Why is gamora?")
 ,(1234567, "When we fall asleep where do we go?")
 ;
 
 INSERT INTO igv_application (
-ep_id,          
-app_id,         
-app_status,     
-ep_name,        
-incharge_member_id,
+epId,          
+appId,         
+appStatus,     
+epName,        
+memberId,
 team,           
-applied_date,   
-contacted_date,   
-slot_id,      
-project_expa_id,
+appliedDate,   
+contactedDate,   
+slotId,      
+projectExpaId,
 gender,         
-home_mc,        
-home_lc,        
-contact_number, 
+homeMc,        
+homeLc,        
+contactNumber, 
 email,          
 notes,
-interview_date,
-interview_time,
-ep_mng_name,   
-ep_mng_contact,
-ep_mng_email,
-abh_date,     
-accepted_date,
-approved_date
+interviewDate,
+interviewTime,
+epMngName,   
+epMngContact,
+epMngEmail,
+abhDate,     
+acceptedDate,
+approvedDate
 ) VALUES 
 (
 1234567, 
 1234567,
-"OPEN", 
+"Open", 
 "Tony Tamer", 
 1, 
 "Team1", 
@@ -325,7 +262,7 @@ approved_date
 "tony@aiesec.net",
 "Note test 1 3 4",
 "2023-10-02",
-"1.30 PM",
+"13:30",
 "EP manager 1",
 "03655989966",
 "abuoew@aiesec.net",
@@ -343,17 +280,17 @@ approved_date
 ,(1234567, 3, "Ananthayata")
 ;*/
 
-INSERT INTO igv_slot (expa_id, title, start_date, end_date, num_openings) VALUES
+-- INSERT INTO igv_slot (expa_id, title, start_date, end_date, num_openings) VALUES
 
-(1234567, "August - 1", "2023-08-25", "2023-09-10", 3 )
-,(1234567, "September - 2", "2023-09-10", "2023-10-25" , 5)
-;
+-- (1234567, "August - 1", "2023-08-25", "2023-09-10", 3 )
+-- ,(1234567, "September - 2", "2023-09-10", "2023-10-25" , 5)
+-- ;
 
-INSERT INTO lc_event (title, event_description, post_link, event_date) VALUES
+-- INSERT INTO lc_event (title, event_description, post_link, event_date) VALUES
 
-("Local Committee Meeting - August", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
-,("Local Committee Meeting - September", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
-;
+-- ("Local Committee Meeting - August", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
+-- ,("Local Committee Meeting - September", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
+-- ;
 
 INSERT INTO email_template (name, subject, body, attachments) VALUES
 

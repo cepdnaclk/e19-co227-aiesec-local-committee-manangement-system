@@ -51,8 +51,12 @@ INSERT INTO district (id, title) VALUES
 (25, 'Vavuniya');
 
 /* ~~~~~~~~~~~~~~~~~~~~ ROLES ~~~~~~~~~~~~~~~~~~~~ */
+<<<<<<< HEAD
 
 /* CREATE TABLE role (
+=======
+CREATE TABLE role (
+>>>>>>> 3d376d2 (redesign igv pages)
     id              VARCHAR(4) PRIMARY KEY,
     roleName        VARCHAR(50)
 ); */
@@ -170,39 +174,49 @@ INSERT INTO front_valid_pair (officeId, departmentId) VALUES
  */
 /* ~~~~~~~~~~~~~~~~~~~~ STORED PROCEDURES ~~~~~~~~~~~~~~~~~~~~ */
 
--- -- Get context data required to show member details
--- CREATE PROCEDURE GetMemberContext()
--- BEGIN
--- SELECT id as 'key', districtName as 'value' from district;
--- SELECT f.id as 'key', 
--- CONCAT('(', f.id, ') ', f.frontOfficeName) as 'value',
--- JSON_ARRAYAGG(JSON_OBJECT('key',d.id,'value', CONCAT('(',d.id,') ', d.departmentName))) as 'departments'
--- FROM front_valid_pair AS v, front_office AS f, department AS d
--- WHERE f.id = v.officeId AND d.id = v.departmentId
--- GROUP BY f.id, f.frontOfficeName;
--- SELECT id as 'key', CONCAT('(',id,') ', backOfficeName) as 'value' from back_office;
--- SELECT id as 'key', CONCAT('(',id,') ', roleName) as 'value' from role;
--- END;
+-- Get context data required to show member details
+CREATE PROCEDURE GetMemberContext()
+BEGIN
+SELECT id as 'key', districtName as 'value' from district;
+SELECT f.id as 'key', 
+CONCAT('(', f.id, ') ', f.frontOfficeName) as 'value',
+JSON_ARRAYAGG(JSON_OBJECT('key',d.id,'value', CONCAT('(',d.id,') ', d.departmentName))) as 'departments'
+FROM front_valid_pair AS v, front_office AS f, department AS d
+WHERE f.id = v.officeId AND d.id = v.departmentId
+GROUP BY f.id, f.frontOfficeName;
+SELECT id as 'key', CONCAT('(',id,') ', backOfficeName) as 'value' from back_office;
+SELECT id as 'key', CONCAT('(',id,') ', roleName) as 'value' from role;
+END;
 
--- -- Get all members
--- CREATE PROCEDURE GetAllMembers()
--- BEGIN
--- SELECT 
---     m.id,
---     m.preferredName,
---     f.frontOfficeName,
---     b.backOfficeName,
---     d.departmentName,
---     r.roleName,
---     m.photoLink,
---     m.aiesecEmail
---     FROM member AS m
---     LEFT JOIN front_office AS f
---     ON f.id = m.frontOfficeId
---     LEFT JOIN back_office AS b
---     ON b.id = m.backOfficeId
---     LEFT JOIN department AS d
---     ON d.id = m.departmentId
---     LEFT JOIN role as r
---     ON r.id = m.roleId;
--- END;
+-- Get all members
+CREATE PROCEDURE GetAllMembers()
+BEGIN
+SELECT 
+    m.id,
+    m.preferredName,
+    f.frontOfficeName,
+    b.backOfficeName,
+    d.departmentName,
+    r.roleName,
+    m.photoLink,
+    m.aiesecEmail
+    FROM member AS m
+    LEFT JOIN front_office AS f
+    ON f.id = m.frontOfficeId
+    LEFT JOIN back_office AS b
+    ON b.id = m.backOfficeId
+    LEFT JOIN department AS d
+    ON d.id = m.departmentId
+    LEFT JOIN role as r
+    ON r.id = m.roleId;
+END;
+
+CREATE PROCEDURE GetMember(IN id INT(5))
+BEGIN
+SELECT
+    *
+FROM
+    member
+WHERE
+    id = id;
+END;

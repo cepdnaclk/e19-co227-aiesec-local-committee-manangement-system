@@ -9,6 +9,8 @@ const connection = mysql.createConnection({
   database: process.env.DATABASE_DB || "LC_KANDY",
   port: process.env.DATABASE_PORT || 3306,
   multipleStatements: true,
+  dateStrings: true, // automatically formats dates into yyyy-mm-dd
+  timeout: 50000,
 });
 
 const connectToDB = async () => {
@@ -39,7 +41,7 @@ const executeScriptFromFile = async (filePath, operationName) => {
 const initDatabase = async () => {
   try {
     await connectToDB();
-
+    /*
     const schemaPath = path.join(__dirname, "schema.sql");
     await logFileModificationTime(schemaPath);
     await executeScriptFromFile(schemaPath, "DB Schema Creation");
@@ -52,6 +54,25 @@ const initDatabase = async () => {
 
     const viewPath = path.join(__dirname, "view.sql");
     await executeScriptFromFile(viewPath, "Views Addition");
+    */
+    // Read and sort the SQL script files in the folder
+    const scriptFolder = path.join(__dirname, "scripts");
+    const scriptFiles = await fs.readdir(scriptFolder);
+    scriptFiles.sort();
+
+    for (const scriptFile of scriptFiles) {
+      if (scriptFile.endsWith(".sql")) {
+        const scriptPath = path.join(scriptFolder, scriptFile);
+        const scriptContent = await fs.readFile(scriptPath, "utf8");
+
+        console.log(`Executing script: ${scriptFile}`);
+
+        // Execute the SQL script
+        await execQuery(scriptContent);
+
+        console.log(`Script ${scriptFile} executed successfully.`);
+      }
+    }
 
     console.info("\x1b[32m%s\x1b[0m", "Database Initialization Done!");
   } catch (err) {
@@ -72,6 +93,6 @@ const execQuery = (query, values = []) => {
   });
 };
 
-initDatabase();
+if ((process.env.NODE_ENV = "development")) initDatabase();
 
 module.exports = { connection, execQuery };

@@ -212,7 +212,7 @@ function Form({ editMode, setEditMode, selectedItemKey, setSelectedItemKey }) {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormSubmitButton editMode={editMode} />
+                  <FormSubmitButton mode={editMode} />
                 </Grid>
               </Grid>
             </FormikForm>

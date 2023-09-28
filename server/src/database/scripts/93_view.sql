@@ -1,3 +1,5 @@
+USE LC_KANDY;
+
 CREATE VIEW OGVApplicantDetailsInBrief AS
 SELECT 
     o.id,
@@ -6,7 +8,7 @@ SELECT
     o.status,
     o.phone,
     o.campaignId,
-    m.preferred_name AS memberInCharge
+    m.preferredName AS memberInCharge
 FROM 
     ogv_applicants o
 LEFT JOIN 
@@ -20,7 +22,7 @@ SELECT
     o.lastName,
     o.phone,
     o.campaignId,
-    m.preferred_name AS memberName,
+    m.preferredName AS memberName,
     m.email AS memberEmail
 FROM 
     ogv_applicants o

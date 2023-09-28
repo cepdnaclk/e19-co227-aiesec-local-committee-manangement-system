@@ -49,7 +49,7 @@ router.put("/:id", (req, res, next) => {
 });
 
 router.delete("/:id", (req, res, next) => {
-  execQuery(`DELETE FROM term WHERE id='${req.params.id}'`)
+  execQuery(`DELETE FROM term WHERE id='${req.params.id}';`)
     .then((rows) => {
       res.status(200).json({ id: req.params.id, message: "Ok" });
     })

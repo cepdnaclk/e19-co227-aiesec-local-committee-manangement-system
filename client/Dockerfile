@@ -12,7 +12,7 @@ FROM development as build
 RUN npm run build
 
 # Production - Serve the App using Nginx
-FROM nginx:1.21
+FROM nginx:1.21 as serve
 COPY --from=build /app/build /usr/share/nginx/html
 COPY ./.nginx/default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
