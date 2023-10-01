@@ -3,7 +3,7 @@ const fs = require("fs").promises; // Promises-based version of 'fs' module
 const path = require("path");
 
 const connection = mysql.createConnection({
-  host: process.env.DATABASE_HOST || "localhost",
+  host: process.env.DATABASE_HOST || "lckandy-test.clmtqbwd31v1.ap-south-1.rds.amazonaws.com",
   user: process.env.DATABASE_USER || "lckandyadmin",
   password: process.env.DATABASE_PASSWORD || "lckandyadmin",
   database: process.env.DATABASE_DB || "LC_KANDY",
