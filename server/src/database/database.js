@@ -4,8 +4,8 @@ const path = require("path");
 
 const connection = mysql.createConnection({
   host: process.env.DATABASE_HOST || "localhost",
-  user: process.env.DATABASE_USER || "root",
-  password: process.env.DATABASE_PASSWORD || "",
+  user: process.env.DATABASE_USER || "lckandyadmin",
+  password: process.env.DATABASE_PASSWORD || "lckandyadmin",
   database: process.env.DATABASE_DB || "LC_KANDY",
   port: process.env.DATABASE_PORT || 3306,
   multipleStatements: true,

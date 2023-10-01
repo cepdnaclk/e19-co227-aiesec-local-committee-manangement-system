@@ -13,7 +13,7 @@
         => should be a combination of the name of the referenced table and the name of the referenced fields
 */
 
-DROP DATABASE IF EXISTS LC_KANDY;
+#DROP DATABASE IF EXISTS LC_KANDY;
 
 CREATE DATABASE LC_KANDY;
 
@@ -280,7 +280,6 @@ CREATE TABLE email_template (
     cc          JSON,
     bcc         JSON,
     attachments JSON
-
 );
 
 /*table for user's gmail date'*/
@@ -303,12 +302,11 @@ CREATE TABLE ogv_applicants (
     phone                   VARCHAR(20),
     email                   VARCHAR(255) NOT NULL UNIQUE,
     memberInChargeId        INT(5) NOT NULL,
-    campaignId              VARCHAR(255),
-
+    
+    campaignId              VARCHAR(255) ,
     -- Signup
     sentLinks               VARCHAR(1024),
     signupNotes             VARCHAR(255),
-
     -- Accepted
     opportunityId           CHAR(7), -- 7 digit id
     opportunityName         VARCHAR(255),
@@ -318,30 +316,23 @@ CREATE TABLE ogv_applicants (
     acceptanceDate          DATE,
     isEseEmailSent          BOOLEAN DEFAULT FALSE,
     acceptedNotes           VARCHAR(255),
-
-    -- Approved
+    /* -- Approved */
     approvedDate            DATE,
     paymentDate             DATE,
     paymentAmount           DECIMAL(10, 2),
     proofLink               VARCHAR(1024),
     approvedNotes           VARCHAR(255),
-
     -- Realized
     realizedStartDate       DATE,
     realizedNotes           VARCHAR(255),
-
     -- Finished
     finishedDate            DATE,
-
     -- Completed
     completedDate           DATE,
-
     -- Approval-Broken
     approvalBreakNote       VARCHAR(255),
-    
     -- Realization-Broken
     realizationBreakNote    VARCHAR(255),
-    
     PRIMARY KEY (id),
     FOREIGN KEY (memberInChargeId) REFERENCES member(id),
     INDEX (status),
