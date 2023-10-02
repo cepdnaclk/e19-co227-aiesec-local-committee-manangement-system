@@ -5,7 +5,7 @@ import { Outlet, Navigate } from "react-router-dom";
 const AdminRoutes: React.FC = () => {
   const { user } = useContext(UserContext);
 
-  return user?.roleId === "LCP" || user?.roleId === "VP" ? (
+  return user?.roleId === "LCP" || user?.roleId === "LCVP" ? (
     <Outlet />
   ) : (
     <Navigate to="/login" />

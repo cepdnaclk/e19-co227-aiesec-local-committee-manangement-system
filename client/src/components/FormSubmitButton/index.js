@@ -1,28 +1,27 @@
 import React from "react";
 
 import Button from "@mui/material/Button";
-
 import { useFormikContext } from "formik";
 
-const FormSubmitButton = ({ editMode, disabled }) => {
+const FormSubmitButton = ({ mode, disabled }) => {
   const { isSubmitting, isValid, isValidating } = useFormikContext();
 
   const buttonText = () => {
-    if (editMode.includes("add")) return "Add";
-    else if (editMode.includes("view")) return "Delete";
-    else if (editMode.includes("edit")) return "Save";
+    if (mode.includes("add") || mode.includes("new")) return "Add";
+    else if (mode.includes("view")) return "Delete";
+    else if (mode.includes("edit")) return "Save";
     else return "";
   };
 
   const buttonColor = () => {
-    if (editMode.includes("view")) return "error";
+    if (mode.includes("view")) return "error";
     else return "primary";
   };
 
   return (
     <Button
       type="submit"
-      disabled={disabled || isSubmitting || !isValid || isValidating}
+      disabled={disabled || isSubmitting || isValidating}
       variant="contained"
       sx={{ m: 2 }}
       color={buttonColor()}

@@ -1,7 +1,5 @@
 import Login from "./pages/Login/Login";
 import MemberView from "./pages/Member/MemberView";
-import ProjectView from "./pages/Project/ProjectView";
-
 import { UserContext } from "./context/UserContext";
 
 import { Routes, Route, Link } from "react-router-dom";
@@ -31,9 +29,11 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
+import { IGVMenu, IGVRoutes } from "./pages/iGV";
+
+import NotFound from "./pages/NotFound";
 import AdminRoutes from "./utils/AdminRoutes";
 import Terms from "./pages/Terms";
-import ApplicationView from "./pages/Application/ApplicationView";
 import Home from "./pages/Home/Home";
 import OGVApplications from "./pages/oGV/Applicants";
 
@@ -47,7 +47,6 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { NotificationBar } from "./context/NotificationContext";
 import OGVRoutes from "./utils/OGVRoutes";
-import IGVRoutes from "./utils/IGVRoutes";
 
 const NavbarButton = ({ href, label }) => {
   return (
@@ -175,6 +174,7 @@ function App() {
                 />
               </IconButton> */}
               <Stack direction="row" spacing={2}>
+                <IGVMenu />
                 {user ? (
                   <>
                     <NavbarButton href="/" label="Home" />
@@ -183,7 +183,7 @@ function App() {
                 {/* ~~~~~~~~~~~~~~~ iGV ~~~~~~~~~~~~~~~*/}
                 {user?.frontOfficeId === "iGV" ? (
                   <>
-                    {user?.roleId === "VP" ? (
+                    {user?.roleId === "LCVP" ? (
                       <NavbarButton href="/igv/projects" label="Projects" />
                     ) : null}
                     <NavbarButton
@@ -199,7 +199,7 @@ function App() {
                   </>
                 ) : null}
                 {/* ~~~~~~~~~~~~~~~ Admin ~~~~~~~~~~~~~~~*/}
-                {user?.roleId === "LCP" || user?.roleId === "VP" ? (
+                {user?.roleId === "LCP" || user?.roleId === "LCVP" ? (
                   <Button
                     id="admin-button"
                     onClick={handleAdminMenuClick}
@@ -231,86 +231,88 @@ function App() {
                     Login
                   </Button>
                 )}
-              </Stack>
-              <Menu
-                id="profile-menu"
-                anchorEl={menuAnchorEl}
-                open={menuOpen}
-                onClose={handleProfileMenuClose}
-                aria-labelledby="profile-button"
-                sx={{
-                  marginTop: "10px",
-                  borderRadius: 10,
-                  p: 5,
-                }}
-              >
-                <MenuItem
-                  // onClick={handleProfileMenuClose}
-                  // component={Link}
-                  onClick={() =>
-                    setModalState({ open: true, mode: "user-view" })
-                  }
-                  // to="/profile"
-                >
-                  My Profile
-                </MenuItem>
-                <MenuItem
-                  onClick={handleProfileMenuClose}
-                  component={Link}
-                  to="/login"
-                >
-                  Logout
-                </MenuItem>
-                <MenuItem>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        color="primary"
-                        checked={prefersDarkMode}
-                        onChange={() => {
-                          setPrefersDarkMode(!prefersDarkMode);
-                        }}
-                      />
-                    }
-                    label="Dark Mode"
-                    labelPlacement="start"
-                  />
-                </MenuItem>
-              </Menu>
-              {user?.roleId === "LCP" || user?.roleId === "VP" ? (
+                {/* </Stack> */}
                 <Menu
-                  id="admin-menu"
-                  anchorEl={adminAnchorEl}
-                  open={adminOpen}
-                  onClose={handleAdminMenuClose}
-                  aria-labelledby="admin-button"
-                  sx={{
-                    marginTop: "10px",
-                    borderRadius: 10,
-                    p: 5,
-                  }}
+                  id="profile-menu"
+                  anchorEl={menuAnchorEl}
+                  open={menuOpen}
+                  onClose={handleProfileMenuClose}
+                  aria-labelledby="profile-button"
+                  // sx={{
+                  //   marginTop: "10px",
+                  //   borderRadius: 10,
+                  //   p: 5,
+                  // }}
                 >
                   <MenuItem
-                    onClick={handleAdminMenuClose}
-                    component={Link}
-                    to="/terms"
+                    // onClick={handleProfileMenuClose}
+                    // component={Link}
+                    onClick={() =>
+                      setModalState({ open: true, mode: "user-view" })
+                    }
+                    // to="/profile"
                   >
-                    Terms
+                    My Profile
                   </MenuItem>
                   <MenuItem
-                    onClick={handleAdminMenuClose}
+                    onClick={handleProfileMenuClose}
                     component={Link}
-                    to="/users"
+                    to="/login"
                   >
-                    Users
+                    Logout
+                  </MenuItem>
+                  <MenuItem>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          color="primary"
+                          checked={prefersDarkMode}
+                          onChange={() => {
+                            setPrefersDarkMode(!prefersDarkMode);
+                          }}
+                        />
+                      }
+                      label="Dark Mode"
+                      labelPlacement="start"
+                    />
                   </MenuItem>
                 </Menu>
-              ) : null}
+                {user?.roleId === "LCP" || user?.roleId === "LCVP" ? (
+                  <Menu
+                    id="admin-menu"
+                    anchorEl={adminAnchorEl}
+                    open={adminOpen}
+                    onClose={handleAdminMenuClose}
+                    aria-labelledby="admin-button"
+                    // sx={{
+                    //   marginTop: "10px",
+                    //   borderRadius: 10,
+                    //   p: 5,
+                    // }}
+                  >
+                    <MenuItem
+                      onClick={handleAdminMenuClose}
+                      component={Link}
+                      to="/terms"
+                    >
+                      Terms
+                    </MenuItem>
+                    <MenuItem
+                      onClick={handleAdminMenuClose}
+                      component={Link}
+                      to="/users"
+                    >
+                      Users
+                    </MenuItem>
+                  </Menu>
+                ) : null}
+              </Stack>
             </Toolbar>
           </AppBar>
         </Box>
         {/* <Box component="main" sx={{ m: 2 }}> */}
         <Paper component="main" sx={{ m: 2, p: 2, borderRadius: "10px" }}>
+          <IGVRoutes />
           <Routes>
             <Route element={<ProtectedRoutes />}>
               <Route path="/" element={<Home />} />
@@ -318,10 +320,6 @@ function App() {
             <Route element={<AdminRoutes />}>
               <Route path="/users" element={<MemberView />} />
               <Route path="/terms" element={<Terms />} />
-            </Route>
-            <Route element={<IGVRoutes />}>
-              <Route path="/igv/projects" element={<ProjectView />} />
-              <Route path="/igv/applications" element={<ApplicationView />} />
             </Route>
             <Route element={<OGVRoutes />}>
               <Route

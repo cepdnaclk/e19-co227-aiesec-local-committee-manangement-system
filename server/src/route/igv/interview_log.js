@@ -1,20 +1,20 @@
 const express = require("express");
 const router = express.Router();
 
-const { execQuery } = require("../database/database");
-
 const {
   requestBodyToFieldsAndValues,
   objectKeysSnakeToCamel,
-} = require("../utils/parse");
+} = require("../../utils/parse");
 
-// view questions API each project - should be accessed within each project
+const { connection, execQuery } = require("../../database/database");
+
+// view answers for questions API each project - should be accessed within each application
 router.get("/", (req, res, next) => {
   // if id present send only requested project details
 
-  const getIgvQuestion = `SELECT question_id, question FROM igv_question where expa_id='${req.query.expaId}';`;
+  const getIgvAnswers = `SELECT question_id, answer FROM igv_interview_log where expa_id='${req.query.appId}';`;
 
-  execQuery(getIgvQuestion)
+  execQuery(getIgvAnswers)
     .then((rows) => {
       data = rows.map((row) => objectKeysSnakeToCamel(row));
       res.status(200).json(data);
@@ -33,13 +33,13 @@ router.post("/", (req, res, next) => {
 
     const [fields, values] = requestBodyToFieldsAndValues(req.body);
 
-    const addIgvQuestion = `INSERT INTO igv_question (${fields.toString()}) VALUES (${values.toString()})`;
+    const addIgvAnswer = `INSERT INTO igv_interview_log (${fields.toString()}) VALUES (${values.toString()})`;
 
-    execQuery(addIgvQuestion)
+    execQuery(addIgvAnswer)
       .then((rows) => {
         res
           .status(200)
-          .json({ message: "New iGV Question Added Successfully" });
+          .json({ message: "New iGV Interview Answer added Successfully" });
       })
 
       .catch((err) => {
@@ -64,11 +64,11 @@ router.put("/", (req, res, next) => {
 
     // updateString = updateString.substring(0, updateString.length - 2);
 
-    const updateIgvQuestionQuery = `UPDATE igv_question SET question='${req.body.question}' WHERE expa_id=${req.body.expaId} AND question_id=${req.body.questionId};`;
+    const updateIgvAnswerQuery = `UPDATE igv_interview_log SET answer='${req.body.question}' WHERE app_id=${req.body.appId} AND question_id=${req.body.questionId};`;
 
-    execQuery(updateIgvQuestionQuery)
+    execQuery(updateIgvAnswerQuery)
       .then((rows) => {
-        res.status(200).json({ message: "iGV Question edited successfully" });
+        res.status(200).json({ message: "iGV Answer edited successfully" });
       })
       .catch((err) => {
         next(err);
@@ -81,10 +81,12 @@ router.put("/", (req, res, next) => {
 // for deleting igv slots
 router.delete("/", (req, res, next) => {
   try {
-    const deleteIgvQuestionQuery = `DELETE FROM igv_question WHERE expa_id=${req.query.expaId} AND question_id=${req.query.questionId}`;
+    const deleteIgvQuestionQuery = `DELETE FROM igv_interview_log WHERE expa_id=${req.query.expaId} AND question_id=${req.query.questionId}`;
     execQuery(deleteIgvQuestionQuery)
       .then((rows) => {
-        res.status(200).json({ message: "iGV Question Deleted Successfully" });
+        res
+          .status(200)
+          .json({ message: "iGV Interview Answer Deleted Successfully" });
       })
       .catch((err) => {
         next(err);
