@@ -25,7 +25,7 @@ jobs:
       run: sleep 120
 
     - name: tagging docker image
-      run: docker tag dimg:latest dinuka029/co227:latest 
+      run: docker tag -f dimg:latest dinuka029/co227:latest 
 
     - name: Pushing the image to docker hub
       run: docker push dinuka029/co227:latest
