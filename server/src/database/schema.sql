@@ -13,7 +13,7 @@
         => should be a combination of the name of the referenced table and the name of the referenced fields
 */
 
-#DROP DATABASE IF EXISTS LC_KANDY;
+-- DROP DATABASE IF EXISTS LC_KANDY;
 
 CREATE DATABASE LC_KANDY;
 
@@ -340,8 +340,42 @@ CREATE TABLE ogv_applicants (
     INDEX (memberInChargeId)
 );
 
+CREATE TABLE ogv_opportunities (
 
+    isActive                BOOLEAN DEFAULT TRUE, --add button to mark active/inactive
+    expaid                  INT(7) PRIMARY KEY,
+    projectName             VARCHAR(50),
+    hostLC                  VARCHAR(20),
+    hostMC                  VARCHAR(20), --country
+    sdg                     INT(2),
+    jd                      VARCHAR(350),
+    food                    VARCHAR(20), /*provided/covered/provided and covered*/
+    transportation          VARCHAR(20), /*provided/covered/provided and covered*/
+    accommodation           VARCHAR(20), /*provided/covered/provided and covered*/
+    notes                   VARCHAR(100),
 
+    PRIMARY KEY(expaId)
+
+);
+
+CREATE TABLE ogt_opportunities (
+
+    isActive                BOOLEAN DEFAULT TRUE, --add button to mark active/inactive
+    expaId                  INT(7) PRIMARY KEY,
+    opportunityName         VARCHAR(50),
+    hostLC                  VARCHAR(20),
+    hostMC                  VARCHAR(20), --country
+    field                   VARCHAR(30),  --ex: IT, Engineering, hospitality
+    jd                      VARCHAR(350), --job description
+    food                    VARCHAR(20), /*provided/covered/provided and covered*/
+    transportation          VARCHAR(20), /*provided/covered/provided and covered*/
+    accommodation           VARCHAR(20), /*provided/covered/provided and covered*/
+    salary                  INT(7),
+    notes                   VARCHAR(100),
+
+    PRIMARY KEY(expaId)
+
+);
 
 
 
