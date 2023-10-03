@@ -19,7 +19,7 @@ jobs:
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
     - name: building the docker image
-      run: docker-compose build co227
+      run: docker-compose build -t co227
 
     - name: tagging docker image
       run: docker tag co227 dinuka029/co227:latest
