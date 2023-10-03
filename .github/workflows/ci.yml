@@ -22,10 +22,10 @@ jobs:
       run: docker-compose build -t dimg
 
     - name: Sleep for 10 seconds
-      run: sleep 20
+      run: sleep 10
 
     - name: tagging docker image
-      run: docker tag dimg:latest dinuka029/co227:latest -f
+      run: docker tag dimg:latest dinuka029/co227:latest
 
     - name: Check if the `dimg` image is built and tagged correctly
       run: docker images | grep dimg:latest
@@ -37,4 +37,4 @@ jobs:
       run: docker inspect dimg
 
     - name: Pushing the image to docker hub
-      run: docker push dinuka029/co227:latest
+      run: docker push dinuka029/co227:dimg
