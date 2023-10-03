@@ -22,9 +22,7 @@ jobs:
       run: docker-compose build -t dimg
 
     - name: Sleep for 10 seconds
-      uses: jakejarvis/wait-action@v2.309.0
-      with:
-        seconds: 10
+      run: sleep 120
 
     - name: tagging docker image
       run: docker tag dimg:latest dinuka029/co227:latest 
