@@ -22,7 +22,7 @@ jobs:
       run: docker-compose build -t dimg
 
     - name: Sleep for 10 seconds
-      uses: jakejarvis/wait-action@v1
+      uses: jakejarvis/wait-action@v2.309.0
       with:
         seconds: 10
 
