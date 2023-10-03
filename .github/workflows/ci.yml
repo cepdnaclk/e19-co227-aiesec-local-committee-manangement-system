@@ -21,8 +21,8 @@ jobs:
     - name: building the docker image
       run: docker-compose build -t co227
 
-    #- name: tagging docker image
-    #  run: docker tag co227:dinuka029/co227
+    - name: tagging docker image
+      run: docker tag co227 dinuka029/co227
 
     - name: Pushing the image to docker hub
-      run: docker-compose push dinuka029/co227:latest
+      run: docker push dinuka029/co227:latest
