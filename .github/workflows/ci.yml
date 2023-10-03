@@ -19,10 +19,10 @@ jobs:
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
     - name: building the docker image
-      run: docker-compose build -t dinuka029/co227:latest
+      run: docker-compose build -t dinuka029/co227
 
     - name: tagging docker image
-      run: docker tag co227 dinuka029/co227
+      run: docker tag dinuka029/co227:latest dinuka029/co227:1a
 
     - name: Pushing the image to docker hub
       run: docker push dinuka029/co227
