@@ -25,4 +25,4 @@ jobs:
       run: docker tag dinuka029/co227:latest dinuka029/co227:1a
 
     - name: Pushing the image to docker hub
-      run: docker push dinuka029/co227
+      run: docker push dinuka029/co227:latest
