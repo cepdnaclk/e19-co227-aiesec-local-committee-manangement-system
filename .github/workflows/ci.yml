@@ -24,17 +24,17 @@ jobs:
     - name: Sleep for 10 seconds
       run: sleep 10
 
+    - name: Check the permissions for the `dimg` image
+      run: docker inspect dimg
+
+    - name: Check the current Docker context
+      run: docker context
+
     - name: tagging docker image
       run: docker tag dimg:latest dinuka029/co227:latest
 
     - name: Check if the `dimg` image is built and tagged correctly
       run: docker images | grep dimg:latest
-
-    - name: Check the current Docker context
-      run: docker context
-
-    - name: Check the permissions for the `dimg` image
-      run: docker inspect dimg
 
     - name: Pushing the image to docker hub
       run: docker push dinuka029/co227:dimg
