@@ -22,7 +22,7 @@ jobs:
       run: docker-compose build -t dimg
 
     - name: tagging docker image
-      run: docker tag dinuka029/co227:latest dimg:latest
+      run: docker tag dimg dinuka029/co227:latest 
 
     - name: Pushing the image to docker hub
       run: docker push dinuka029/co227:latest
