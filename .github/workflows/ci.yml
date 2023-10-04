@@ -24,4 +24,4 @@ jobs:
     - name: Build and Push Docker image
       #run: docker-compose build --push -t dinuka029/co227:latest 
       #run: docker buildx build --file docker-compose.yml --push -t dinuka029/co227:latest 
-      run: docker buildx build --push -t dinuka029/co227:latest #stable verison
+      run: docker buildx build --push -t dinuka029/co227:latest  .
