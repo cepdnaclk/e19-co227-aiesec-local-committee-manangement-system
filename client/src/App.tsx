@@ -29,7 +29,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
-import { IGVMenu, IGVRoutes } from "./pages/iGV";
+import { IGVMenu, IGVPanel } from "./pages/iGV";
 
 import NotFound from "./pages/NotFound";
 import AdminRoutes from "./utils/AdminRoutes";
@@ -312,8 +312,9 @@ function App() {
         </Box>
         {/* <Box component="main" sx={{ m: 2 }}> */}
         <Paper component="main" sx={{ m: 2, p: 2, borderRadius: "10px" }}>
-          <IGVRoutes />
+          {/* <IGVRoutes /> */}
           <Routes>
+            <Route path="/igv/*" element={<IGVPanel />} />
             <Route element={<ProtectedRoutes />}>
               <Route path="/" element={<Home />} />
             </Route>

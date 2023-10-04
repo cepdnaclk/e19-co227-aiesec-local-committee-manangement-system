@@ -10,6 +10,9 @@ CREATE TABLE igv_project (
     food            ENUM('Provided', 'Covered', 'Provided & Covered'),
     transportation  ENUM('Provided', 'Covered', 'Provided & Covered'),
     accommodation   ENUM('Provided', 'Covered', 'Provided & Covered'),
+    projectLogo     VARCHAR(100),
+    location        VARCHAR(50),
+    fee             VARCHAR(25),
     notes           VARCHAR(100)
 );
 
@@ -176,6 +179,83 @@ BEGIN
     CLOSE cur;
 END;
 
+CREATE VIEW IGVApplicationMaster AS
+SELECT 
+    /* application details */
+    a.appId,
+    a.email,
+    a.epName,
+    /* project details */
+    p.projectName,
+    p.projectLogo,
+    p.location,
+    p.fee,
+    p.accommodation,
+    p.transportation,
+    p.food,
+    /* slot details */
+    s.slotName,
+    s.startDate,
+    s.endDate,
+    /* member in charge details */
+    m.fullName,
+    m.email as memberEmail,
+    r.roleName,
+    d.departmentName,
+    f.frontOfficeName
+FROM 
+    igv_application as a
+LEFT JOIN
+    igv_project as p
+ON
+    a.projectExpaId = p.expaId
+LEFT JOIN
+    igv_slot as s
+ON
+    a.slotId = s.slotId
+LEFT JOIN
+    member as m
+ON
+    a.memberId = m.id
+LEFT JOIN
+    role as r
+ON
+    r.id = m.roleId
+LEFT JOIN
+    department as d
+ON
+    d.id = m.departmentId
+LEFT JOIN
+    front_office as f
+ON
+    f.id = m.frontOfficeId
+;
+
+CREATE VIEW IGVApplicationsInBrief AS
+SELECT 
+    a.appId,
+    a.appStatus,
+    a.epName,
+    m.preferredName as inChargeMember,
+    p.projectName,
+    s.slotName,
+    a.memberId
+FROM 
+    igv_application as a
+LEFT JOIN
+    igv_project as p
+ON
+    a.projectExpaId = p.expaId
+LEFT JOIN
+    igv_slot as s
+ON
+    a.slotId = s.slotId
+LEFT JOIN
+    member as m
+ON
+    a.memberId = m.id
+ORDER BY 
+    a.appliedDate DESC;
 
 
 /* ~~~~~~~~~~~~~~~~~~~~ STORED PROCEDURES ~~~~~~~~~~~~~~~~~~~~ */
@@ -189,126 +269,6 @@ FROM igv_project AS p
 LEFT JOIN igv_slot AS s ON p.expaId = s.expaId
 GROUP BY p.expaId, p.projectName;
 END;
-
-CREATE PROCEDURE GetAllIGVApplicationsForAdmin()
-BEGIN
-SELECT 
-    a.appId,
-    a.appStatus,
-    a.epName,
-    m.preferredName as inChargeMember,
-    p.projectName,
-    s.slotName
-FROM 
-    igv_application as a
-LEFT JOIN
-    igv_project as p
-ON
-    a.projectExpaId = p.expaId
-LEFT JOIN
-    igv_slot as s
-ON
-    a.slotId = s.slotId
-LEFT JOIN
-    member as m
-ON
-    a.memberId = m.id
-ORDER BY 
-    a.appliedDate DESC ;
-END;
-
-CREATE PROCEDURE GetAllIGVApplications(
-    IN inMemberId INT(5)
-)
-BEGIN
-SELECT 
-    a.appId,
-    a.appStatus,
-    a.epName,
-    m.preferredName as inChargeMember,
-    p.projectName,
-    s.slotName
-FROM 
-    igv_application as a
-LEFT JOIN
-    igv_project as p
-ON
-    a.projectExpaId = p.expaId
-LEFT JOIN
-    igv_slot as s
-ON
-    a.slotId = s.slotId
-LEFT JOIN
-    member as m
-ON
-    a.memberId = m.id
-WHERE
-    a.memberId = inMemberId
-ORDER BY 
-    a.appliedDate DESC ;
-END;
-
-CREATE PROCEDURE GetIGVApplication(
-    IN inAppId  INT(5)
-)
-BEGIN
-SELECT 
-    a.appId,
-    a.appStatus,
-    a.epName,
-    m.preferredName as inChargeMember,
-    p.projectName,
-    s.slotName
-FROM 
-    igv_application as a
-LEFT JOIN
-    igv_project as p
-ON
-    a.projectExpaId = p.expaId
-LEFT JOIN
-    igv_slot as s
-ON
-    a.slotId = s.slotId
-LEFT JOIN
-    member as m
-ON
-    a.memberId = m.id
-WHERE
-    a.appId = inAppId
-ORDER BY 
-    a.appliedDate DESC ;
-END;
-
-
-CREATE PROCEDURE GetLatestIGVApplication()
-BEGIN
-SELECT 
-    a.appId,
-    a.appStatus,
-    a.epName,
-    m.preferredName as inChargeMember,
-    p.projectName,
-    s.slotName
-FROM 
-    igv_application as a
-LEFT JOIN
-    igv_project as p
-ON
-    a.projectExpaId = p.expaId
-LEFT JOIN
-    igv_slot as s
-ON
-    a.slotId = s.slotId
-LEFT JOIN
-    member as m
-ON
-    a.memberId = m.id
-WHERE
-    a.appId = (SELECT MAX(appId) FROM igv_application)
-ORDER BY 
-    a.appliedDate DESC ;
-END;
-
 
 CREATE PROCEDURE GetIGVMemberList()
 BEGIN
@@ -379,7 +339,7 @@ CREATE PROCEDURE GetIGVApplicantDetails(specificAppId INT)
             p.transportation,
             a.amount AS fee,
             m.fullName AS memberFullName,
-            r.title AS roleName,
+            r.roleName AS roleName,
             d.departmentName
         FROM 
             igv_application AS a

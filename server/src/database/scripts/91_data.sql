@@ -87,11 +87,11 @@ VALUES
     'mikepass', 
     'Michael Johnson', 
     'Mike', 
-    "oGV", 
-    "CXP", 
+    "iGV", 
+    "IR", 
     NULL, 
     '2021-05-03', 
-    "SPL", 
+    "TM", 
     '999-555-1212', 
     'michael.johnson@aiesec.org', 
     'M', 
@@ -218,6 +218,9 @@ INSERT INTO igv_question (expaId, question) VALUES
 ,(1234567, "When we fall asleep where do we go?")
 ;
 
+INSERT INTO email_template (officeId, name, subject, body) VALUES
+("iGV", "test", "test", "<p>My role is [memberFullName]</p>");
+
 INSERT INTO igv_application (
 epId,          
 appId,         
@@ -261,7 +264,7 @@ approvedDate
 "092092484",
 "tony@aiesec.net",
 "Note test 1 3 4",
-"2023-10-02",
+"2023-12-02",
 "13:30",
 "EP manager 1",
 "03655989966",

@@ -27,10 +27,13 @@ import Application from "./Applications/Application";
 import NotFound from "../NotFound";
 import Dashboard from "./Dashboard";
 import InterviewLog from "./Applications/InterviewLog";
-import MailClient from "../Mail/MailClient";
+import EmailClient from "./Applications/EmailClient";
+import EmailList from "../Emails/EmailList";
+import Email from "../Emails/Email";
 
 const IGVMenu = () => {
-  const { user } = useContext(UserContext);
+  const { privileges } = useContext(UserContext);
+  const { isIGVAdmin, isIGVUser } = privileges;
 
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const menuOpen = Boolean(menuAnchorEl);
@@ -41,8 +44,7 @@ const IGVMenu = () => {
     setMenuAnchorEl(null);
   };
 
-  if (!user || (user.frontOfficeId !== "iGV" && user.frontOfficeId !== "LCP"))
-    return null;
+  if (!isIGVUser) return null;
 
   return (
     <>
@@ -72,56 +74,84 @@ const IGVMenu = () => {
         >
           Applications
         </MenuItem>
+        {isIGVAdmin ? (
+          <MenuItem onClick={handleMenuClose} component={Link} to="/igv/emails">
+            Emails
+          </MenuItem>
+        ) : null}
       </Menu>
     </>
   );
 };
 
-const IGVRoutes = () => {
-  const { user } = useContext(UserContext);
+const IGVPanel = () => {
+  const { privileges } = useContext(UserContext);
+  const { isIGVUser } = privileges;
+
+  if (!isIGVUser) return null;
 
   return (
-    <Routes>
-      {user.frontOfficeId === "iGV" ? (
-        <Route index element={<Dashboard />} />
-      ) : null}
-      <Route path="/igv" element={<IGVRoute />}>
-        <Route path="projects">
-          <Route index element={<ProjectList />} />
-          {user.roleId === "LCP" || user.roleId === "LCVP" ? (
-            <>
+    <>
+      <Routes>
+        <Route element={<IGVRoute />}>
+          <Route index element={<Dashboard />} />
+          <Route path="projects">
+            <Route index element={<ProjectList />} />
+            <Route element={<IGVAdminRoute />}>
               <Route path="new" element={<Project mode="new" />} />
               <Route path="edit/:expaId" element={<Project mode="edit" />} />
-            </>
-          ) : null}
-          {/* <Route path="view/:expaId*" element={<ProjectPanel />} /> */}
-          <Route path="view/:expaId/*" element={<ProjectPanel />} />
+            </Route>
+            <Route path="view/:expaId/*" element={<ProjectPanel />} />
+          </Route>
+          <Route path="applications">
+            <Route index element={<ApplicationList />} />
+            <Route element={<IGVAdminRoute />}>
+              <Route path="new" element={<Application mode="new" />} />
+            </Route>
+
+            <Route path="edit/:appId" element={<Application mode="edit" />} />
+            <Route path="view/:appId/*" element={<ApplicationPanel />} />
+          </Route>
+          <Route element={<IGVAdminRoute />}>
+            <Route path="emails">
+              <Route index element={<EmailList officeId="iGV" />} />
+              <Route path="new" element={<Email officeId="iGV" mode="new" />} />
+              <Route
+                path="edit/:id"
+                element={<Email officeId="iGV" mode="edit" />}
+              />
+              <Route
+                path="view/:id"
+                element={<Email officeId="iGV" mode="view" />}
+              />
+            </Route>
+          </Route>
+          <Route path="*" element={<NotFound />} />
         </Route>
-        <Route path="applications">
-          <Route index element={<ApplicationList />} />
-          {user.roleId === "LCP" || user.roleId === "LCVP" ? (
-            <Route path="new" element={<Application mode="new" />} />
-          ) : null}
-          <Route path="edit/:appId" element={<Application mode="edit" />} />
-          <Route path="view/:appId/*" element={<ApplicationPanel />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 };
 
 const IGVRoute = () => {
-  const { user } = useContext(UserContext);
+  const { privileges } = useContext(UserContext);
+  const { isIGVUser } = privileges;
 
-  if (!user || (user.frontOfficeId !== "iGV" && user.frontOfficeId !== "LCP"))
-    return <Navigate to="/login" />;
+  if (!isIGVUser) return <Navigate to="/login" />;
+
+  return <Outlet />;
+};
+
+const IGVAdminRoute = () => {
+  const { privileges } = useContext(UserContext);
+  const { isIGVAdmin } = privileges;
+
+  if (!isIGVAdmin) return <Navigate to="/login" />;
 
   return <Outlet />;
 };
 
 const ProjectPanel = () => {
-  const { user } = useContext(UserContext);
   const navigate = useNavigate();
   let location = useLocation();
   return (
@@ -166,18 +196,18 @@ const ProjectPanel = () => {
       </Box>
       <Box sx={{ pt: 2 }}>
         <Routes>
-          <Route path="project" element={<Project mode="view" />} />
-          <Route path="slots">
-            <Route index element={<SlotList />} />
-            {user.roleId === "LCP" || user.roleId === "LCVP" ? (
-              <>
+          <Route element={<IGVRoute />}>
+            <Route path="project" element={<Project mode="view" />} />
+            <Route path="slots">
+              <Route index element={<SlotList />} />
+              <Route element={<IGVAdminRoute />}>
                 <Route path="new" element={<Slot mode="new" />} />
                 <Route path="edit/:slotId" element={<Slot mode="edit" />} />
-              </>
-            ) : null}
-            <Route path="view/:slotId" element={<Slot mode="view" />} />
+              </Route>
+              <Route path="view/:slotId" element={<Slot mode="view" />} />
+            </Route>
+            <Route path="questions" element={<QuestionList />} />
           </Route>
-          <Route path="questions" element={<QuestionList />} />
         </Routes>
       </Box>
     </Box>
@@ -229,13 +259,15 @@ const ApplicationPanel = () => {
       </Box>
       <Box sx={{ pt: 2 }}>
         <Routes>
-          <Route path="application" element={<Application mode="view" />} />
-          <Route path="interview_log" element={<InterviewLog />} />
-          <Route path="emails" element={<MailClient />} />
+          <Route element={<IGVRoute />}>
+            <Route path="application" element={<Application mode="view" />} />
+            <Route path="interview_log" element={<InterviewLog />} />
+            <Route path="emails" element={<EmailClient />} />
+          </Route>
         </Routes>
       </Box>
     </Box>
   );
 };
 
-export { IGVMenu, IGVRoutes };
+export { IGVMenu, IGVPanel };

@@ -12,7 +12,7 @@ import ErrorPage from "../ErrorPage";
 export default function Dashboard() {
   const { user } = useContext(UserContext);
 
-  const url = `/igv/interviews/upcoming/${user.id}`;
+  const url = `/igv/applications/upcoming/${user.id}`;
   const interviewList = useQuery({ key: ["igv-upcoming-interviews"], url });
 
   if (interviewList.isLoading) return <Loading />;
@@ -38,8 +38,8 @@ export default function Dashboard() {
               return (
                 <ListItem key={i}>
                   <ListItemText>
-                    {interview.epName} on {interview.interviewDate} at{" "}
-                    {interview.interviewTime}
+                    {`${interview.epName} on ${interview.interviewDate} at 
+                    ${interview.interviewTime}`}
                   </ListItemText>
                 </ListItem>
               );

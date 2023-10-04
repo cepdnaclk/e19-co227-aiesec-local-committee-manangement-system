@@ -20,7 +20,7 @@ router.post("/login", (req, res, next) => {
     const password = req.body.password;
     console.log(email, password);
 
-    const queryFindUser = `SELECT id, email, passphrase, front_office_id, department_id, back_office_id, role_id, preferred_name FROM member WHERE email = ?;`;
+    const queryFindUser = `SELECT id, email, passphrase, frontOfficeId, departmentId, backOfficeId, roleId, preferredName FROM member WHERE email = ?;`;
 
     connection.query(queryFindUser, [email], (err, result) => {
       if (err) {
@@ -42,7 +42,7 @@ router.post("/login", (req, res, next) => {
       const formattedUser = Object.keys(user).reduce((acc, key) => {
         // Remove password field
         if (key === "passphrase") return acc;
-        acc[changeCase.camelCase(key)] = user[key];
+        acc[key] = user[key];
         return acc;
       }, {});
 

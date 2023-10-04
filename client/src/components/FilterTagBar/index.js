@@ -30,6 +30,7 @@ const FilterTagBar = ({ initialData, setGroupedData, searchProp, tags }) => {
         {tags.map((tag) => {
           return (
             <Chip
+              key={`tag-${tag}`}
               label={tag}
               onClick={() => {
                 const index = activeTags.indexOf(tag);

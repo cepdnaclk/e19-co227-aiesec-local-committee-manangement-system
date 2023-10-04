@@ -10,15 +10,15 @@ const { connection, execQuery } = require("../../database/database");
 
 router.get("/all/:id", (req, res, next) => {
   if (req?.params?.id === "admin") {
-    const getIgvApplications = `CALL GetAllIGVApplicationsForAdmin();`;
+    const getIgvApplications = `SELECT * FROM IGVApplicationsInBrief;`;
     execQuery(getIgvApplications)
-      .then((rows) => res.status(200).json(rows[0]))
+      .then((rows) => res.status(200).json(rows))
       .catch((err) => next(err));
   } else {
-    const getIgvApplications = `CALL GetAllIGVApplications(${req?.params?.id});`;
+    const getIgvApplications = `SELECT * FROM IGVApplicationsInBrief WHERE memberId='${req?.params?.id})';`;
 
     execQuery(getIgvApplications)
-      .then((rows) => res.status(200).json(rows[0]))
+      .then((rows) => res.status(200).json(rows))
       .catch((err) => next(err));
   }
 });
@@ -65,9 +65,12 @@ router.post("/item", (req, res, next) => {
     ).toString()}) VALUES (${Object.values(req.body).map((value) => {
       if (!value) return "NULL";
       return `'${value}'`;
-    })});CALL GetLatestIGVApplication();`;
+    })});SELECT * FROM IGVApplicationsInBrief WHERE appId=(SELECT MAX(appId) FROM igv_application);`;
     execQuery(addIgvApplication)
-      .then((rows) => res.status(200).json(rows[1][0]))
+      .then((rows) => {
+        // console.log(rows);
+        return res.status(200).json(rows[1][0]);
+      })
       .catch((err) => next(err));
   } catch (err) {
     next(err);
@@ -89,7 +92,7 @@ router.put("/item/:appId", (req, res, next) => {
     updateString = updateString.substring(0, updateString.length - 2);
 
     const updateIgvApplicationQuery = `UPDATE igv_application SET ${updateString} WHERE appId=${req.params.appId};
-    CALL GetIGVApplication(${req.params.appId})`;
+    SELECT * FROM IGVApplicationsInBrief WHERE appId='${req.params.appId}'`;
 
     execQuery(updateIgvApplicationQuery)
       .then((rows) => {
@@ -150,19 +153,15 @@ router.delete("/item/:appId", (req, res, next) => {
 //     });
 // });
 
-// // /igv/interviews/upcoming/:memberid
-// router.get("/upcoming/", (req, res, next) => {
-//   execQuery(
-//     // Enclose the json array in '' to make it a valid json string
-//     `CALL GetUpcomingInterviews(${req.query.id});`
-//   )
-//     .then((rows) => {
-//       data = rows[0].map((row) => objectKeysSnakeToCamel(row));
-//       res.status(200).json(data);
-//     })
-//     .catch((err) => {
-//       next(err);
-//     });
-// });
+// /igv/interviews/upcoming/:memberid
+router.get("/upcoming/:id", (req, res, next) => {
+  execQuery(`CALL GetUpcomingInterviews('${req.params.id}');`)
+    .then((rows) => {
+      res.status(200).json(rows[0]);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
 
 module.exports = router;

@@ -2,10 +2,10 @@
 /* ~~~~~~~~~~~~~~~~~~~~ FACULTIES ~~~~~~~~~~~~~~~~~~~~ */
 CREATE TABLE faculty (
     id              VARCHAR(3) PRIMARY KEY,
-    title     VARCHAR(100)
+    facultyName     VARCHAR(100)
 );
 
-INSERT INTO faculty (id, title) VALUES
+INSERT INTO faculty (id, facultyName) VALUES
 ('AG', 'Faculty of Agriculture'),
 ('A', 'Faculty of Arts'),
 ('D', 'Faculty of Dental Sciences'),
@@ -19,10 +19,10 @@ INSERT INTO faculty (id, title) VALUES
 /* ~~~~~~~~~~~~~~~~~~~~ DISTRICTS ~~~~~~~~~~~~~~~~~~~~ */
 CREATE TABLE district (
     id              INT(2) PRIMARY KEY,
-    title    VARCHAR(20)
+    districtName    VARCHAR(20)
 );
 
-INSERT INTO district (id, title) VALUES
+INSERT INTO district (id, districtName) VALUES
 (1, 'Ampara'),
 (2, 'Anuradhapura'),
 (3, 'Badulla'),
@@ -50,12 +50,13 @@ INSERT INTO district (id, title) VALUES
 (25, 'Vavuniya');
 
 /* ~~~~~~~~~~~~~~~~~~~~ ROLES ~~~~~~~~~~~~~~~~~~~~ */
+
 CREATE TABLE role (
     id              VARCHAR(4) PRIMARY KEY,
-    title        VARCHAR(50)
-); 
+    roleName        VARCHAR(50)
+);
 
-INSERT INTO role (title, id) VALUES
+INSERT INTO role (roleName, id) VALUES
 ("Local Committee President", "LCP"),
 ("Local Committee Vice President", "LCVP"),
 ("Manager", "MGR"),
@@ -165,9 +166,8 @@ CREATE TABLE member (
     FOREIGN KEY (districtId)        REFERENCES district(id),
     FOREIGN KEY (roleId)            REFERENCES role(id)
 );
- 
-/* ~~~~~~~~~~~~~~~~~~~~ STORED PROCEDURES ~~~~~~~~~~~~~~~~~~~~ */
 
+/* ~~~~~~~~~~~~~~~~~~~~ STORED PROCEDURES ~~~~~~~~~~~~~~~~~~~~ */
 -- Get context data required to show member details
 CREATE PROCEDURE GetMemberContext()
 BEGIN

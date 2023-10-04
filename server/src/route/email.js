@@ -14,109 +14,120 @@ const {
 
 // get email template by frontOfficeId or backOfficeId
 router.get("/template", (req, res, next) => {
-    try {
-        if (!req.query.frontOfficeId && !req.query.backOfficeId) {
-            return res.status(400).send("Either frontOfficeId or backOfficeId must be provided in the query parameters.");
-        }
-
-        execQuery(`SELECT * FROM email_template WHERE officeId = ?`, [req.query.frontOfficeId || req.query.backOfficeId])
-            .then((rows) => {
-                if (rows.length === 0) {
-                    return res.status(404).send("No template found for the provided officeId.");
-                }
-
-                // Generalized JSON parsing for multiple rows
-                rows = rows.map(data => {
-                    for (let key in data) {
-                        try {
-                            let parsedData = JSON.parse(data[key]);
-                            data[key] = parsedData;
-                        } catch (e) {
-                            // If it's not parseable JSON, do nothing and leave the original value
-                        }
-                    }
-                    return data;
-                });
-
-                res.status(200).json(rows);
-            })
-            .catch((err) => {
-                next(err);
-            });
-    } catch (e) {
-        next(e);
+  try {
+    // console.log(req);
+    // if (!req.query.frontOfficeId && !req.query.backOfficeId) {
+    if (!req?.query?.officeId) {
+      return res.status(400).send({
+        message:
+          "Either frontOfficeId or backOfficeId must be provided in the query parameters.",
+      });
     }
-});
 
+    execQuery(`SELECT * FROM email_template WHERE officeId = ?`, [
+      // req.query.frontOfficeId || req.query.backOfficeId,
+      req.query.officeId,
+    ])
+      .then((rows) => {
+        // If no rows are found return empty rows
+        // if (rows.length === 0) {
+        //   return res
+        //     .status(404)
+        //     .send({ message: "No template found for the provided officeId." });
+        // }
+
+        // Generalized JSON parsing for multiple rows
+        rows = rows.map((data) => {
+          for (let key in data) {
+            try {
+              let parsedData = JSON.parse(data[key]);
+              data[key] = parsedData;
+            } catch (e) {
+              // If it's not parseable JSON, do nothing and leave the original value
+            }
+          }
+          return data;
+        });
+
+        res.status(200).json(rows);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } catch (e) {
+    next(e);
+  }
+});
 
 // get email template by id
 router.get("/template/:id", (req, res, next) => {
-    try {
-        let sql = `SELECT * FROM email_template WHERE id = ?`;
+  try {
+    let sql = `SELECT * FROM email_template WHERE id = ?`;
 
-        execQuery(sql, [req.params.id])
-            .then((rows) => {
-                if (rows.length > 0) {
-                    let data = rows[0];
+    execQuery(sql, [req.params.id])
+      .then((rows) => {
+        if (rows.length > 0) {
+          let data = rows[0];
 
-                    // Generalized JSON parsing
-                    for (let key in data) {
-                        try {
-                            let parsedData = JSON.parse(data[key]);
-                            data[key] = parsedData;
-                        } catch (e) {
-                            // If it's not parseable JSON, do nothing and leave the original value
-                        }
-                    }
+          // Generalized JSON parsing
+          for (let key in data) {
+            try {
+              let parsedData = JSON.parse(data[key]);
+              data[key] = parsedData;
+            } catch (e) {
+              // If it's not parseable JSON, do nothing and leave the original value
+            }
+          }
 
-                    res.status(200).json(data);
-                } else {
-                    res.status(404).send("Template not found.");
-                }
-            })
-            .catch((err) => {
-                next(err);
-            });
-    } catch (e) {
-        next(e);
-    }
+          res.status(200).json(data);
+        } else {
+          res.status(404).send("Template not found.");
+        }
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } catch (e) {
+    next(e);
+  }
 });
-
 
 // create email template
 router.post("/template/create", (req, res, next) => {
+  try {
+    // console.log(req.body);
+    const fields = Object.keys(req.body);
 
-    try {
-        const fields = Object.keys(req.body);
+    const values = Object.values(req.body).map((value) => {
+      // Check if the value is an array, and if so, JSON.stringify it
+      if (Array.isArray(value)) {
+        return JSON.stringify(value);
+      } else if (value) {
+        return value;
+      } else {
+        return null;
+      }
+    });
 
-        const values = Object.values(req.body).map(value => {
-            // Check if the value is an array, and if so, JSON.stringify it
-            if (Array.isArray(value)) {
-                return JSON.stringify(value);
-            } else if (value) {
-                return value;
-            } else {
-                return null;
-            }
-        });
+    // Create a placeholder string: ?,?,?... based on the number of fields
+    const placeholders = new Array(fields.length).fill("?").join(",");
 
-        // Create a placeholder string: ?,?,?... based on the number of fields
-        const placeholders = new Array(fields.length).fill('?').join(',');
+    const insertQuery = `INSERT INTO email_template (${fields.toString()}) VALUES (${placeholders});
+    SELECT id, name FROM email_template WHERE id =(SELECT LAST_INSERT_ID())`;
 
-        const insertQuery = `INSERT INTO email_template (${fields.toString()}) VALUES (${placeholders})`;
-
-        execQuery(insertQuery, values)
-            .then((rows) => {
-                res.status(200).json({ msg: "successfully created" });
-            })
-            .catch((err) => {
-                next(err);
-            });
-    } catch (e) {
-        next(e);
-    }
+    execQuery(insertQuery, values)
+      .then((rows) => {
+        // return the newly created data
+        // console.log(rows[1][0]);
+        res.status(200).json(rows[1][0]);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } catch (e) {
+    next(e);
+  }
 });
-
 
 // delete email template
 router.delete("/template/:id", (req, res, next) => {
@@ -124,7 +135,8 @@ router.delete("/template/:id", (req, res, next) => {
 
   execQuery(sql)
     .then((rows) => {
-      res.status(200).json({ msg: "successfully deleted" });
+      // console.log("deleted");
+      res.status(200).json({ id: req.params.id });
     })
     .catch((err) => {
       next(err);
@@ -133,37 +145,44 @@ router.delete("/template/:id", (req, res, next) => {
 
 // update email template
 router.put("/template/:id", (req, res, next) => {
-    try {
-        const fields = Object.keys(req.body);
-        const values = Object.values(req.body).map((value) => {
-                                                        if (typeof value === 'object') {
-                                                            return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
-                                                        } else {
-                                                            return value ? `'${value.replace(/'/g, "''")}'` : `NULL`;
-                                                        }
-                                                    });
+  try {
+    const fields = Object.keys(req.body);
+    const values = Object.values(req.body);
+    // .map((value) => {
+    //   if (typeof value === "object") {
+    //     return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
+    //   } else {
+    //     return value ? `'${value.replace(/'/g, "''")}'` : `NULL`;
+    //   }
+    // });
 
-
-        let updates = [];
-        for (let i = 0; i < fields.length; i++) {
-            updates.push(`${fields[i]} = ${values[i]}`);
-        }
-
-        let updateString = updates.join(", ");
-
-        const query = `UPDATE email_template SET ${updateString} WHERE id='${req.params.id}';`;
-        execQuery(query)
-            .then((rows) => {
-                res.status(200).json({ msg: "template updated" });
-            })
-            .catch((err) => {
-                next(err);
-            });
-    } catch (err) {
-        next(err);
+    let updates = [];
+    for (let i = 0; i < fields.length; i++) {
+      // updates.push(`${fields[i]} = ${values[i]}`);
+      if (
+        fields[i] === "cc" ||
+        fields[i] === "bcc" ||
+        fields[i] === "attachments"
+      )
+        updates.push(`${fields[i]} = '${JSON.stringify(values[i])}'`);
+      else updates.push(`${fields[i]} = '${values[i]}'`);
     }
-});
 
+    let updateString = updates.join(", ");
+
+    const query = `UPDATE email_template SET ${updateString} WHERE id='${req.params.id}';
+    SELECT id, name FROM email_template WHERE id='${req.params.id}';`;
+    execQuery(query)
+      .then((rows) => {
+        res.status(200).json(rows[1][0]);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } catch (err) {
+    next(err);
+  }
+});
 
 /*------------------ EMAILS THROUGH USERS ---------------------------------------*/
 
@@ -231,16 +250,15 @@ router.get("/auth/callback", async (req, res) => {
 
 router.get("/sendEmail", async (req, res, next) => {
   try {
-    const { from, attachments, to, cc, bcc, subject, body } =
-      req.body;
+    const { from, attachments, to, cc, bcc, subject, body } = req.body;
     const response = await sendUserEmail(
-        from,
-        to,
-        cc,
-        bcc,
-        subject,
-        body,
-        attachment
+      from,
+      to,
+      cc,
+      bcc,
+      subject,
+      body,
+      attachment
     );
     res.send("Email sent: " + response);
   } catch (err) {
