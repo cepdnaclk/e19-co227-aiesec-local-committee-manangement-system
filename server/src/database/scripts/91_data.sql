@@ -292,25 +292,7 @@ approvedDate
 -- ,("Local Committee Meeting - September", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
 -- ;
 
-INSERT INTO email_template (name, subject, body, attachments) VALUES
 
-("reminder", "Reminder (via LCMS)", 
-
-"<p>Hi {{member_name}} !</p>
-<p>This Email is sent to <strong>remind </strong>you that you are assigned to an OGV applicant.</p>
-<p style='margin-left:40px'>applicant&#39;s details :&nbsp;</p>
-<p style='margin-left:80px'>{{applicant_details}}</p>
-<p>&nbsp;</p>
-<p>Thank You,</p>
-<p>AIESEC local committee management system</p>",
-'["https://assets.website-files.com/60a2e3be4c28b25f35f6a54a/621bcef94c58054c38ae8305_AIESEC_OG.jpg"]'),
-
-("ese", "Test Ese email subject", 
-
-"<p>Test Email Body!! </p>
-<p>&nbsp;</p>
-<p>Thank You,</p>
-<p>AIESEC local committee management system</p>", '["https://assets.website-files.com/60a2e3be4c28b25f35f6a54a/621bcef94c58054c38ae8305_AIESEC_OG.jpg"]');
 
 INSERT INTO ogv_applicants (
     status,

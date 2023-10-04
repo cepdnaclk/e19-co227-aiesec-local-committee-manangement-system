@@ -14,7 +14,7 @@ function replacePlaceholders(template, data) {
     // replace {{those}} with given data   
     // ex: template = Hello {{ name }} ! --> data = { name: John } --> return = Hello John!
 
-    return template.replace(/\{\{(\w+)\}\}/g, function (match, placeholder) {
+    return template.replace(/\[(\w+)\]/g, function (match, placeholder) {
         return data[placeholder] || '';
     });
 }

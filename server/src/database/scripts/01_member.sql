@@ -1,10 +1,9 @@
-USE LC_KANDY;
 
 /* ~~~~~~~~~~~~~~~~~~~~ FACULTIES ~~~~~~~~~~~~~~~~~~~~ */
-/* CREATE TABLE faculty (
+CREATE TABLE faculty (
     id              VARCHAR(3) PRIMARY KEY,
-    facultyName     VARCHAR(100)
-); */
+    title     VARCHAR(100)
+);
 
 INSERT INTO faculty (id, title) VALUES
 ('AG', 'Faculty of Agriculture'),
@@ -18,10 +17,10 @@ INSERT INTO faculty (id, title) VALUES
 ('MG', 'Faculty of Management');
 
 /* ~~~~~~~~~~~~~~~~~~~~ DISTRICTS ~~~~~~~~~~~~~~~~~~~~ */
-/* CREATE TABLE district (
+CREATE TABLE district (
     id              INT(2) PRIMARY KEY,
-    districtName    VARCHAR(20)
-); */
+    title    VARCHAR(20)
+);
 
 INSERT INTO district (id, title) VALUES
 (1, 'Ampara'),
@@ -51,15 +50,10 @@ INSERT INTO district (id, title) VALUES
 (25, 'Vavuniya');
 
 /* ~~~~~~~~~~~~~~~~~~~~ ROLES ~~~~~~~~~~~~~~~~~~~~ */
-<<<<<<< HEAD
-
-/* CREATE TABLE role (
-=======
 CREATE TABLE role (
->>>>>>> 3d376d2 (redesign igv pages)
     id              VARCHAR(4) PRIMARY KEY,
-    roleName        VARCHAR(50)
-); */
+    title        VARCHAR(50)
+); 
 
 INSERT INTO role (title, id) VALUES
 ("Local Committee President", "LCP"),
@@ -71,10 +65,10 @@ INSERT INTO role (title, id) VALUES
 ("Coordinator", "CDN");
 
 /* ~~~~~~~~~~~~~~~~~~~~ FRONT OFFICES ~~~~~~~~~~~~~~~~~~~~ */
-/* CREATE TABLE front_office (
+CREATE TABLE front_office (
     id              VARCHAR(4) PRIMARY KEY,
     frontOfficeName VARCHAR(50)
-); */
+);
 
 INSERT INTO front_office (frontOfficeName, id) VALUES
 ("Local Committee President", "LCP"),
@@ -84,11 +78,11 @@ INSERT INTO front_office (frontOfficeName, id) VALUES
 ("outgoing Global Talent/Teacher", "oGT"),
 ("Back Office Vice President", "BOVP");
 
-/* ~~~~~~~~~~~~~~~~~~~~ BACK OFFICES ~~~~~~~~~~~~~~~~~~~~ *//* 
+/* ~~~~~~~~~~~~~~~~~~~~ BACK OFFICES ~~~~~~~~~~~~~~~~~~~~ */
 CREATE TABLE back_office (
     id              VARCHAR(4) PRIMARY KEY,
     backOfficeName  VARCHAR(50)
-); */
+);
 
 INSERT INTO back_office (backOfficeName, id) VALUES
 ("BRAND", "BND"),
@@ -100,10 +94,10 @@ INSERT INTO back_office (backOfficeName, id) VALUES
 ("Public Relations and Engage with AIESEC", "PnE");
 
 /* ~~~~~~~~~~~~~~~~~~~~ DEPARTMENTS ~~~~~~~~~~~~~~~~~~~~ */
-/* CREATE TABLE department (
+CREATE TABLE department (
     id              VARCHAR(4) PRIMARY KEY,
     departmentName  VARCHAR(25)
-); */
+);
 
 INSERT INTO department (departmentName, id) VALUES
 ("Local Committee President", "LCP"),
@@ -117,13 +111,13 @@ INSERT INTO department (departmentName, id) VALUES
 ("Customer Experience", "CXP");
 
 /* ~~~~~~~~~~~~~~~~~~~~ VALID FRONT OFFICES - DEPARTMENTS ~~~~~~~~~~~~~~~~~~~~ */
-/* CREATE TABLE front_valid_pair (
+CREATE TABLE front_valid_pair (
     officeId        VARCHAR(4),
     departmentId    VARCHAR(4),
 
     FOREIGN KEY (officeId)     REFERENCES front_office(id),
     FOREIGN KEY (departmentId) REFERENCES department(id)
-); */
+);
 
 INSERT INTO front_valid_pair (officeId, departmentId) VALUES
 ("LCP","LCP"),
@@ -133,7 +127,7 @@ INSERT INTO front_valid_pair (officeId, departmentId) VALUES
 ("oGT","VP"),("oGT","IR"),("oGT","B2B"),("oGT","MKT"),("oGT","B2C"),("oGT","CXP");
 
 /* ~~~~~~~~~~~~~~~~~~~~ MEMBERS ~~~~~~~~~~~~~~~~~~~~ */
-/* CREATE TABLE member ( 
+CREATE TABLE member ( 
 
     id                  INT(5) AUTO_INCREMENT PRIMARY KEY,
 
@@ -171,7 +165,7 @@ INSERT INTO front_valid_pair (officeId, departmentId) VALUES
     FOREIGN KEY (districtId)        REFERENCES district(id),
     FOREIGN KEY (roleId)            REFERENCES role(id)
 );
- */
+ 
 /* ~~~~~~~~~~~~~~~~~~~~ STORED PROCEDURES ~~~~~~~~~~~~~~~~~~~~ */
 
 -- Get context data required to show member details

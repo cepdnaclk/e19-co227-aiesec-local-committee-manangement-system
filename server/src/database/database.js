@@ -8,6 +8,7 @@ const connection = mysql.createConnection({
   password: process.env.DATABASE_PASSWORD || "lckandyadmin",
   database: process.env.DATABASE_DB || "LC_KANDY",
   port: process.env.DATABASE_PORT || 3306,
+  charset: 'utf8mb4',
   multipleStatements: true,
   dateStrings: true, // automatically formats dates into yyyy-mm-dd
   timeout: 50000,
@@ -40,7 +41,9 @@ const executeScriptFromFile = async (filePath, operationName) => {
 
 const initDatabase = async () => {
   try {
+
     await connectToDB();
+
     /*
     const schemaPath = path.join(__dirname, "schema.sql");
     await logFileModificationTime(schemaPath);
@@ -82,16 +85,17 @@ const initDatabase = async () => {
 };
 
 const execQuery = (query, values = []) => {
-  return new Promise((resolve, reject) => {
-    connection.query(query, values, (err, rows) => {
-      if (err) {
-        console.error(err);
-        return reject(err);
-      }
-      resolve(rows);
+    return new Promise((resolve, reject) => {
+        connection.query(query, values, (err, rows) => {
+            if (err) {
+                console.error("Error executing query:", query, "Values:", values, "Error:", err);
+                return reject(err);
+            }
+            resolve(rows);
+        });
     });
-  });
 };
+
 
 if ((process.env.NODE_ENV = "development")) initDatabase();
 

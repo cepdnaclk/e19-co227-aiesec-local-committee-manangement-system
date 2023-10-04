@@ -28,26 +28,6 @@ CREATE TABLE lc_event (
 
 /* =============================================== */
 
-/*table for storing templates of emails*/
-CREATE TABLE email_template (
-    id          INT             AUTO_INCREMENT PRIMARY KEY,
-    name        VARCHAR(255)    NOT NULL UNIQUE,
-    subject     VARCHAR(255)    NOT NULL,
-    body        TEXT            NOT NULL,
-    cc          JSON,
-    bcc         JSON,
-    attachments JSON
-
-);
-
-/*table for user's gmail date'*/
-CREATE TABLE user_gmail_data (
-    id              INT             AUTO_INCREMENT PRIMARY KEY,
-    email           VARCHAR(255)    NOT NULL UNIQUE,
-    accessToken     TEXT ,
-    refreshToken    TEXT ,
-    tokenExpiry     BIGINT
-);
 
 CREATE TABLE ogv_applicants (
     id                      INT NOT NULL AUTO_INCREMENT,

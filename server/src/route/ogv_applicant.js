@@ -197,8 +197,8 @@ router.post("/mail/:id", async (req, res, next) => {
     try {
         const userDetails = getUserDataFromToken(req);
 
-        const userEmail = userDetails.email;
-        let receiver;
+        const from = userDetails.email;
+        let to;
         const { attachments, receiverId, cc, bcc, subject, body } = req.body;
         
         const result = await new Promise((resolve, reject) => {
@@ -211,9 +211,9 @@ router.post("/mail/:id", async (req, res, next) => {
         receiver = result[0].email;
 
         const response = await sendUserEmail(
-            userEmail,
+            from,
             attachments,
-            receiver,
+            to,
             cc,
             bcc,
             subject,

@@ -102,6 +102,22 @@ CREATE TABLE igv_interview_log (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+
+CREATE TABLE igv_email_status(
+
+    id              INT             AUTO_INCREMENT PRIMARY KEY,
+    appId           INT(5),
+    templateId      INT(3),
+    status          ENUM('Pending', 'Sent')     DEFAULT 'Pending',
+
+    FOREIGN KEY (appId) REFERENCES igv_application(appId) 
+        ON DELETE CASCADE ON UPDATE CASCADE,
+
+    FOREIGN KEY (templateId) REFERENCES email_template(id) 
+        ON DELETE CASCADE ON UPDATE CASCADE
+
+);
+
 /* ~~~~~~~~~~~~~~~~~~~~ TRIGGERS ~~~~~~~~~~~~~~~~~~~~ */
 /* Create an empty interview log when a new application is created
 (answers updated later during interview by user)*/
@@ -130,6 +146,37 @@ BEGIN
     END WHILE;
     CLOSE cur;
 END;
+
+
+/* Each time a new applicant is created add rows for each templateId in email_template where OfficeId = 'IGV' with status pending*/
+CREATE TRIGGER CreateEmailStatusLog
+AFTER INSERT ON igv_application
+FOR EACH ROW
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE template_id INT;
+    
+    /* Cursor for fetching template IDs based on officeId = 'igv' */
+    DECLARE cur CURSOR FOR
+        SELECT id
+        FROM email_template
+        WHERE officeId = 'IGV';
+    
+    /* Handler for ending the loop when all rows have been fetched */
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    /* Loop through each templateId and insert into igv_email_status */
+    OPEN cur;
+    FETCH cur INTO template_id;
+    WHILE done != 1 DO
+        INSERT INTO igv_email_status (appId, templateId)
+        VALUES (NEW.appId, template_id); 
+        FETCH cur INTO template_id;
+    END WHILE;
+    CLOSE cur;
+END;
+
+
 
 /* ~~~~~~~~~~~~~~~~~~~~ STORED PROCEDURES ~~~~~~~~~~~~~~~~~~~~ */
 CREATE PROCEDURE GetIGVOpportunities()
@@ -314,4 +361,38 @@ WHERE
     memberId = id
 AND
     DATE(interviewDate) >= CURDATE();
+END;
+
+
+CREATE PROCEDURE GetIGVApplicantDetails(specificAppId INT)
+    BEGIN
+        SELECT 
+            m.email AS memberEmail,
+            a.email AS applicantEmail,
+            a.epName,
+            p.projectName,
+            s.slotName,
+            s.startDate,
+            s.endDate,
+            p.accommodation,
+            p.food,
+            p.transportation,
+            a.amount AS fee,
+            m.fullName AS memberFullName,
+            r.title AS roleName,
+            d.departmentName
+        FROM 
+            igv_application AS a
+        JOIN 
+            igv_project AS p ON a.projectExpaId = p.expaId
+        JOIN 
+            igv_slot AS s ON a.slotId = s.slotId
+        JOIN 
+            member AS m ON a.memberId = m.id
+        JOIN 
+            role AS r ON m.roleId = r.id  
+        JOIN 
+            department AS d ON m.departmentId = d.id
+    WHERE 
+            a.appId = specificAppId;
 END;
