@@ -35,4 +35,4 @@ jobs:
      # run: docker images | grep dimg:latest
 
     - name: Pushing the image to docker hub
-      run: docker push dinuka029/co227:latest
+      run: docker push dinuka029/project_service
