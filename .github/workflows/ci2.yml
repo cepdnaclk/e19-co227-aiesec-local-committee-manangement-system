@@ -16,7 +16,7 @@ jobs:
       uses: docker/setup-buildx-action@v3
 
     - name: Build Docker image
-      run: docker buildx build -t dinuka029/co227:latest .
+      run: docker buildx build --push -t dinuka029/co227:latest .
 
     - name: Logging into Dockerhub
       env:
