@@ -22,7 +22,7 @@ jobs:
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     
     - name: Build and Push Docker image
-      run: docker buildx build --push -t dinuka029/co227:latest .
+      run: docker buildx build --file docker-compose.yml --push -t dinuka029/co227:latest .
 
     #- name: Push Docker image
     #  run: docker push dinuka029/co227:latest
