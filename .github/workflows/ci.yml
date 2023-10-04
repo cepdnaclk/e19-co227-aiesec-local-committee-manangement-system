@@ -25,14 +25,14 @@ jobs:
       run: docker context
 
     - name: Check the permissions for the `dimg` image
-      run: docker inspect dimg
+      run: docker inspect project_sevices
 
 
-    - name: tagging docker image
-      run: docker tag dimg:latest dinuka029/co227:latest
+   # - name: tagging docker image
+    #  run: docker tag dimg:latest dinuka029/co227:latest
 
-    - name: Check if the `dimg` image is built and tagged correctly
-      run: docker images | grep dimg:latest
+    #- name: Check if the `dimg` image is built and tagged correctly
+     # run: docker images | grep dimg:latest
 
-    - name: Pushing the image to docker hub
-      run: docker push dinuka029/co227:dimg
+   # - name: Pushing the image to docker hub
+   #   run: docker push dinuka029/co227:dimg
