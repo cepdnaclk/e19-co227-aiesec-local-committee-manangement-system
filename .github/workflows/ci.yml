@@ -28,7 +28,7 @@ jobs:
       #run: docker buildx build --file docker-compose.yml --service web --push -t dinuka029/co227:latest .
 
     - name: Build docker compose file
-      run: docker buildx build -f docker-compose.yml .
+      run: docker buildx build -f docker-compose.yml --push .
 
-    - name: Push to Docker hub
-      run: docker push dinuka029/co227:latest  .
+    #- name: Push to Docker hub
+    #  run: docker push dinuka029/co227:latest  .
