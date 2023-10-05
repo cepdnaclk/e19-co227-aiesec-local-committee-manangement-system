@@ -6,6 +6,9 @@ services:
     build:
       context: ./client
       target: serve
+
+    image: dinuka029/co227
+
     ports:
       - 80:80
     restart: always
@@ -15,6 +18,7 @@ services:
     build:
       context: ./server
       target: build
+    image: dinuka029/co227
     ports:
       - 8081:8081
     environment:
