@@ -12,8 +12,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    #- name: Set up Docker Buildx
-    #  uses: docker/setup-buildx-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
     - name: Logging into Dockerhub
       env:
@@ -28,7 +28,7 @@ jobs:
       #run: docker buildx build --file docker-compose.yml --service web --push -t dinuka029/co227:latest .
 
     - name: Build docker compose file
-      run: docker-compose build web
+      run: docker buildx build -f docker-compose.yml .
 
     - name: Push to Docker hub
-      run: docker push dinuka029/co227:latest
+      run: docker push dinuka029/co227:latest  .
