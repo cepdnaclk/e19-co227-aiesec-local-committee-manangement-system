@@ -12,8 +12,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+    #- name: Set up Docker Buildx
+    #  uses: docker/setup-buildx-action@v3
 
     - name: Logging into Dockerhub
       env:
@@ -21,8 +21,14 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     
-    - name: Build and Push Docker image
+    #- name: Build and Push Docker image
       #run: docker-compose build --push -t dinuka029/co227:latest  .
       #run: docker buildx build --file docker-compose.yml --push -t dinuka029/co227:latest  .
       #run: docker buildx build --push -t dinuka029/co227:latest  .
-      run: docker buildx build --file docker-compose.yml --service web --push -t dinuka029/co227:latest .
+      #run: docker buildx build --file docker-compose.yml --service web --push -t dinuka029/co227:latest .
+
+    - name: Build docker compose file
+      run: docker-compose build web
+
+    - name: Push to Docker hub
+      run: docker push dinuka029/co227:latest
