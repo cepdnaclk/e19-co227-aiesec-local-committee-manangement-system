@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   useQuery,
   usePostMutation,
@@ -274,7 +274,7 @@ export default function Application({ mode }) {
           <Form>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <pre>{JSON.stringify(values, null, 2)}</pre>
+                {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
               </Grid>
               <Grid item xs={6}>
                 <InputField name="epId" label="EP ID" {...fieldProps} />

@@ -64,6 +64,9 @@ const IGVMenu = () => {
         onClose={handleMenuClose}
         aria-labelledby="iGV-menu-button"
       >
+        <MenuItem onClick={handleMenuClose} component={Link} to="/igv/">
+          Dashboard
+        </MenuItem>
         <MenuItem onClick={handleMenuClose} component={Link} to="/igv/projects">
           Projects
         </MenuItem>
@@ -108,7 +111,6 @@ const IGVPanel = () => {
             <Route element={<IGVAdminRoute />}>
               <Route path="new" element={<Application mode="new" />} />
             </Route>
-
             <Route path="edit/:appId" element={<Application mode="edit" />} />
             <Route path="view/:appId/*" element={<ApplicationPanel />} />
           </Route>

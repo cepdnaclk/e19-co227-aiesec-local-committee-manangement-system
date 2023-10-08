@@ -289,11 +289,14 @@ approvedDate
 -- ,(1234567, "September - 2", "2023-09-10", "2023-10-25" , 5)
 -- ;
 
--- INSERT INTO lc_event (title, event_description, post_link, event_date) VALUES
+INSERT INTO lc_event (title, eventDescription, postLink, eventDate) VALUES
 
--- ("Local Committee Meeting - August", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
--- ,("Local Committee Meeting - September", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
--- ;
+("Local Committee Meeting - November", "November month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-11-30")
+,("Local Committee Meeting - December", "December month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-12-30")
+,("Local Committee Meeting - January", "January month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2024-01-30")
+,("Local Committee Meeting - February", "February month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2024-02-28")
+,("Local Committee Meeting - March", "March month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2024-03-30")
+;
 
 
 

@@ -11,9 +11,10 @@ import ErrorPage from "../ErrorPage";
 
 export default function Dashboard() {
   const { user } = useContext(UserContext);
+  const {id} = user;
 
-  const url = `/igv/applications/upcoming/${user.id}`;
-  const interviewList = useQuery({ key: ["igv-upcoming-interviews"], url });
+  const url = `/igv/applications/upcoming/${id}`;
+  const interviewList = useQuery({ key: ["igv-upcoming-interviews", id], url });
 
   if (interviewList.isLoading) return <Loading />;
   if (interviewList.isError) return <ErrorPage error={interviewList.error} />;

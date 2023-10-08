@@ -4,26 +4,11 @@ import EventSlider from "../../components/EventSlider";
 
 import Grid from "@mui/material/Grid";
 import { UserContext } from "../../context/UserContext";
-
+import EventsCarousel from "../CMS/EventsCarousel";
 const Home = () => {
   const { user } = useContext(UserContext);
 
-  return <div></div>;
-
-  // return user ? (
-  //   <>
-  //     <Grid container spacing={2}>
-  //       <Grid item xs={6}>
-  //         <EventSlider />
-  //       </Grid>
-  //       <Grid item xs={6}>
-  //         <UpcomingInterviewList />
-  //       </Grid>
-  //     </Grid>
-  //   </>
-  // ) : (
-  //   <>Please Login</>
-  // );
+  return <EventsCarousel />;
 };
 
 export default Home;

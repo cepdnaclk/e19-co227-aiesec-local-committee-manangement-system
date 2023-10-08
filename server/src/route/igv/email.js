@@ -18,17 +18,19 @@ router.get("/placeholders", (req, res, next) => {
 });
 
 router.get("/:appId", (req, res, next) => {
-  const getAllTemplates = `SELECT 
-                                et.id,
-                                et.name,
-                                ies.status
-                            FROM 
-                                email_template AS et
-                            LEFT JOIN 
-                                igv_email_status AS ies ON et.id = ies.templateId
-                            WHERE 
-                                ies.appId = ?;
-                            `;
+  // const getAllTemplates = `SELECT
+  //                               et.id,
+  //                               et.name,
+  //                               ies.status
+  //                           FROM
+  //                               email_template AS et
+  //                           LEFT JOIN
+  //                               igv_email_status AS ies ON et.id = ies.templateId
+  //                           WHERE
+  //                               ies.appId = ?;
+  //                           `;
+
+  const getAllTemplates = `SELECT id, name FROM email_template WHERE officeId = 'iGV';`;
 
   execQuery(getAllTemplates, [req.params.appId])
     .then((rows) => {

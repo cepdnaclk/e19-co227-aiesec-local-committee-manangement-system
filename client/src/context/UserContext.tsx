@@ -28,12 +28,20 @@ interface PrivilegesType {
   isSuperUser: boolean;
   isIGVAdmin: boolean;
   isIGVUser: boolean;
+  isPMAdmin: boolean;
+  isPMUser: boolean;
+  isOGVAdmin: boolean;
+  isOGVUser: boolean;
 }
 
 const defaultPrivileges: PrivilegesType = {
   isSuperUser: false,
   isIGVAdmin: false,
   isIGVUser: false,
+  isPMAdmin: false,
+  isPMUser: false,
+  isOGVAdmin: false,
+  isOGVUser: false,
 };
 
 interface UserContextType {
@@ -74,6 +82,14 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         user?.roleId === "LCP" ||
         (user?.frontOfficeId === "iGV" && user?.roleId === "LCVP"),
       isIGVUser: user?.frontOfficeId === "LCP" || user?.frontOfficeId === "iGV",
+      isPMAdmin:
+        user?.roleId === "LCP" ||
+        (user?.backOfficeId === "PM" && user?.roleId === "LCVP"),
+      isPMUser: user?.frontOfficeId === "LCP" || user?.backOfficeId === "PM",
+      isOGVAdmin:
+        user?.roleId === "LCP" ||
+        (user?.frontOfficeId === "oGV" && user?.roleId === "LCVP"),
+      isOGVUser: user?.frontOfficeId === "LCP" || user?.frontOfficeId === "oGV",
     });
   }, [user]);
 

@@ -9,10 +9,10 @@ const {
 const { connection, execQuery } = require("../database/database");
 
 // view events
-router.get("/", (req, res, next) => {
+router.get("/upcoming", (req, res, next) => {
   // if id present send only requested project details
 
-  const getEvents = `SELECT title, event_description, post_link, event_date FROM lc_event;`;
+  const getEvents = `SELECT eventId, title, eventDescription, postLink, eventDate FROM lc_event WHERE eventDate >= CURDATE();`;
 
   execQuery(getEvents)
     .then((rows) => {

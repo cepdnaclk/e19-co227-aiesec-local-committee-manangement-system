@@ -30,12 +30,13 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import { IGVMenu, IGVPanel } from "./pages/iGV";
+import { PMMenu, PMPanel } from "./pages/PM";
+import { OGVMenu, OGVPanel } from "./pages/oGV";
 
 import NotFound from "./pages/NotFound";
 import AdminRoutes from "./utils/AdminRoutes";
 import Terms from "./pages/Terms";
 import Home from "./pages/Home/Home";
-import OGVApplications from "./pages/oGV/Applicants";
 
 import DarkLogo from "./assets/White-Black-Logo.png";
 import LightLogo from "./assets/Black-Logo.png";
@@ -46,7 +47,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { NotificationBar } from "./context/NotificationContext";
-import OGVRoutes from "./utils/OGVRoutes";
 
 const NavbarButton = ({ href, label }) => {
   return (
@@ -175,27 +175,11 @@ function App() {
               </IconButton> */}
               <Stack direction="row" spacing={2}>
                 <IGVMenu />
+                <OGVMenu />
+                <PMMenu />
                 {user ? (
                   <>
                     <NavbarButton href="/" label="Home" />
-                  </>
-                ) : null}
-                {/* ~~~~~~~~~~~~~~~ iGV ~~~~~~~~~~~~~~~*/}
-                {user?.frontOfficeId === "iGV" ? (
-                  <>
-                    {user?.roleId === "LCVP" ? (
-                      <NavbarButton href="/igv/projects" label="Projects" />
-                    ) : null}
-                    <NavbarButton
-                      href="/igv/applications"
-                      label="Applications"
-                    />
-                  </>
-                ) : null}
-                {/* ~~~~~~~~~~~~~~~ oGV ~~~~~~~~~~~~~~~*/}
-                {user?.frontOfficeId === "oGV" ? (
-                  <>
-                    <NavbarButton href="/ogv/applicants" label="Applicants" />
                   </>
                 ) : null}
                 {/* ~~~~~~~~~~~~~~~ Admin ~~~~~~~~~~~~~~~*/}
@@ -315,18 +299,14 @@ function App() {
           {/* <IGVRoutes /> */}
           <Routes>
             <Route path="/igv/*" element={<IGVPanel />} />
+            <Route path="/pm/*" element={<PMPanel />} />
+            <Route path="/ogv/*" element={<OGVPanel />} />
             <Route element={<ProtectedRoutes />}>
               <Route path="/" element={<Home />} />
             </Route>
             <Route element={<AdminRoutes />}>
               <Route path="/users" element={<MemberView />} />
               <Route path="/terms" element={<Terms />} />
-            </Route>
-            <Route element={<OGVRoutes />}>
-              <Route
-                path="/ogv/applicants"
-                element={<OGVApplications />}
-              ></Route>
             </Route>
             <Route path="/login" element={<Login />} />
           </Routes>
@@ -367,17 +347,6 @@ function App() {
             />
           </DialogContent>
         </Dialog>
-        {/* <Snackbar
-          open={snackbarState.open}
-          autoHideDuration={4000}
-          onClose={() => {
-            setSnackbarState(snackbarIdleState);
-          }}
-        >
-          <Alert severity={snackbarState.severity}>
-            {snackbarState.message}
-          </Alert>
-        </Snackbar> */}
       </div>
     </ThemeProvider>
   );
