@@ -8,5 +8,6 @@ router.use("/igv", require("./route/igv"));
 router.use("/event", require("./route/events"));
 router.use("/email", require("./route/email"));
 router.use("/ogv", require("./route/ogv_applicant"));
+router.use("/ogt", require("./route/ogt_applicant"));
 
 module.exports = router;
