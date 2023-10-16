@@ -65,7 +65,7 @@ VALUES
     "LCP", 
     "BND", 
     '2022-08-20', 
-    "SPL", 
+    "LCP", 
     '555-123-4567', 
     'jane.smith@aiesec.org', 
     'F', 
@@ -244,14 +244,15 @@ epMngContact,
 epMngEmail,
 abhDate,     
 acceptedDate,
-approvedDate
+approvedDate,
+paymentAmount
 ) VALUES 
 (
 1234567, 
 1234567,
 "Open", 
 "Tony Tamer", 
-1, 
+2, 
 "Team1", 
 "2023-07-31",
 "2023-08-01",
@@ -261,7 +262,7 @@ approvedDate
 "Turkey", 
 "ANKARA",
 "092092484",
-"tony@aiesec.net",
+"sankapeeris360@gmail.com",
 "Note test 1 3 4",
 "2023-12-02",
 "13:30",
@@ -270,7 +271,8 @@ approvedDate
 "abuoew@aiesec.net",
 "2023-08-02",
 "2023-08-03",
-"2023-08-04"
+"2023-08-04",
+"100.00"
 );
 
 

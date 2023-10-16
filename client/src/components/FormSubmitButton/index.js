@@ -4,12 +4,13 @@ import Button from "@mui/material/Button";
 import { useFormikContext } from "formik";
 
 const FormSubmitButton = ({ mode, disabled }) => {
-  const { isSubmitting, isValid, isValidating } = useFormikContext();
+  const { isSubmitting, isValidating } = useFormikContext();
 
   const buttonText = () => {
     if (mode.includes("add") || mode.includes("new")) return "Add";
     else if (mode.includes("view")) return "Delete";
     else if (mode.includes("edit")) return "Save";
+    else if (mode.includes("send")) return "Send";
     else return "";
   };
 

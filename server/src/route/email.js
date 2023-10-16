@@ -249,16 +249,17 @@ router.get("/auth/callback", async (req, res) => {
 });
 
 router.get("/sendEmail", async (req, res, next) => {
+  // console.log("I was invoked");
   try {
     const { from, attachments, to, cc, bcc, subject, body } = req.body;
     const response = await sendUserEmail(
       from,
+      attachments,
       to,
       cc,
       bcc,
       subject,
-      body,
-      attachment
+      body
     );
     res.send("Email sent: " + response);
   } catch (err) {

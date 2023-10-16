@@ -81,6 +81,7 @@ export default function MemberBadgeList({ memberId }) {
                         return old.filter((item) => item.id !== achievement.id);
                       }
                     );
+                    queryClient.invalidateQueries(["members"]);
                     notifySuccess("Deleted");
                   } catch (err) {
                     notifyError(err.message);
@@ -128,6 +129,7 @@ export default function MemberBadgeList({ memberId }) {
                         ["achievement-list", memberId],
                         (old) => [...old, badge]
                       );
+                      queryClient.invalidateQueries(["members"]);
                       notifySuccess("Added");
                     } catch (err) {
                       notifyError(err.message);

@@ -12,9 +12,6 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import CardHeader from "@mui/material/CardHeader";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 import { useNotify } from "../../../context/NotificationContext";
 import badgeAlt from "../../../assets/badge-alt.png";
 import Loading from "../../Loading";
@@ -52,12 +49,15 @@ export default function Badge({ mode, setMode, id, setId }) {
     keyField: "id",
   });
 
-  const [name, setName] = useState(() => {
-    if (mode === "new") return "";
-    else return selectedBadge?.data?.name;
-  });
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    if (selectedBadge?.data?.name && mode === "edit")
+      setName(selectedBadge.data.name);
+  }, [selectedBadge.isInitialLoading, selectedBadge.isError]);
+
   const [file, setFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState("");
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { notifySuccess, notifyError } = useNotify();
@@ -128,7 +128,7 @@ export default function Badge({ mode, setMode, id, setId }) {
     setIsSubmitting(false);
   };
 
-  if (selectedBadge.isLoading) return <Loading />;
+  if (selectedBadge.isInitialLoading) return <Loading />;
   if (selectedBadge.isError) return <ErrorPage error={selectedBadge.error} />;
 
   return (
@@ -150,8 +150,10 @@ export default function Badge({ mode, setMode, id, setId }) {
       >
         <img
           src={
-            mode === "add"
-              ? previewUrl || badgeAlt
+            mode === "new"
+              ? previewUrl
+                ? previewUrl
+                : badgeAlt
               : process.env.REACT_APP_API_SERVER +
                 "/images/" +
                 selectedBadge?.data?.image

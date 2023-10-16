@@ -8,5 +8,4 @@ CREATE TABLE lc_event (
     eventDescription       VARCHAR(200),
     postLink               VARCHAR(255),
     eventDate              DATE
-
 );

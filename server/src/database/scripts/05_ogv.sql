@@ -33,6 +33,7 @@ CREATE TABLE ogv_applicants (
     paymentAmount           DECIMAL(10, 2),
     proofLink               VARCHAR(1024),
     approvedNotes           VARCHAR(255),
+    claimStatus     BOOLEAN   DEFAULT FALSE, 
 
     -- Realized
     realizedStartDate       DATE,

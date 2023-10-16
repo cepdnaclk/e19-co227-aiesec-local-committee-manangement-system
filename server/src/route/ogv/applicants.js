@@ -238,7 +238,16 @@ router.get(`/members`, (req, res, next) => {
     });
 });
 
-router.post("/setClaimStatus/", async (req, res, next) => {
+router.get("/claims", (req, res, next) => {
+  execQuery(
+    // `SELECT appId AS id, CONCAT('Application ID: ', appId, ' Amount: ', paymentAmount, ' $') AS label, claimStatus FROM igv_application;`
+    `SELECT id, CONCAT('Opportunity ID: ', opportunityId, ' Amount: ', paymentAmount, ' $') AS label, claimStatus FROM ogv_applicants;`
+  )
+    .then((rows) => res.status(200).json(rows))
+    .catch((err) => next(err));
+});
+
+router.post("/claims", async (req, res, next) => {
   const id = req.body.id;
   const value = req.body.value;
 

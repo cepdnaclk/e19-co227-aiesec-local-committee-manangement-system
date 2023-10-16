@@ -69,7 +69,8 @@ export const usePostMutation = ({
         );
       try {
         // Optimistically add the new value
-        queryClient.setQueryData(updateQueryKey, (old) => [...old, data]);
+        if (updateQueryKey)
+          queryClient.setQueryData(updateQueryKey, (old) => [...old, data]);
       } catch (e) {
         console.log(e);
       }

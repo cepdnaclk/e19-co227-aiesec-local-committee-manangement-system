@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { UserContext } from "../../../context/UserContext";
 import { useQuery, usePutMutation } from "../../../api/reactQuery";
 import { useParams } from "react-router-dom";
@@ -29,13 +29,15 @@ const InterviewLog = () => {
 
   const url = `/igv/applications/log/${appId}`;
   const [log, setLog] = useState([]);
+  // const logRef = useRef([]);
   const interviewLog = useQuery({
     key: ["igv-selected-interview-log", appId],
     url,
   });
   useEffect(() => {
     setLog(interviewLog.data);
-  }, [interviewLog]);
+    // if (interviewLog.data) logRef.current = interviewLog.data;
+  }, []);
 
   const updateInterviewLog = usePutMutation({
     url,
@@ -62,7 +64,14 @@ const InterviewLog = () => {
                 </Grid>
                 <Grid item xs={7} key={i}>
                   <TextField
-                    value={item.answer || ""}
+                    value={
+                      // log.find((obj) => obj.questionId === item.questionId)
+                      //   ?.answer || ""
+                      // logRef.current.find(
+                      //   (obj) => obj.questionId === item.questionId
+                      // )?.answer || ""
+                      item.answer || []
+                    }
                     size="small"
                     fullWidth
                     {...fieldProps}
@@ -77,6 +86,25 @@ const InterviewLog = () => {
                           } else return object;
                         })
                       );
+                      // const updatedLog = [...log].map((object) => {
+                      //   if (object.questionId === item.questionId) {
+                      //     return {
+                      //       ...object,
+                      //       answer: e.target.value,
+                      //     };
+                      //   } else return object;
+                      // });
+                      // setLog(updatedLog);
+                      // const updatedLog = logRef.current.map((object) => {
+                      //   if (object.questionId === item.questionId) {
+                      //     return {
+                      //       ...object,
+                      //       answer: e.target.value,
+                      //     };
+                      //   }
+                      //   return object;
+                      // });
+                      // logRef.current = updatedLog;
                     }}
                   />
                 </Grid>
