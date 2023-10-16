@@ -47,7 +47,7 @@ BEGIN
         o.status,
         o.phone,
         o.campaignId,
-        m.preferred_name AS memberInCharge
+        m.preferredName AS memberInCharge
     FROM 
         ogv_applicants o
     LEFT JOIN 

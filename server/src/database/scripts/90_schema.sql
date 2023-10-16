@@ -33,7 +33,8 @@ CREATE TABLE ogv_applicants (
     id                      INT NOT NULL AUTO_INCREMENT,
     notes                   TEXT,
     status                  ENUM('Pre-Signup', 'Signup', 'Accepted', 'Approved', 'Realized', 'Finished', 'Completed', 'Approval-Broken', 'Realization-Broken') NOT NULL,
-    
+    claimStatus             BOOLEAN   DEFAULT FALSE,    
+
     -- Pre-Signup
     firstName               VARCHAR(255) NOT NULL,
     lastName                VARCHAR(255) NOT NULL,

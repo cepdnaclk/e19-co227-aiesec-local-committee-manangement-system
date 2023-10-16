@@ -183,7 +183,7 @@ export default function Application({ mode }) {
       approvedDate: yup.date().notRequired(),
       realizedDate: yup.date().notRequired(),
       paymentDate: yup.date().notRequired(),
-      amount: yup
+      paymentAmount: yup
         .string()
         .notRequired()
         .test("maxDecimalPlaces", "Maximum Two Decimal Places", (value) =>
@@ -409,7 +409,7 @@ export default function Application({ mode }) {
                 <InputField name="paymentDate" type="date" {...fieldProps} />
               </Grid>
               <Grid item xs={4}>
-                <InputField name="amount" {...fieldProps} />
+                <InputField name="paymentAmount" {...fieldProps} />
               </Grid>
               <Grid item xs={12}>
                 <InputField name="proofLink" {...fieldProps} />
@@ -458,7 +458,7 @@ const initialState = {
   approvedDate: "",
   realizedDate: "",
   paymentDate: "",
-  amount: "",
+  paymentAmount: "",
   proofLink: "",
   finishedDate: "",
   completedDate: "",

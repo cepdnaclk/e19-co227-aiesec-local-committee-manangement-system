@@ -164,4 +164,25 @@ router.get("/upcoming/:id", (req, res, next) => {
     });
 });
 
+
+router.post("/setClaimStatus/", async (req, res, next) => {
+    const appId = req.body.id;
+    const value = req.body.value;
+
+    if (!appId) {
+        res.status(400).json({ error: 'appId is required' });
+        return;
+    }
+
+    const queryString = `UPDATE igv_application SET claimStatus = ? WHERE appId = ?`;
+
+    try {
+        const rows = await execQuery(queryString, [value,appId]);
+        res.status(200).json({ message: 'Updated successfully' });
+    } catch (err) {
+        next(err);
+    }
+});
+
+
 module.exports = router;

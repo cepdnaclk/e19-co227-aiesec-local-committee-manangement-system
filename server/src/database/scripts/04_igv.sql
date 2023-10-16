@@ -57,6 +57,7 @@ CREATE TABLE igv_application (
     contactNumber   VARCHAR(15),
     email           VARCHAR(50),
     notes           VARCHAR(150),
+    claimStatus     BOOLEAN   DEFAULT FALSE,     
 
     /* interview details will be filled after scheduling the interview */
     interviewDate   DATE,
@@ -75,7 +76,7 @@ CREATE TABLE igv_application (
     /* realization */
     realizedDate    DATE,
     paymentDate     DATE,
-    amount          DECIMAL(10, 2),
+    paymentAmount   DECIMAL(10, 2),
     proofLink       CHAR(100),
 
     /* finished */
@@ -83,6 +84,7 @@ CREATE TABLE igv_application (
 
     /* completed */
     completedDate    DATE,
+
 
     FOREIGN KEY (projectExpaId) REFERENCES igv_project(expaId)
     ON DELETE SET NULL ON UPDATE SET NULL,
@@ -337,7 +339,7 @@ CREATE PROCEDURE GetIGVApplicantDetails(specificAppId INT)
             p.accommodation,
             p.food,
             p.transportation,
-            a.amount AS fee,
+            a.paymentAmount AS fee,
             m.fullName AS memberFullName,
             r.roleName AS roleName,
             d.departmentName

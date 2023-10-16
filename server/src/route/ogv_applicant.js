@@ -34,8 +34,8 @@ const { getUserDataFromToken } = require("../utils/helpers");
 // get member details for 'select member' dropdown menu
 router.get(`/members`, (req, res, next) => {
   execQuery(`
-    SELECT m.id as 'key', m.preferred_name as 'value' 
-    FROM member as m WHERE m.front_office_id = "oGV" AND m.department_id="CXP";`)
+    SELECT m.id as 'key', m.preferredName as 'value' 
+    FROM member as m WHERE m.frontOfficeId = "oGV" AND m.departmentId="CXP";`)
     .then((rows) => {
       res.status(200).json(rows);
     })
@@ -235,5 +235,24 @@ router.post("/mail/:id", async (req, res, next) => {
     }
 });
 
+
+router.post("/setClaimStatus/", async (req, res, next) => {
+    const id = req.body.id;
+    const value = req.body.value;
+
+    if (!id) {
+        res.status(400).json({ error: 'Id is required' });
+        return;
+    }
+
+    const queryString = `UPDATE ogv_applicants SET claimStatus = ? WHERE id = ?`;
+
+    try {
+        const rows = await execQuery(queryString, [value, id]);
+        res.status(200).json({ message: 'Updated successfully' });
+    } catch (err) {
+        next(err);
+    }
+});
 
 module.exports = router;
