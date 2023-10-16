@@ -26,6 +26,7 @@ import Listing from "../../components/Listing";
 import MemberCard from "./MemberCard";
 import MemberCardSkeleton from "./MemberCardSkeleton";
 import SearchBar from "../../components/SearchBar";
+import MemberProfileMaster from "./MemberProfileMaster";
 
 const MEMBERS_URL = "/member/";
 
@@ -168,7 +169,7 @@ export default function MemberView() {
                   </IconButton>
                 </Box>
               </Box>
-              <MemberProfile
+              <MemberProfileMaster
                 setSnackbarState={setSnackbarState}
                 formState={modalState}
                 setFormState={setModalState}

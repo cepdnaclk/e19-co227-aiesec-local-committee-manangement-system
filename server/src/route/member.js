@@ -33,7 +33,7 @@ router.get("/", (req, res, next) => {
 
 // get required resources to fill out the register form (district, office ids, ... etc)
 router.get("/resources/", (req, res, next) => {
-  execQuery("CALL GetMemberRegisterResources()")
+  execQuery("CALL GetMemberContext()")
     .then((rows) => {
       // TODO: result is mapped into object by hardcoding for now, find a better way to do this
       const result = {
@@ -54,7 +54,9 @@ router.get("/resources/", (req, res, next) => {
 //add new member
 router.post("/", (req, res, next) => {
   try {
-    const [fields, values] = requestBodyToFieldsAndValues(req.body);
+    // const [fields, values] = requestBodyToFieldsAndValues(req.body);
+    delete req.body["id"];
+    const [fields, values] = [Object.keys(req.body), Object.values(req.body)];
     const memberRegistrationQuery = `INSERT INTO member (${fields.toString()}) VALUES (${values.toString()})`;
 
     execQuery(memberRegistrationQuery)
@@ -72,19 +74,21 @@ router.post("/", (req, res, next) => {
 //update member details
 router.put("/", (req, res, next) => {
   try {
-    const [fields, values] = requestBodyToFieldsAndValues(req.body);
+    const id = req.body["id"];
+    delete req.body["id"];
+    const [fields, values] = [Object.keys(req.body), Object.values(req.body)];
     // Combine the two arrays into a single array.
     let updateString = "";
 
     for (let i = 0; i < fields.length; i++) {
       updateString += fields[i] + " = ";
-      updateString += values[i] + ", ";
+      updateString += `'${values[i]}', `;
     }
 
     // remove last trailling ", "
     updateString = updateString.substring(0, updateString.length - 2);
 
-    const updateMemberQuery = `UPDATE member SET ${updateString} WHERE id=${values[0]};`;
+    const updateMemberQuery = `UPDATE member SET ${updateString} WHERE id='${id}';`;
 
     execQuery(updateMemberQuery)
       .then((rows) => {

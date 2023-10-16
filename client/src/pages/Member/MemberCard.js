@@ -9,11 +9,13 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
+import BadgeShowcase from "../PM/Badges/BadgeShowcase";
 
 const MemberCard = (props) => {
   const { member, onClick } = props;
-
-  const subheader = `${member.frontOfficeAbbreviation} | ${member.departmentAbbreviation} | ${member.roleAbbreviation}`;
+  const subheader = `${member.frontOfficeId || member.backOfficeId} | ${
+    member.departmentId
+  } | ${member.roleId}`;
 
   return (
     <Grid item xs={6} sm={5} md={4} lg={3}>
@@ -37,6 +39,7 @@ const MemberCard = (props) => {
             <Typography variant="body2" color="textSecondary">
               {member.aiesecEmail}
             </Typography>
+            <BadgeShowcase badgeList={JSON.parse(member.badges)} />
           </CardContent>
         </CardActionArea>
       </Card>

@@ -146,9 +146,6 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="App">
-        <>
-          <NotificationBar />
-        </>
         <Box component="nav" sx={{ m: 2 }}>
           <AppBar
             position="static"
@@ -347,6 +344,7 @@ function App() {
             />
           </DialogContent>
         </Dialog>
+        <NotificationBar />
       </div>
     </ThemeProvider>
   );

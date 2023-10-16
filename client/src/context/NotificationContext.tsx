@@ -3,22 +3,20 @@ import React, { createContext, useState, useContext } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-type MessageType = "success" | "error" | "warning" | "info";
+type SeverityType = "success" | "error" | "warning" | "info";
 
 interface SnackbarStateType {
   open: boolean;
-  type: MessageType;
-  message: string;
+  severity?: SeverityType;
+  message?: string;
 }
 
 const SnackbarIdleState: SnackbarStateType = {
   open: false,
-  type: "info",
-  message: "",
 };
 
 interface NotifyProps {
-  type: MessageType;
+  severity: SeverityType;
   message: string;
 }
 
@@ -44,11 +42,11 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   const [snackbarState, setSnackbarState] =
     useState<SnackbarStateType>(SnackbarIdleState);
 
-  const notify = ({ type, message }: NotifyProps) => {
+  const notify = ({ severity, message }: NotifyProps) => {
     setSnackbarState({
       open: true,
-      type: type,
-      message: message,
+      severity,
+      message,
     });
   };
 
@@ -81,7 +79,7 @@ export const NotificationBar: React.FC = () => {
       autoHideDuration={4000}
       onClose={handleClose}
     >
-      <Alert severity={snackbarState.type}>{snackbarState.message}</Alert>
+      <Alert severity={snackbarState.severity}>{snackbarState.message}</Alert>
     </Snackbar>
   );
 };
@@ -91,19 +89,19 @@ export const useNotify = () => {
   const { notify } = useContext(NotificationContext);
 
   const notifySuccess = (message: string) => {
-    notify({ type: "success", message });
+    notify({ severity: "success", message });
   };
 
   const notifyError = (message: string) => {
-    notify({ type: "error", message });
+    notify({ severity: "error", message });
   };
 
   const notifyWarning = (message: string) => {
-    notify({ type: "warning", message });
+    notify({ severity: "warning", message });
   };
 
   const notifyInfo = (message: string) => {
-    notify({ type: "info", message });
+    notify({ severity: "info", message });
   };
 
   return { notifySuccess, notifyError, notifyWarning, notifyInfo };

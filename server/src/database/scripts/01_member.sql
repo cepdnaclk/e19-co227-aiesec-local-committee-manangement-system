@@ -188,21 +188,27 @@ BEGIN
 SELECT 
     m.id,
     m.preferredName,
-    f.frontOfficeName,
-    b.backOfficeName,
-    d.departmentName,
-    r.roleName,
+    m.frontOfficeId,
+    m.backOfficeId,
+    m.departmentId,
+    m.roleId,
     m.photoLink,
-    m.aiesecEmail
+    m.aiesecEmail,
+    JSON_ARRAYAGG(b.image) as 'badges'
     FROM member AS m
-    LEFT JOIN front_office AS f
-    ON f.id = m.frontOfficeId
-    LEFT JOIN back_office AS b
-    ON b.id = m.backOfficeId
-    LEFT JOIN department AS d
-    ON d.id = m.departmentId
-    LEFT JOIN role as r
-    ON r.id = m.roleId;
+    -- LEFT JOIN front_office AS f
+    -- ON f.id = m.frontOfficeId
+    -- LEFT JOIN back_office AS b
+    -- ON b.id = m.backOfficeId
+    -- LEFT JOIN department AS d
+    -- ON d.id = m.departmentId
+    -- LEFT JOIN role as r
+    -- ON r.id = m.roleId
+    LEFT JOIN achievement as a
+    ON a.memberId = m.id
+    LEFT JOIN badge as b
+    ON a.badgeId = b.id
+GROUP BY m.id;
 END;
 
 CREATE PROCEDURE GetMember(IN id INT(5))

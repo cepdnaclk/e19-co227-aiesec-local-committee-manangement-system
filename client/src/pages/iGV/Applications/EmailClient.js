@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery } from "../../../api/reactQuery";
+import { useQuery, useGetMutation } from "../../../api/reactQuery";
 import { useParams } from "react-router-dom";
 import { EmailForm } from "../../Emails/Email";
 import Button from "@mui/material/Button";
@@ -10,7 +10,9 @@ import ErrorPage from "../../ErrorPage";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
+import { useNotify } from "../../../context/NotificationContext";
 const EmailClient = () => {
+  const { notifySuccess, notifyError } = useNotify();
   const { appId } = useParams();
   const [selectedEmailId, setSelectedEmailId] = useState("");
 
@@ -27,10 +29,26 @@ const EmailClient = () => {
     enabled: Boolean(selectedEmailId),
   });
 
+  const sendEmail = useGetMutation({
+    url: "/email/sendEmail",
+  });
+
   if (emailList.isLoading) return <Loading />;
   if (emailList.isError) return <ErrorPage error={emailList.error} />;
 
-  const handleSubmit = () => {};
+  const handleSubmit = (formData, { setSubmitting }) => {
+    setSubmitting(true);
+    sendEmail.mutate(formData, {
+      onSuccess: (data) => {
+        notifySuccess("Created");
+        setSubmitting(false);
+      },
+      onError: (err) => {
+        notifyError(err?.response?.data);
+        setSubmitting(false);
+      },
+    });
+  };
 
   return (
     <>

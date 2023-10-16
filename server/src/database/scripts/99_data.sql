@@ -37,7 +37,7 @@ VALUES
     "John",
     "LCP",
     "LCP",
-    NULL,
+    "BND",
     "2019-01-01",
     "LCP",
     "1234567890",
@@ -61,9 +61,9 @@ VALUES
     '123',
     'Jane Smith', 
     'Janie', 
-    "oGV", 
-    "CXP", 
-    NULL, 
+    "LCP", 
+    "LCP", 
+    "BND", 
     '2022-08-20', 
     "SPL", 
     '555-123-4567', 
@@ -89,7 +89,7 @@ VALUES
     'Mike', 
     "iGV", 
     "IR", 
-    NULL, 
+    "BND", 
     '2021-05-03', 
     "TM", 
     '999-555-1212', 
@@ -115,7 +115,7 @@ VALUES
     'Alex', 
     "oGV", 
     "CXP", 
-    NULL,
+    "BND",
     '2020-11-28', 
     "TM", 
     '111-222-3333', 
@@ -141,7 +141,7 @@ VALUES
     "Giyuu",
     "iGV", 
     "IR", 
-    NULL,
+    "BND",
     "2019-01-01",
     "TL",
     "1234567890",
@@ -159,8 +159,7 @@ VALUES
     "1",
     "https://drive.google.com/file/d/1_5ttCoLPOlmsMD5lIk8wZ11fxj_lBTgR/view?usp=sharing",
     "No.3 Kings Street, Kandy"
-)
-;
+);
 
 INSERT INTO term VALUES
 ('22-Summer', '2022-01-01', '2022-05-01', '2022-03-01')
@@ -297,8 +296,6 @@ INSERT INTO lc_event (title, eventDescription, postLink, eventDate) VALUES
 ,("Local Committee Meeting - February", "February month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2024-02-28")
 ,("Local Committee Meeting - March", "March month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2024-03-30")
 ;
-
-
 
 INSERT INTO ogv_applicants (
     status,
@@ -469,3 +466,17 @@ INSERT INTO ogv_applicants (
     NULL, -- No approvalBreakNote for Approved status
     NULL -- No realizationBreakNote for Approved status
 );
+
+INSERT INTO badge (name, image) VALUES 
+('Excellent', 'excellent.png'),
+('Friendly', 'friendly.png'),
+('Honor', 'honor.png'),
+('Star', 'star.png'),
+('Verified', 'verified.png');
+
+INSERT INTO achievement (memberId, badgeId) VALUES 
+(1, 1),
+(1, 2),
+(1, 3),
+(2, 4),
+(3, 5);

@@ -1,0 +1,112 @@
+import React, { createContext, useState, useContext } from "react";
+
+import Dialog from "@mui/material/Dialog";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+
+export const ModalContext = createContext();
+
+export const ModalProvider = ({ children })=> {
+  const [open, setOpen] = useState(false);
+  const [content, setContent] = useState(null);
+
+  const openModal = ({content, onClose}) => {
+    setContent(content);
+    setOpen(false);
+  };
+
+  const closeModal = () => {
+    setContent(null);
+    setOpen(false);
+  };
+
+  return (
+    <ModalContext.Provider value={{ open, openModal, closeModal }}>
+      {children}
+    </ModalContext.Provider>
+  );
+};
+
+/* Modal Component */
+export const Modal: React.FC = () => {
+  const { open, closeModal } = useContext(ModalContext);
+
+  return (
+    <Dialog
+      open={Boolean(mode)}
+      PaperProps={{
+        style: {
+          backgroundColor: "transparent",
+          boxShadow: "none",
+        },
+      }}
+      slotProps={{
+        backdrop: {
+          style: {
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backdropFilter: "blur(10px)",
+            color: "rgba(0, 0, 0, 1)",
+          },
+        },
+      }}
+    >
+      <Box
+        sx={{
+          backgroundColor: "transparent",
+          boxShadow: "none",
+        }}
+      >
+        <IconButton
+          onClick={() => {
+            setMode(null);
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      <Badge mode={mode} setMode={setMode} id={id} setId={setId} />
+    </Dialog>
+  );
+};
+
+/* Custom hook for children component to use the notify() function */
+export const useModal = () => {};
+
+/**
+ * <Dialog open={modalState.open} fullWidth maxWidth="md">
+          <DialogContent dividers>
+            <Box>
+              <Box textAlign="right" sx={{ m: 1, width: "100%" }}>
+                {modalState.mode === "user-view" ? (
+                  <IconButton
+                    onClick={() => {
+                      setModalState({
+                        open: true,
+                        mode: "user-edit",
+                      });
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                ) : null}
+                <IconButton
+                  onClick={() => {
+                    setModalState(modalIdleState);
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+            </Box>
+            <MemberProfile
+              setSnackbarState={setSnackbarState}
+              formState={modalState}
+              setFormState={setModalState}
+              formIdleState={modalIdleState}
+              refreshParent={() => {}}
+              focusItemId={user?.id}
+            />
+          </DialogContent>
+        </Dialog>
+ */

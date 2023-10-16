@@ -48,7 +48,7 @@ router.get("/template", (req, res, next) => {
           }
           return data;
         });
-
+        console.log(rows);
         res.status(200).json(rows);
       })
       .catch((err) => {

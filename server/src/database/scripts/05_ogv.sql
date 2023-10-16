@@ -144,3 +144,12 @@ BEGIN
     WHERE
         o.id = applicant_id;
 END;
+
+CREATE VIEW OGVApplicationMaster AS
+SELECT 
+    /* application details */
+    a.firstName,
+    a.lastName
+FROM 
+    ogv_applicants as a
+;

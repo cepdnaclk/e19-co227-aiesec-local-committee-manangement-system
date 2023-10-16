@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from "react";
+import {
+  useQuery,
+  usePostMutation,
+  usePutMutation,
+} from "../../../api/reactQuery";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -11,34 +16,51 @@ import CardHeader from "@mui/material/CardHeader";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNotify } from "../../../context/NotificationContext";
-
-const fileToDataUri = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      resolve(event.target.result);
-    };
-    reader.readAsDataURL(file);
-  });
+import badgeAlt from "../../../assets/badge-alt.png";
+import Loading from "../../Loading";
+import ErrorPage from "../../ErrorPage";
+// const fileToDataUri = (file) =>
+//   new Promise((resolve, reject) => {
+//     const reader = new FileReader();
+//     reader.onload = (event) => {
+//       resolve(event.target.result);
+//     };
+//     reader.readAsDataURL(file);
+//   });
 
 export default function Badge({ mode, setMode, id, setId }) {
-  const [name, setName] = useState("");
-  const [dataUri, setDataUri] = useState("");
+  // HTTP Utils
+  const url = "/pm/badges";
+  const selectedBadge = useQuery({
+    key: ["badge-selected", id],
+    url: `${url}/${id}`,
+    enabled: mode !== "new",
+  });
+  const addBadge = usePostMutation({
+    url,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  const updateBadge = usePutMutation({
+    url: `${url}/${id}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    removeQueryKeys: [["badge-selected", id]],
+    updateQueryKey: ["badge-list"],
+    keyField: "id",
+  });
+
+  const [name, setName] = useState(() => {
+    if (mode === "new") return "";
+    else return selectedBadge?.data?.name;
+  });
+  const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [state, setState] = useState();
-  const uploadPicture = (e) => {
-    setState({
-      /* contains the preview, if you want to show the picture to the user
-           you can access it with this.state.currentPicture
-       */
-      picturePreview: URL.createObjectURL(e.target.files[0]),
-      /* this contains the file we want to send */
-      pictureAsFile: e.target.files[0],
-    });
-  };
-
-  const { notifySucces, notifyError } = useNotify();
+  const { notifySuccess, notifyError } = useNotify();
 
   const inputProps = {
     sx: { m: 1 },
@@ -51,34 +73,63 @@ export default function Badge({ mode, setMode, id, setId }) {
     disabled: isSubmitting,
   };
 
-  const onChange = (file) => {
-    if (!file) {
-      setDataUri("");
+  const onUpload = (e) => {
+    // if (!file) {
+    //   setDataUri("");
+    //   return;
+    // }
+
+    // fileToDataUri(file).then((dataUri) => {
+    //   setDataUri(dataUri);
+    // });
+
+    setFile(e.target.files[0] || null);
+  };
+
+  // useEffect(() => {
+  //   console.log(file);
+  //   if (file) setPreviewUrl(URL.createObjectURL(file));
+  // }, [file]);
+
+  const handleSubmit = async () => {
+    if (!name || (mode === "new" && !file)) {
+      notifyError("Name or Icon Cannot be Empty");
       return;
     }
 
-    fileToDataUri(file).then((dataUri) => {
-      setDataUri(dataUri);
-    });
+    setIsSubmitting(true);
+    if (mode === "new") {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("file", file);
+      await addBadge.mutate(formData, {
+        onSuccess: () => {
+          notifySuccess("Added succesfully");
+        },
+        onError: (err) => {
+          notifyError(err.message);
+        },
+      });
+    }
+    if (mode === "edit") {
+      await updateBadge.mutate(
+        { name },
+        {
+          onSuccess: () => {
+            notifySuccess("Updated succesfully");
+          },
+          onError: (err) => {
+            notifyError(err.message);
+          },
+        }
+      );
+    }
+
+    setIsSubmitting(false);
   };
 
-  useEffect(() => {
-    console.log(dataUri);
-  }, [dataUri]);
-
-  const handleSubmit = async () => {
-    // if (!name || !dataUri) notifyError("Name or Icon Cannot be Empty");
-    // const formData = new FormData();
-    // formData.append("name", name);
-    // formData.append("icon", state.pictureAsFile);
-
-    // console.log(formData.get("icon"));
-    const data = await fetch("http://localhost:8081/pm", {
-      method: "post",
-      headers: { "Content-Type": "multipart/form-data" },
-      body: { msg: "Hello" },
-    });
-  };
+  if (selectedBadge.isLoading) return <Loading />;
+  if (selectedBadge.isError) return <ErrorPage error={selectedBadge.error} />;
 
   return (
     <Card
@@ -90,25 +141,25 @@ export default function Badge({ mode, setMode, id, setId }) {
         flexDirection: "column",
       }}
     >
-      <CardHeader
-        action={
-          <IconButton
-            onClick={() => {
-              setMode(null);
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-        }
-      />
       <CardMedia
         sx={{
           height: 256,
           width: 256,
+          objectFit: "cover",
         }}
-        image={dataUri}
-        // image={state?.picturePreview}
-      />
+      >
+        <img
+          src={
+            mode === "add"
+              ? previewUrl || badgeAlt
+              : process.env.REACT_APP_API_SERVER +
+                "/images/" +
+                selectedBadge?.data?.image
+          }
+          alt="Preview"
+          style={{ width: "100%", height: "100%" }}
+        />
+      </CardMedia>
       <CardContent>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           {mode === "view" ? (
@@ -128,9 +179,7 @@ export default function Badge({ mode, setMode, id, setId }) {
               <TextField
                 type="file"
                 label="Icon"
-                onChange={(e) => {
-                  onChange(e.target.files[0] || null);
-                }}
+                onChange={onUpload}
                 // onChange={uploadPicture}
                 InputLabelProps={{ shrink: true }}
                 {...inputProps}
@@ -147,33 +196,23 @@ export default function Badge({ mode, setMode, id, setId }) {
                 Add
               </Button>
             ),
-            view: (
-              <>
-                <Button
-                  onClick={() => {
-                    setMode("edit");
-                  }}
-                  {...actionProps}
-                >
-                  Edit
-                </Button>
-                <Button {...actionProps}>Delete</Button>
-              </>
-            ),
+            // view: (
+            //   <>
+            //     <Button
+            //       onClick={() => {
+            //         setMode("edit");
+            //       }}
+            //       {...actionProps}
+            //     >
+            //       Edit
+            //     </Button>
+            //     <Button {...actionProps}>Delete</Button>
+            //   </>
+            // ),
             edit: (
-              <>
-                <Button onClick={handleSubmit} {...actionProps}>
-                  Save
-                </Button>
-                <Button
-                  onClick={() => {
-                    setMode("view");
-                  }}
-                  {...actionProps}
-                >
-                  Cancel
-                </Button>
-              </>
+              <Button onClick={handleSubmit} {...actionProps}>
+                Save
+              </Button>
             ),
           }[mode]
         }

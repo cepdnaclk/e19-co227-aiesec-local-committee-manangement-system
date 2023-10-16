@@ -114,40 +114,40 @@ export default function MemberProfile(props) {
   });
 
   useEffect(() => {
-    console.log("Initial state: ", formState);
     loadResources();
 
-    if (test && formState.mode === "admin-add") {
-      setInitialState({
-        email: "jane@example.com",
-        passphrase: "456",
-        fullName: "Jane Doe",
-        preferredName: "Jane",
-        frontOfficeId: "0",
-        departmentId: "0",
-        backOfficeId: "1",
-        joinedDate: "2020-01-01",
-        roleId: "1",
-        contactNo: "1234567890",
-        aiesecEmail: "jane@example.com",
-        gender: "F",
-        nic: "1234567890",
-        birthDate: "2000-01-01",
-        facebookLink: "jane@facebook.com",
-        linkedinLink: "jane@linkedin.com",
-        instagramLink: "jane@instagram.com",
-        registerNo: "E/01/001",
-        schoolName: "School",
-        homeAddress: "No.1 Kings Street, Kandy",
-        homeContact: "1234567890",
-        districtId: "1",
-        photoLink: "jane.photo.com",
-        boardingAddress: "No.2 Kings Street, Kandy",
-      });
-    }
+    // if (test && formState.mode === "admin-add") {
+    //   setInitialState({
+    //     email: "jane@example.com",
+    //     passphrase: "456",
+    //     fullName: "Jane Doe",
+    //     preferredName: "Jane",
+    //     frontOfficeId: "0",
+    //     departmentId: "0",
+    //     backOfficeId: "1",
+    //     joinedDate: "2020-01-01",
+    //     roleId: "1",
+    //     contactNo: "1234567890",
+    //     aiesecEmail: "jane@example.com",
+    //     gender: "F",
+    //     nic: "1234567890",
+    //     birthDate: "2000-01-01",
+    //     facebookLink: "jane@facebook.com",
+    //     linkedinLink: "jane@linkedin.com",
+    //     instagramLink: "jane@instagram.com",
+    //     registerNo: "E/01/001",
+    //     schoolName: "School",
+    //     homeAddress: "No.1 Kings Street, Kandy",
+    //     homeContact: "1234567890",
+    //     districtId: "1",
+    //     photoLink: "jane.photo.com",
+    //     boardingAddress: "No.2 Kings Street, Kandy",
+    //   });
+    // }
   }, []);
 
   const loadResources = async (e) => {
+    console.log("Member id: ", focusItemId);
     setLoading(true);
     try {
       const response = await axios.get(RESOURCES_URL, {
@@ -195,7 +195,7 @@ export default function MemberProfile(props) {
     preferredName: yup.string(),
     frontOfficeId: yup.string().required("Front office required"),
     departmentId: yup.string().required("Department required"),
-    backOfficeId: yup.string(),
+    backOfficeId: yup.string().notRequired(),
     joinedDate: yup.date().required("Joined Date"),
     roleId: yup.string().required("Role required"),
     contactNo: yup.string(),

@@ -16,7 +16,7 @@ export const useQuery = ({ key, url, params, ...rest }) => {
   });
 };
 
-export const usePostMutation = ({
+export const useGetMutation = ({
   url,
   params,
   updateQueryKey,
@@ -26,7 +26,40 @@ export const usePostMutation = ({
 
   return useMutation({
     mutationFn: (formData) =>
-      axios.post(`${url}`, formData, { params }).then((res) => res.data),
+      axios.get(`${url}`, formData, { params }).then((res) => res.data),
+    onSuccess: (data, variables, context) => {
+      if (removeQueryKeys)
+        removeQueryKeys.forEach((element) =>
+          queryClient.removeQueries({
+            queryKey: element,
+          })
+        );
+      try {
+        // Optimistically add the new value
+        if (updateQueryKey) {
+          queryClient.setQueryData(updateQueryKey, (old) => [...old, data]);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+  });
+};
+
+export const usePostMutation = ({
+  url,
+  params,
+  headers,
+  updateQueryKey,
+  removeQueryKeys,
+}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (formData) =>
+      axios
+        .post(`${url}`, formData, { headers, params })
+        .then((res) => res.data),
     onSuccess: (data, variables, context) => {
       if (removeQueryKeys)
         removeQueryKeys.forEach((element) =>
