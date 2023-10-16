@@ -248,8 +248,8 @@ router.get("/auth/callback", async (req, res) => {
   }
 });
 
-router.get("/sendEmail", async (req, res, next) => {
-  // console.log("I was invoked");
+router.post("/sendEmail", async (req, res, next) => {
+  console.log("I was invoked: ", req.body);
   try {
     const { from, attachments, to, cc, bcc, subject, body } = req.body;
     const response = await sendUserEmail(

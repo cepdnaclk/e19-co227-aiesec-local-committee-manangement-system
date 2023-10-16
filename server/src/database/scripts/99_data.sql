@@ -482,3 +482,12 @@ INSERT INTO achievement (memberId, badgeId) VALUES
 (1, 3),
 (2, 4),
 (3, 5);
+
+-- INSERT INTO user_gmail_data (email, accessToken, refreshToken, tokenExpiry)
+-- VALUES 
+-- (
+--     'sankapeeris360@gmail.com',
+--     'ya29.a0AfB_byDIDBbZp3z7DeyV2gS3uXC2LyzZBRgMc6gusUzNnb1nNgKR_8BXx2LTgtx0sijdkCiZkzN3mKVnyJzG5j5Jm995U67slYhN2WVZBXcyyp46eOwwqZQI4J4Ub8-hWOAB33W7lKnQPzI_PFY3uZq6jKUE28IJMfjIaCgYKAX0SARISFQGOcNnCJwvpqQ-m-lHonkQT3zzOBg0171',
+--     '1//0gWKhMcwTcxv_CgYIARAAGBASNwF-L9IrMUZ1r6XH5hhAubqDgWyzrZoHdqrT0g4YabgvUNRiIhBTiCqf976ypk5_czcck7vhPW4',
+--     '1697608549596'
+-- );

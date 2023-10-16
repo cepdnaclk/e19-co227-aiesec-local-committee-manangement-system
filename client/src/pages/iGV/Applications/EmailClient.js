@@ -9,7 +9,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import BackspaceIcon from "@mui/icons-material/Backspace";
-import { useQuery, useGetMutation } from "../../../api/reactQuery";
+import { useQuery, usePostMutation } from "../../../api/reactQuery";
 import { useParams } from "react-router-dom";
 import { EmailForm } from "../../Emails/Email";
 import IconButton from "@mui/material/IconButton";
@@ -41,7 +41,7 @@ const EmailClient = () => {
     enabled: Boolean(selectedEmailId),
   });
 
-  const sendEmail = useGetMutation({
+  const sendEmail = usePostMutation({
     url: "/email/sendEmail",
   });
 
@@ -49,12 +49,16 @@ const EmailClient = () => {
   if (emailList.isError) return <ErrorPage error={emailList.error} />;
 
   const handleSubmit = (formData, { setSubmitting }) => {
-    const submitData = { ...formData };
-    console.log("I was invoked");
+    const submitData = {
+      to: selectedEmail.data.to,
+      from: selectedEmail.data.from,
+      ...formData,
+    };
+    console.log("I was invoked: ", submitData);
     setSubmitting(true);
-    sendEmail.mutate(formData, {
+    sendEmail.mutate(submitData, {
       onSuccess: (data) => {
-        notifySuccess("Created");
+        notifySuccess("Sent");
         setSubmitting(false);
       },
       onError: (err) => {
