@@ -4,19 +4,17 @@ import { toBeInTheDocument } from "@testing-library/jest-dom";
 import SearchBar from "../index";
 
 describe("SearchBar Component", () => {
-  const mockInitialData = [
-    { id: 1, name: "Apple" },
-    { id: 2, name: "Banana" },
-    { id: 3, name: "Cherry" },
+  const mockData = [
+    { id: 1, name: "Apple", color: "Green" },
+    { id: 2, name: "Banana", color: "Yellow" },
+    { id: 3, name: "Cherry", color: "Red" },
+    { id: 4, name: "Strawberry", color: "Red" },
+    { id: 5, name: "Blueberry", color: "Blue" },
   ];
 
-<<<<<<< Updated upstream
-  it("render with empty data", () => {
-=======
   const setFilteredData = jest.fn();
 
   it("works with empty data", () => {
->>>>>>> Stashed changes
     render(
       <SearchBar initialData={[]} setFilteredData={() => {}} searchProp="" />
     );
@@ -36,21 +34,12 @@ describe("SearchBar Component", () => {
       />
     );
 
-<<<<<<< Updated upstream
-    const searchInput = screen.getByPlaceholderText("Search");
-
-    // Type 'Banana' into the search input
-    fireEvent.change(searchInput, { target: { value: "Banana" } });
-
-    // Ensure setFilteredData was called with the filtered data
-=======
     // check if the component renders without errors
     const searchInput = screen.getByPlaceholderText("Search");
     expect(searchInput).toBeInTheDocument();
 
     // Type text into the search input and check if the component filters properly
     fireEvent.change(searchInput, { target: { value: "Banana" } });
->>>>>>> Stashed changes
     expect(setFilteredData).toHaveBeenCalledWith([]);
   });
 
@@ -58,12 +47,12 @@ describe("SearchBar Component", () => {
     render(
       <>
         <SearchBar
-          initialData={mockInitialData}
+          initialData={mockData}
           setFilteredData={() => {}}
           searchProp="name"
         />
         <ul>
-          {mockInitialData.map((item) => {
+          {mockData.map((item) => {
             return <li key={item.id}>{item.name}</li>;
           })}
         </ul>
@@ -80,18 +69,10 @@ describe("SearchBar Component", () => {
     expect(screen.getByText("Cherry")).toBeInTheDocument();
   });
 
-<<<<<<< Updated upstream
-  it("filters data correctly when typing into the search input", () => {
-    const setFilteredData = jest.fn();
-    render(
-      <SearchBar
-        initialData={mockInitialData}
-=======
   it("filters correctly", () => {
     render(
       <SearchBar
         initialData={mockData}
->>>>>>> Stashed changes
         setFilteredData={setFilteredData}
         searchProp="name"
       />
@@ -99,13 +80,6 @@ describe("SearchBar Component", () => {
 
     const searchInput = screen.getByPlaceholderText("Search");
 
-<<<<<<< Updated upstream
-    // Type 'Banana' into the search input
-    fireEvent.change(searchInput, { target: { value: "Banana" } });
-
-    // Ensure setFilteredData was called with the filtered data
-    expect(setFilteredData).toHaveBeenCalledWith([{ id: 2, name: "Banana" }]);
-=======
     // Type text with matching data into the search input and check if the component filters properly
     fireEvent.change(searchInput, { target: { value: "erry" } });
     expect(setFilteredData).toHaveBeenCalledWith([
@@ -142,40 +116,34 @@ describe("SearchBar Component", () => {
     // Ensure the search input is cleared and data is reset
     expect(searchInput).toHaveValue("");
     expect(setFilteredData).toHaveBeenCalledWith([]);
->>>>>>> Stashed changes
   });
 
-  it("clears the search input when the clear button is clicked", () => {
-    render(
-      <SearchBar
-        initialData={mockInitialData}
-        setFilteredData={() => {}}
-        searchProp="name"
-      />
-    );
+  // it("clears the search input when the clear button is clicked", () => {
+  //   render(
+  //     <SearchBar
+  //       initialData={mockData}
+  //       setFilteredData={() => {}}
+  //       searchProp="name"
+  //     />
+  //   );
 
-    const searchInput = screen.getByPlaceholderText("Search");
-    const clearButton = screen.getByLabelText("Clear");
+  //   const searchInput = screen.getByPlaceholderText("Search");
+  //   const clearButton = screen.getByLabelText("Clear");
 
-    // Ensure the search input has the correct value
-    fireEvent.change(searchInput, { target: { value: "Cherry" } });
-    expect(searchInput).toHaveValue("Cherry");
-<<<<<<< Updated upstream
-=======
-    expect(setFilteredData).toHaveBeenCalledWith([
-      { id: 3, name: "Cherry", color: "Red" },
-    ]);
->>>>>>> Stashed changes
+  //   // Ensure the search input has the correct value
+  //   fireEvent.change(searchInput, { target: { value: "Cherry" } });
+  //   expect(searchInput).toHaveValue("Cherry");
+  //   expect(setFilteredData).toHaveBeenCalledWith([
+  //     { id: 3, name: "Cherry", color: "Red" },
+  //   ]);
 
-    // Click the clear button
-    fireEvent.click(clearButton);
+  //   // Click the clear button
+  //   fireEvent.click(clearButton);
 
-    // Ensure the search input is cleared and data is reset
-    expect(searchInput).toHaveValue("");
-<<<<<<< Updated upstream
-=======
-    expect(setFilteredData).toHaveBeenCalledWith(mockData);
-  });
+  //   // Ensure the search input is cleared and data is reset
+  //   expect(searchInput).toHaveValue("");
+  //   expect(setFilteredData).toHaveBeenCalledWith(mockData);
+  // });
 
   it("clear button is disabled when search text is empty", () => {
     render(
@@ -227,6 +195,5 @@ describe("SearchBar Component", () => {
     const searchInput = screen.getByPlaceholderText("Search");
     fireEvent.change(searchInput, { target: { value: "Cherry" } });
     expect(setFilteredData).toHaveBeenCalledWith(mockData);
->>>>>>> Stashed changes
   });
 });

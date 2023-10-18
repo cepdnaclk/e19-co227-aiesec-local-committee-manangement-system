@@ -19,7 +19,7 @@ const SearchBar = ({
     if (searchText && initialData) {
       const filteredData = [];
       initialData?.forEach((data) => {
-        if (data[searchProp].toLowerCase().includes(searchText.toLowerCase()))
+        if (data[searchProp]?.toLowerCase().includes(searchText.toLowerCase()))
           filteredData.push(data);
       });
       setFilteredData(filteredData);

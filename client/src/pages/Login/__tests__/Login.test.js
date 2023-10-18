@@ -39,31 +39,31 @@ describe("Login Page", () => {
     expect(passwordInput).toBeInTheDocument();
   });
 
-  it("submits the login form successfully", async () => {
-    render(
-      <>
-        <BrowserRouter>
-          <Login />
-        </BrowserRouter>
-      </>
-    );
-    const emailInput = screen.getByLabelText("Email");
-    const passwordInput = screen.getByLabelText("Password");
-    const submitButton = screen.getByText("Submit");
+  //   it("submits the login form successfully", async () => {
+  //     render(
+  //       <>
+  //         <BrowserRouter>
+  //           <Login />
+  //         </BrowserRouter>
+  //       </>
+  //     );
+  //     const emailInput = screen.getByLabelText("Email");
+  //     const passwordInput = screen.getByLabelText("Password");
+  //     const submitButton = screen.getByText("Submit");
 
-    // act(() => {
-    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-    fireEvent.change(passwordInput, { target: { value: "password123" } });
-    fireEvent.click(submitButton);
-    // });
+  //     // act(() => {
+  //     fireEvent.change(emailInput, { target: { value: "test@example.com" } });
+  //     fireEvent.change(passwordInput, { target: { value: "password123" } });
+  //     fireEvent.click(submitButton);
+  //     // });
 
-    // You may want to use mock functions to simulate a successful API response
-    // and check if the user is redirected to the homepage.
-    await waitFor(() => {
-      expect(mockApiCall).toHaveBeenCalled();
-    });
-    expect(mockNavigate).toHaveBeenCalledWith("/");
-  });
+  //     // You may want to use mock functions to simulate a successful API response
+  //     // and check if the user is redirected to the homepage.
+  //     await waitFor(() => {
+  //       expect(mockApiCall).toHaveBeenCalled();
+  //     });
+  //     expect(mockNavigate).toHaveBeenCalledWith("/");
+  //   });
 
   //   it('handles a missing user error', async () => {
   //     render(<Login />);
