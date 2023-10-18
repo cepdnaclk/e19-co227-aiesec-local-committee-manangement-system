@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
-import { toBeInTheDocument } from "@testing-library/jest-dom";
+import "@testing-library/jest-dom";
 import SearchBar from "../index";
 
 describe("SearchBar Component", () => {
@@ -14,23 +14,51 @@ describe("SearchBar Component", () => {
 
   const setFilteredData = jest.fn();
 
-  it("works with empty data", () => {
+  it("render with empty data", () => {
     render(
-      <SearchBar initialData={[]} setFilteredData={() => {}} searchProp="" />
+      <SearchBar
+        initialData={[]}
+        setFilteredData={setFilteredData}
+        searchProp="name"
+      />
     );
 
     // check if the component renders without errors
     expect(screen.getByPlaceholderText("Search")).toBeInTheDocument();
   });
 
-  it("handle filtering empty data", () => {
-    const setFilteredData = jest.fn();
+  it("render with mock data", () => {
+    render(
+      <>
+        <SearchBar
+          initialData={mockData}
+          setFilteredData={setFilteredData}
+          searchProp="name"
+        />
+        <ul>
+          {mockData.map((item) => {
+            return <li key={item.id}>{item.name}</li>;
+          })}
+        </ul>
+      </>
+    );
+    // check if the component renders without errors
+    expect(screen.getByPlaceholderText("Search")).toBeInTheDocument();
 
+    // check if the mock data is displayed in the list
+    expect(screen.getByText("Apple")).toBeInTheDocument();
+    expect(screen.getByText("Banana")).toBeInTheDocument();
+    expect(screen.getByText("Cherry")).toBeInTheDocument();
+    expect(screen.getByText("Strawberry")).toBeInTheDocument();
+    expect(screen.getByText("Blueberry")).toBeInTheDocument();
+  });
+
+  it("handle filtering empty data", () => {
     render(
       <SearchBar
         initialData={[]}
         setFilteredData={setFilteredData}
-        searchProp=""
+        searchProp="name"
       />
     );
 
@@ -43,33 +71,7 @@ describe("SearchBar Component", () => {
     expect(setFilteredData).toHaveBeenCalledWith([]);
   });
 
-  it("works with mock data", () => {
-    render(
-      <>
-        <SearchBar
-          initialData={mockData}
-          setFilteredData={() => {}}
-          searchProp="name"
-        />
-        <ul>
-          {mockData.map((item) => {
-            return <li key={item.id}>{item.name}</li>;
-          })}
-        </ul>
-      </>
-    );
-
-    // check if the component renders without errors
-    const searchInput = screen.getByPlaceholderText("Search");
-    expect(searchInput).toBeInTheDocument();
-
-    // check if the mock data is displayed in the list
-    expect(screen.getByText("Apple")).toBeInTheDocument();
-    expect(screen.getByText("Banana")).toBeInTheDocument();
-    expect(screen.getByText("Cherry")).toBeInTheDocument();
-  });
-
-  it("filters correctly", () => {
+  it("handle filtering mock data with matching data", () => {
     render(
       <SearchBar
         initialData={mockData}
@@ -80,16 +82,32 @@ describe("SearchBar Component", () => {
 
     const searchInput = screen.getByPlaceholderText("Search");
 
-    // Type text with matching data into the search input and check if the component filters properly
+    // Type 'Banana' into the search input
     fireEvent.change(searchInput, { target: { value: "erry" } });
+
+    // Ensure setFilteredData was called with the filtered data
     expect(setFilteredData).toHaveBeenCalledWith([
       { id: 3, name: "Cherry", color: "Red" },
       { id: 4, name: "Strawberry", color: "Red" },
       { id: 5, name: "Blueberry", color: "Blue" },
     ]);
+  });
 
-    // Type text with no matching data into the search input and check if the component filters properly
+  it("handle filtering mock data with no matching data", () => {
+    render(
+      <SearchBar
+        initialData={mockData}
+        setFilteredData={setFilteredData}
+        searchProp="name"
+      />
+    );
+
+    const searchInput = screen.getByPlaceholderText("Search");
+
+    // Type 'Banana' into the search input
     fireEvent.change(searchInput, { target: { value: "Kiwi" } });
+
+    // Ensure setFilteredData was called with the filtered data
     expect(setFilteredData).toHaveBeenCalledWith([]);
   });
 
@@ -108,6 +126,7 @@ describe("SearchBar Component", () => {
     // Ensure the search input has the correct value
     fireEvent.change(searchInput, { target: { value: "Cherry" } });
     expect(searchInput).toHaveValue("Cherry");
+    // Ensure setFilteredData was called with the filtered data
     expect(setFilteredData).toHaveBeenCalledWith([]);
 
     // Click the clear button
@@ -115,35 +134,40 @@ describe("SearchBar Component", () => {
 
     // Ensure the search input is cleared and data is reset
     expect(searchInput).toHaveValue("");
+    // Ensure setFilteredData was called with the filtered data
     expect(setFilteredData).toHaveBeenCalledWith([]);
   });
 
-  // it("clears the search input when the clear button is clicked", () => {
-  //   render(
-  //     <SearchBar
-  //       initialData={mockData}
-  //       setFilteredData={() => {}}
-  //       searchProp="name"
-  //     />
-  //   );
+  it("clears the search input when the clear button is clicked with mock data", () => {
+    render(
+      <SearchBar
+        initialData={mockData}
+        setFilteredData={setFilteredData}
+        searchProp="name"
+      />
+    );
 
-  //   const searchInput = screen.getByPlaceholderText("Search");
-  //   const clearButton = screen.getByLabelText("Clear");
+    const searchInput = screen.getByPlaceholderText("Search");
+    const clearButton = screen.getByLabelText("Clear");
 
-  //   // Ensure the search input has the correct value
-  //   fireEvent.change(searchInput, { target: { value: "Cherry" } });
-  //   expect(searchInput).toHaveValue("Cherry");
-  //   expect(setFilteredData).toHaveBeenCalledWith([
-  //     { id: 3, name: "Cherry", color: "Red" },
-  //   ]);
+    // Type 'Cherry' into the search input
+    fireEvent.change(searchInput, { target: { value: "Cherry" } });
 
-  //   // Click the clear button
-  //   fireEvent.click(clearButton);
+    // Ensure the search input has the correct value
+    expect(searchInput).toHaveValue("Cherry");
+    // Ensure setFilteredData was called with the filtered data
+    expect(setFilteredData).toHaveBeenCalledWith([
+      { id: 3, name: "Cherry", color: "Red" },
+    ]);
 
-  //   // Ensure the search input is cleared and data is reset
-  //   expect(searchInput).toHaveValue("");
-  //   expect(setFilteredData).toHaveBeenCalledWith(mockData);
-  // });
+    // Click the clear button
+    fireEvent.click(clearButton);
+
+    // Ensure the search input is cleared
+    expect(searchInput).toHaveValue("");
+    // Ensure setFilteredData was called with the filtered data
+    expect(setFilteredData).toHaveBeenCalledWith(mockData);
+  });
 
   it("clear button is disabled when search text is empty", () => {
     render(

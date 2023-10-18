@@ -1,0 +1,25 @@
+name : CD pipeline
+
+on:
+  workflow_run:
+    workflows: [ "CI Pipeline" ]
+    Types:
+      - completed 
+
+jobs:
+
+  build:
+    runs-on: self-hosted
+
+    steps:
+
+    - name: Deleting old docker container
+      run: sudo docker rm -f co227-container || true
+
+    - name: Pull docker image
+      run: sudo docker pull dinuka029/co227:latest
+
+    - name: Run Docker container
+      run: sudo docker run -d -p 80:80 --name co227-container dinuka029/co227
+      
+

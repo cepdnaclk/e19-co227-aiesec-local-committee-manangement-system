@@ -142,6 +142,8 @@ function App() {
     [prefersDarkMode]
   );
 
+  return <div>Hello</div>;
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
