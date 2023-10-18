@@ -10,6 +10,9 @@ CREATE TABLE igv_project (
     food            ENUM('Provided', 'Covered', 'Provided & Covered'),
     transportation  ENUM('Provided', 'Covered', 'Provided & Covered'),
     accommodation   ENUM('Provided', 'Covered', 'Provided & Covered'),
+    projectLogo     VARCHAR(100),
+    location        VARCHAR(50),
+    fee             VARCHAR(25),
     notes           VARCHAR(100)
 );
 
@@ -54,6 +57,7 @@ CREATE TABLE igv_application (
     contactNumber   VARCHAR(15),
     email           VARCHAR(50),
     notes           VARCHAR(150),
+    claimStatus     BOOLEAN   DEFAULT FALSE,     
 
     /* interview details will be filled after scheduling the interview */
     interviewDate   DATE,
@@ -72,7 +76,7 @@ CREATE TABLE igv_application (
     /* realization */
     realizedDate    DATE,
     paymentDate     DATE,
-    amount          DECIMAL(10, 2),
+    paymentAmount   DECIMAL(10, 2),
     proofLink       CHAR(100),
 
     /* finished */
@@ -80,6 +84,7 @@ CREATE TABLE igv_application (
 
     /* completed */
     completedDate    DATE,
+
 
     FOREIGN KEY (projectExpaId) REFERENCES igv_project(expaId)
     ON DELETE SET NULL ON UPDATE SET NULL,
@@ -100,6 +105,22 @@ CREATE TABLE igv_interview_log (
         ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (questionId) REFERENCES igv_question(questionId)
         ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+CREATE TABLE igv_email_status(
+
+    id              INT             AUTO_INCREMENT PRIMARY KEY,
+    appId           INT(5),
+    templateId      INT(3),
+    status          ENUM('Pending', 'Sent')     DEFAULT 'Pending',
+
+    FOREIGN KEY (appId) REFERENCES igv_application(appId) 
+        ON DELETE CASCADE ON UPDATE CASCADE,
+
+    FOREIGN KEY (templateId) REFERENCES email_template(id) 
+        ON DELETE CASCADE ON UPDATE CASCADE
+
 );
 
 /* ~~~~~~~~~~~~~~~~~~~~ TRIGGERS ~~~~~~~~~~~~~~~~~~~~ */
@@ -131,6 +152,114 @@ BEGIN
     CLOSE cur;
 END;
 
+
+/* Each time a new applicant is created add rows for each templateId in email_template where OfficeId = 'IGV' with status pending*/
+CREATE TRIGGER CreateEmailStatusLog
+AFTER INSERT ON igv_application
+FOR EACH ROW
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE template_id INT;
+    
+    /* Cursor for fetching template IDs based on officeId = 'igv' */
+    DECLARE cur CURSOR FOR
+        SELECT id
+        FROM email_template
+        WHERE officeId = 'IGV';
+    
+    /* Handler for ending the loop when all rows have been fetched */
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    /* Loop through each templateId and insert into igv_email_status */
+    OPEN cur;
+    FETCH cur INTO template_id;
+    WHILE done != 1 DO
+        INSERT INTO igv_email_status (appId, templateId)
+        VALUES (NEW.appId, template_id); 
+        FETCH cur INTO template_id;
+    END WHILE;
+    CLOSE cur;
+END;
+
+CREATE VIEW IGVApplicationMaster AS
+SELECT 
+    /* application details */
+    a.appId,
+    a.email,
+    a.epName,
+    /* project details */
+    p.projectName,
+    p.projectLogo,
+    p.location,
+    p.fee,
+    p.accommodation,
+    p.transportation,
+    p.food,
+    /* slot details */
+    s.slotName,
+    s.startDate,
+    s.endDate,
+    /* member in charge details */
+    m.fullName,
+    m.email as memberEmail,
+    r.roleName,
+    d.departmentName,
+    f.frontOfficeName
+FROM 
+    igv_application as a
+LEFT JOIN
+    igv_project as p
+ON
+    a.projectExpaId = p.expaId
+LEFT JOIN
+    igv_slot as s
+ON
+    a.slotId = s.slotId
+LEFT JOIN
+    member as m
+ON
+    a.memberId = m.id
+LEFT JOIN
+    role as r
+ON
+    r.id = m.roleId
+LEFT JOIN
+    department as d
+ON
+    d.id = m.departmentId
+LEFT JOIN
+    front_office as f
+ON
+    f.id = m.frontOfficeId
+;
+
+CREATE VIEW IGVApplicationsInBrief AS
+SELECT 
+    a.appId,
+    a.appStatus,
+    a.epName,
+    m.preferredName as inChargeMember,
+    p.projectName,
+    s.slotName,
+    a.memberId
+FROM 
+    igv_application as a
+LEFT JOIN
+    igv_project as p
+ON
+    a.projectExpaId = p.expaId
+LEFT JOIN
+    igv_slot as s
+ON
+    a.slotId = s.slotId
+LEFT JOIN
+    member as m
+ON
+    a.memberId = m.id
+ORDER BY 
+    a.appliedDate DESC;
+
+
 /* ~~~~~~~~~~~~~~~~~~~~ STORED PROCEDURES ~~~~~~~~~~~~~~~~~~~~ */
 CREATE PROCEDURE GetIGVOpportunities()
 BEGIN
@@ -142,126 +271,6 @@ FROM igv_project AS p
 LEFT JOIN igv_slot AS s ON p.expaId = s.expaId
 GROUP BY p.expaId, p.projectName;
 END;
-
-CREATE PROCEDURE GetAllIGVApplicationsForAdmin()
-BEGIN
-SELECT 
-    a.appId,
-    a.appStatus,
-    a.epName,
-    m.preferredName as inChargeMember,
-    p.projectName,
-    s.slotName
-FROM 
-    igv_application as a
-LEFT JOIN
-    igv_project as p
-ON
-    a.projectExpaId = p.expaId
-LEFT JOIN
-    igv_slot as s
-ON
-    a.slotId = s.slotId
-LEFT JOIN
-    member as m
-ON
-    a.memberId = m.id
-ORDER BY 
-    a.appliedDate DESC ;
-END;
-
-CREATE PROCEDURE GetAllIGVApplications(
-    IN inMemberId INT(5)
-)
-BEGIN
-SELECT 
-    a.appId,
-    a.appStatus,
-    a.epName,
-    m.preferredName as inChargeMember,
-    p.projectName,
-    s.slotName
-FROM 
-    igv_application as a
-LEFT JOIN
-    igv_project as p
-ON
-    a.projectExpaId = p.expaId
-LEFT JOIN
-    igv_slot as s
-ON
-    a.slotId = s.slotId
-LEFT JOIN
-    member as m
-ON
-    a.memberId = m.id
-WHERE
-    a.memberId = inMemberId
-ORDER BY 
-    a.appliedDate DESC ;
-END;
-
-CREATE PROCEDURE GetIGVApplication(
-    IN inAppId  INT(5)
-)
-BEGIN
-SELECT 
-    a.appId,
-    a.appStatus,
-    a.epName,
-    m.preferredName as inChargeMember,
-    p.projectName,
-    s.slotName
-FROM 
-    igv_application as a
-LEFT JOIN
-    igv_project as p
-ON
-    a.projectExpaId = p.expaId
-LEFT JOIN
-    igv_slot as s
-ON
-    a.slotId = s.slotId
-LEFT JOIN
-    member as m
-ON
-    a.memberId = m.id
-WHERE
-    a.appId = inAppId
-ORDER BY 
-    a.appliedDate DESC ;
-END;
-
-
-CREATE PROCEDURE GetLatestIGVApplication()
-BEGIN
-SELECT 
-    a.appId,
-    a.appStatus,
-    a.epName,
-    m.preferredName as inChargeMember,
-    p.projectName,
-    s.slotName
-FROM 
-    igv_application as a
-LEFT JOIN
-    igv_project as p
-ON
-    a.projectExpaId = p.expaId
-LEFT JOIN
-    igv_slot as s
-ON
-    a.slotId = s.slotId
-LEFT JOIN
-    member as m
-ON
-    a.memberId = m.id
-WHERE
-    a.appId = (SELECT MAX(appId) FROM igv_application)
-ORDER BY 
-    a.appliedDate DESC ;
-END;
-
 
 CREATE PROCEDURE GetIGVMemberList()
 BEGIN
@@ -314,4 +323,38 @@ WHERE
     memberId = id
 AND
     DATE(interviewDate) >= CURDATE();
+END;
+
+
+CREATE PROCEDURE GetIGVApplicantDetails(specificAppId INT)
+    BEGIN
+        SELECT 
+            m.email AS memberEmail,
+            a.email AS applicantEmail,
+            a.epName,
+            p.projectName,
+            s.slotName,
+            s.startDate,
+            s.endDate,
+            p.accommodation,
+            p.food,
+            p.transportation,
+            a.paymentAmount AS fee,
+            m.fullName AS memberFullName,
+            r.roleName AS roleName,
+            d.departmentName
+        FROM 
+            igv_application AS a
+        JOIN 
+            igv_project AS p ON a.projectExpaId = p.expaId
+        JOIN 
+            igv_slot AS s ON a.slotId = s.slotId
+        JOIN 
+            member AS m ON a.memberId = m.id
+        JOIN 
+            role AS r ON m.roleId = r.id  
+        JOIN 
+            department AS d ON m.departmentId = d.id
+    WHERE 
+            a.appId = specificAppId;
 END;

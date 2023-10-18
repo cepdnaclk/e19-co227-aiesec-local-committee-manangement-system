@@ -29,24 +29,24 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
-import { IGVMenu, IGVRoutes } from "./pages/iGV";
-
+import { IGVMenu, IGVPanel } from "./pages/iGV";
+import { PMMenu, PMPanel } from "./pages/PM";
+import { OGVMenu, OGVPanel } from "./pages/oGV";
+import { FNLMenu, FNLPanel } from "./pages/FNL";
 import NotFound from "./pages/NotFound";
 import AdminRoutes from "./utils/AdminRoutes";
 import Terms from "./pages/Terms";
 import Home from "./pages/Home/Home";
-import OGVApplications from "./pages/oGV/Applicants";
 
 import DarkLogo from "./assets/White-Black-Logo.png";
 import LightLogo from "./assets/Black-Logo.png";
 import BlueLogo from "./assets/Blue-Logo.png";
-import MemberProfile from "./pages/Member/MemberProfile";
+import MemberProfileMaster from "./pages/Member/MemberProfileMaster";
 
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { NotificationBar } from "./context/NotificationContext";
-import OGVRoutes from "./utils/OGVRoutes";
 
 const NavbarButton = ({ href, label }) => {
   return (
@@ -148,9 +148,6 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="App">
-        <>
-          <NotificationBar />
-        </>
         <Box component="nav" sx={{ m: 2 }}>
           <AppBar
             position="static"
@@ -177,27 +174,12 @@ function App() {
               </IconButton> */}
               <Stack direction="row" spacing={2}>
                 <IGVMenu />
+                <OGVMenu />
+                <PMMenu />
+                <FNLMenu />
                 {user ? (
                   <>
                     <NavbarButton href="/" label="Home" />
-                  </>
-                ) : null}
-                {/* ~~~~~~~~~~~~~~~ iGV ~~~~~~~~~~~~~~~*/}
-                {user?.frontOfficeId === "iGV" ? (
-                  <>
-                    {user?.roleId === "LCVP" ? (
-                      <NavbarButton href="/igv/projects" label="Projects" />
-                    ) : null}
-                    <NavbarButton
-                      href="/igv/applications"
-                      label="Applications"
-                    />
-                  </>
-                ) : null}
-                {/* ~~~~~~~~~~~~~~~ oGV ~~~~~~~~~~~~~~~*/}
-                {user?.frontOfficeId === "oGV" ? (
-                  <>
-                    <NavbarButton href="/ogv/applicants" label="Applicants" />
                   </>
                 ) : null}
                 {/* ~~~~~~~~~~~~~~~ Admin ~~~~~~~~~~~~~~~*/}
@@ -314,20 +296,18 @@ function App() {
         </Box>
         {/* <Box component="main" sx={{ m: 2 }}> */}
         <Paper component="main" sx={{ m: 2, p: 2, borderRadius: "10px" }}>
-          <IGVRoutes />
+          {/* <IGVRoutes /> */}
           <Routes>
+            <Route path="/igv/*" element={<IGVPanel />} />
+            <Route path="/pm/*" element={<PMPanel />} />
+            <Route path="/ogv/*" element={<OGVPanel />} />
+            <Route path="/fnl/*" element={<FNLPanel />} />
             <Route element={<ProtectedRoutes />}>
               <Route path="/" element={<Home />} />
             </Route>
             <Route element={<AdminRoutes />}>
               <Route path="/users" element={<MemberView />} />
               <Route path="/terms" element={<Terms />} />
-            </Route>
-            <Route element={<OGVRoutes />}>
-              <Route
-                path="/ogv/applicants"
-                element={<OGVApplications />}
-              ></Route>
             </Route>
             <Route path="/login" element={<Login />} />
           </Routes>
@@ -358,7 +338,7 @@ function App() {
                 </IconButton>
               </Box>
             </Box>
-            <MemberProfile
+            <MemberProfileMaster
               setSnackbarState={setSnackbarState}
               formState={modalState}
               setFormState={setModalState}
@@ -368,17 +348,7 @@ function App() {
             />
           </DialogContent>
         </Dialog>
-        {/* <Snackbar
-          open={snackbarState.open}
-          autoHideDuration={4000}
-          onClose={() => {
-            setSnackbarState(snackbarIdleState);
-          }}
-        >
-          <Alert severity={snackbarState.severity}>
-            {snackbarState.message}
-          </Alert>
-        </Snackbar> */}
+        <NotificationBar />
       </div>
     </ThemeProvider>
   );

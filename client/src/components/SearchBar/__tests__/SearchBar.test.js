@@ -62,12 +62,12 @@ describe("SearchBar Component", () => {
       />
     );
 
+    // check if the component renders without errors
     const searchInput = screen.getByPlaceholderText("Search");
+    expect(searchInput).toBeInTheDocument();
 
-    // Type 'Banana' into the search input
+    // Type text into the search input and check if the component filters properly
     fireEvent.change(searchInput, { target: { value: "Banana" } });
-
-    // Ensure setFilteredData was called with the filtered data
     expect(setFilteredData).toHaveBeenCalledWith([]);
   });
 
@@ -123,10 +123,8 @@ describe("SearchBar Component", () => {
     const searchInput = screen.getByPlaceholderText("Search");
     const clearButton = screen.getByLabelText("Clear");
 
-    // Type 'Cherry' into the search input
-    fireEvent.change(searchInput, { target: { value: "Cherry" } });
-
     // Ensure the search input has the correct value
+    fireEvent.change(searchInput, { target: { value: "Cherry" } });
     expect(searchInput).toHaveValue("Cherry");
     // Ensure setFilteredData was called with the filtered data
     expect(setFilteredData).toHaveBeenCalledWith([]);
@@ -134,7 +132,7 @@ describe("SearchBar Component", () => {
     // Click the clear button
     fireEvent.click(clearButton);
 
-    // Ensure the search input is cleared
+    // Ensure the search input is cleared and data is reset
     expect(searchInput).toHaveValue("");
     // Ensure setFilteredData was called with the filtered data
     expect(setFilteredData).toHaveBeenCalledWith([]);

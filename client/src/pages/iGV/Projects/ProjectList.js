@@ -13,8 +13,8 @@ import ErrorPage from "../../ErrorPage";
 
 export default function ProjectList() {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
-  const isAdmin = Boolean(user.roleId === "LCP" || user.roleId === "LCVP");
+  const { privileges } = useContext(UserContext);
+  const {isIGVAdmin} = privileges;
   const [filteredData, setFilteredData] = useState();
 
   const url = "/igv/projects";
@@ -42,7 +42,7 @@ export default function ProjectList() {
           onClick={() => {
             navigate("new");
           }}
-          disabled={!isAdmin}
+          disabled={!isIGVAdmin}
         >
           <AddIcon />
         </IconButton>

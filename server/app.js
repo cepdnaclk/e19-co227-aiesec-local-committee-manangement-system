@@ -14,15 +14,17 @@ const port = process.env.PORT || 8081;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
 // Set view engine to EJS
-app.set('view engine', 'ejs');
-app.set('views', "./src/static/views");
-app.use(express.static('./src/static/'));
-
+app.set("view engine", "ejs");
+app.set("views", "./src/static/views");
+app.use(express.static("./src/static/"));
 
 // public endpoints
-app.get("/", (req, res) => { res.render('./welcome')});
+app.get("/", (req, res) => {
+  res.render("./welcome");
+});
 // user authentication
 app.use("/user", require("./src/route/user"));
 

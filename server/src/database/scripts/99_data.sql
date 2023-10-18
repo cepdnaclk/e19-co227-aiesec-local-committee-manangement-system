@@ -37,7 +37,7 @@ VALUES
     "John",
     "LCP",
     "LCP",
-    NULL,
+    "BND",
     "2019-01-01",
     "LCP",
     "1234567890",
@@ -61,11 +61,11 @@ VALUES
     '123',
     'Jane Smith', 
     'Janie', 
-    "oGV", 
-    "CXP", 
-    NULL, 
+    "LCP", 
+    "LCP", 
+    "BND", 
     '2022-08-20', 
-    "SPL", 
+    "LCP", 
     '555-123-4567', 
     'jane.smith@aiesec.org', 
     'F', 
@@ -87,11 +87,11 @@ VALUES
     'mikepass', 
     'Michael Johnson', 
     'Mike', 
-    "oGV", 
-    "CXP", 
-    NULL, 
+    "iGV", 
+    "IR", 
+    "BND", 
     '2021-05-03', 
-    "SPL", 
+    "TM", 
     '999-555-1212', 
     'michael.johnson@aiesec.org', 
     'M', 
@@ -115,7 +115,7 @@ VALUES
     'Alex', 
     "oGV", 
     "CXP", 
-    NULL,
+    "BND",
     '2020-11-28', 
     "TM", 
     '111-222-3333', 
@@ -141,7 +141,7 @@ VALUES
     "Giyuu",
     "iGV", 
     "IR", 
-    NULL,
+    "BND",
     "2019-01-01",
     "TL",
     "1234567890",
@@ -159,8 +159,7 @@ VALUES
     "1",
     "https://drive.google.com/file/d/1_5ttCoLPOlmsMD5lIk8wZ11fxj_lBTgR/view?usp=sharing",
     "No.3 Kings Street, Kandy"
-)
-;
+);
 
 INSERT INTO term VALUES
 ('22-Summer', '2022-01-01', '2022-05-01', '2022-03-01')
@@ -218,6 +217,9 @@ INSERT INTO igv_question (expaId, question) VALUES
 ,(1234567, "When we fall asleep where do we go?")
 ;
 
+INSERT INTO email_template (officeId, name, subject, body) VALUES
+("iGV", "test", "test", "<p>My role is [memberFullName]</p>");
+
 INSERT INTO igv_application (
 epId,          
 appId,         
@@ -242,14 +244,15 @@ epMngContact,
 epMngEmail,
 abhDate,     
 acceptedDate,
-approvedDate
+approvedDate,
+paymentAmount
 ) VALUES 
 (
 1234567, 
 1234567,
 "Open", 
 "Tony Tamer", 
-1, 
+2, 
 "Team1", 
 "2023-07-31",
 "2023-08-01",
@@ -259,16 +262,17 @@ approvedDate
 "Turkey", 
 "ANKARA",
 "092092484",
-"tony@aiesec.net",
+"sankapeeris360@gmail.com",
 "Note test 1 3 4",
-"2023-10-02",
+"2023-12-02",
 "13:30",
 "EP manager 1",
 "03655989966",
 "abuoew@aiesec.net",
 "2023-08-02",
 "2023-08-03",
-"2023-08-04"
+"2023-08-04",
+"100.00"
 );
 
 
@@ -286,31 +290,14 @@ approvedDate
 -- ,(1234567, "September - 2", "2023-09-10", "2023-10-25" , 5)
 -- ;
 
--- INSERT INTO lc_event (title, event_description, post_link, event_date) VALUES
+INSERT INTO lc_event (title, eventDescription, postLink, eventDate) VALUES
 
--- ("Local Committee Meeting - August", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
--- ,("Local Committee Meeting - September", "August month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-08-30")
--- ;
-
-INSERT INTO email_template (name, subject, body, attachments) VALUES
-
-("reminder", "Reminder (via LCMS)", 
-
-"<p>Hi {{member_name}} !</p>
-<p>This Email is sent to <strong>remind </strong>you that you are assigned to an OGV applicant.</p>
-<p style='margin-left:40px'>applicant&#39;s details :&nbsp;</p>
-<p style='margin-left:80px'>{{applicant_details}}</p>
-<p>&nbsp;</p>
-<p>Thank You,</p>
-<p>AIESEC local committee management system</p>",
-'["https://assets.website-files.com/60a2e3be4c28b25f35f6a54a/621bcef94c58054c38ae8305_AIESEC_OG.jpg"]'),
-
-("ese", "Test Ese email subject", 
-
-"<p>Test Email Body!! </p>
-<p>&nbsp;</p>
-<p>Thank You,</p>
-<p>AIESEC local committee management system</p>", '["https://assets.website-files.com/60a2e3be4c28b25f35f6a54a/621bcef94c58054c38ae8305_AIESEC_OG.jpg"]');
+("Local Committee Meeting - November", "November month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-11-30")
+,("Local Committee Meeting - December", "December month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2023-12-30")
+,("Local Committee Meeting - January", "January month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2024-01-30")
+,("Local Committee Meeting - February", "February month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2024-02-28")
+,("Local Committee Meeting - March", "March month's monthly local committee meeting","https://drive.google.com/file/d/1c08PfLzraEVDqfx8bSObaISPB68JKKvC/view?usp=sharing" ,"2024-03-30")
+;
 
 INSERT INTO ogv_applicants (
     status,
@@ -328,7 +315,6 @@ INSERT INTO ogv_applicants (
     hostLc,
     acceptedStartDate,
     acceptanceDate,
-    isEseEmailSent,
     acceptedNotes,
     approvedDate,
     paymentDate,
@@ -357,7 +343,6 @@ INSERT INTO ogv_applicants (
     'Host LC',
     '2023-09-18',
     '2023-09-20',
-    1, -- Assuming isEseEmailSent should be set to TRUE
     'Notes about acceptance',
     '2023-09-25',
     '2023-09-26',
@@ -386,7 +371,6 @@ INSERT INTO ogv_applicants (
     'Another Host LC',
     '2023-09-22',
     '2023-09-24',
-    0, -- Assuming isEseEmailSent should be set to FALSE
     'Additional notes about acceptance',
     '2023-09-28',
     '2023-09-29',
@@ -415,7 +399,6 @@ INSERT INTO ogv_applicants (
     'LC for Realized',
     '2023-09-10',
     '2023-09-15',
-    1, -- Assuming isEseEmailSent should be set to TRUE
     'Notes about acceptance',
     '2023-09-20',
     '2023-09-22',
@@ -444,7 +427,6 @@ INSERT INTO ogv_applicants (
     NULL, -- No hostLc for pre-signup
     NULL, -- No acceptedStartDate for pre-signup
     NULL, -- No acceptanceDate for pre-signup
-    NULL, -- No isEseEmailSent for pre-signup
     NULL, -- No acceptedNotes for pre-signup
     NULL, -- No approvedDate for pre-signup
     NULL, -- No paymentDate for pre-signup
@@ -473,7 +455,6 @@ INSERT INTO ogv_applicants (
     'Approved LC',
     '2023-09-12',
     '2023-09-14',
-    1, -- Assuming isEseEmailSent should be set to TRUE
     'Notes about acceptance',
     '2023-09-19',
     '2023-09-21',
@@ -487,3 +468,26 @@ INSERT INTO ogv_applicants (
     NULL, -- No approvalBreakNote for Approved status
     NULL -- No realizationBreakNote for Approved status
 );
+
+INSERT INTO badge (name, image) VALUES 
+('Excellent', 'excellent.png'),
+('Friendly', 'friendly.png'),
+('Honor', 'honor.png'),
+('Star', 'star.png'),
+('Verified', 'verified.png');
+
+INSERT INTO achievement (memberId, badgeId) VALUES 
+(1, 1),
+(1, 2),
+(1, 3),
+(2, 4),
+(3, 5);
+
+-- INSERT INTO user_gmail_data (email, accessToken, refreshToken, tokenExpiry)
+-- VALUES 
+-- (
+--     'sankapeeris360@gmail.com',
+--     'ya29.a0AfB_byDIDBbZp3z7DeyV2gS3uXC2LyzZBRgMc6gusUzNnb1nNgKR_8BXx2LTgtx0sijdkCiZkzN3mKVnyJzG5j5Jm995U67slYhN2WVZBXcyyp46eOwwqZQI4J4Ub8-hWOAB33W7lKnQPzI_PFY3uZq6jKUE28IJMfjIaCgYKAX0SARISFQGOcNnCJwvpqQ-m-lHonkQT3zzOBg0171',
+--     '1//0gWKhMcwTcxv_CgYIARAAGBASNwF-L9IrMUZ1r6XH5hhAubqDgWyzrZoHdqrT0g4YabgvUNRiIhBTiCqf976ypk5_czcck7vhPW4',
+--     '1697608549596'
+-- );

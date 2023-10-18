@@ -9,7 +9,6 @@ import { Formik, Form } from "formik";
 import * as yup from "yup";
 import { UserContext } from "../../../context/UserContext";
 import { useParams, useNavigate } from "react-router-dom";
-
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
@@ -143,7 +142,7 @@ export default function Project({ mode }) {
         validateOnChange
         enableReinitialize
       >
-        {() => (
+        {({ handleChange }) => (
           <Form>
             <Grid container spacing={2}>
               <Grid item xs={5}>
@@ -207,6 +206,24 @@ export default function Project({ mode }) {
                   rows={2}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <InputField
+                  name="projectLogo"
+                  disabled={isFormDisabled}
+                  onChange={(e) => {
+                    const convertedLink = e.target.value
+                      .replace(/file\/d\//g, "uc?id=")
+                      .replace(/\/([^/]+)$/, "&export=download");
+                    handleChange(convertedLink);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <InputField name="location" disabled={isFormDisabled} />
+              </Grid>
+              <Grid item xs={6}>
+                <InputField name="fee" disabled={isFormDisabled} />
+              </Grid>
             </Grid>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               <FormSubmitButton mode={mode} />
@@ -229,6 +246,9 @@ const initialState = {
   transportation: "",
   accommodation: "",
   notes: "",
+  projectLogo: "",
+  location: "",
+  fee: "",
 };
 
 const options = [
@@ -264,4 +284,10 @@ const validationSchema = yup.object().shape({
   transportation: yup.string().required("Required"),
   accommodation: yup.string().required("Required"),
   notes: yup.string().max(100, "Cannot exceed 100 characters"),
+  projectLogo: yup
+    .string()
+    .notRequired()
+    .max(100, "Cannot exceed 100 characters"),
+  location: yup.string().notRequired().max(50, "Cannot exceed 50 characters"),
+  fee: yup.string().notRequired().max(25, "Cannot exceed 25 characters"),
 });

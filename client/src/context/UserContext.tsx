@@ -24,9 +24,34 @@ interface UserType {
   roleId: RoleIdType;
 }
 
+interface PrivilegesType {
+  isSuperUser: boolean;
+  isIGVAdmin: boolean;
+  isIGVUser: boolean;
+  isPMAdmin: boolean;
+  isPMUser: boolean;
+  isOGVAdmin: boolean;
+  isOGVUser: boolean;
+  isFNLAdmin: boolean;
+  isFNLUser: boolean;
+}
+
+const defaultPrivileges: PrivilegesType = {
+  isSuperUser: false,
+  isIGVAdmin: false,
+  isIGVUser: false,
+  isPMAdmin: false,
+  isPMUser: false,
+  isOGVAdmin: false,
+  isOGVUser: false,
+  isFNLAdmin: false,
+  isFNLUser: false,
+};
+
 interface UserContextType {
   user: UserType | null;
   setUser: (user: UserType) => void;
+  privileges: PrivilegesType;
 }
 
 interface UserProviderProps {
@@ -36,6 +61,7 @@ interface UserProviderProps {
 export const UserContext = createContext<UserContextType>({
   user: null,
   setUser: () => {},
+  privileges: defaultPrivileges,
 });
 
 // Retrieve user state from local storage at mount
@@ -46,10 +72,33 @@ const getUser = (): UserType | null => {
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserType>(getUser);
+  const [privileges, setPrivileges] =
+    useState<PrivilegesType>(defaultPrivileges);
 
   // Save user state to local storage when mutated
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
+
+    // define privileges
+    setPrivileges({
+      isSuperUser: user?.roleId === "LCP",
+      isIGVAdmin:
+        user?.roleId === "LCP" ||
+        (user?.frontOfficeId === "iGV" && user?.roleId === "LCVP"),
+      isIGVUser: user?.frontOfficeId === "LCP" || user?.frontOfficeId === "iGV",
+      isPMAdmin:
+        user?.roleId === "LCP" ||
+        (user?.backOfficeId === "PM" && user?.roleId === "LCVP"),
+      isPMUser: user?.frontOfficeId === "LCP" || user?.backOfficeId === "PM",
+      isOGVAdmin:
+        user?.roleId === "LCP" ||
+        (user?.frontOfficeId === "oGV" && user?.roleId === "LCVP"),
+      isOGVUser: user?.frontOfficeId === "LCP" || user?.frontOfficeId === "oGV",
+      isFNLAdmin:
+        user?.roleId === "LCP" ||
+        (user?.backOfficeId === "FnL" && user?.roleId === "LCVP"),
+      isFNLUser: user?.frontOfficeId === "LCP" || user?.backOfficeId === "FnL",
+    });
   }, [user]);
 
   return (
@@ -57,6 +106,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       value={{
         user,
         setUser,
+        privileges,
       }}
     >
       {children}

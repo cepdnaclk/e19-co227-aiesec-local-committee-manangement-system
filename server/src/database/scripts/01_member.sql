@@ -1,12 +1,11 @@
-USE LC_KANDY;
 
 /* ~~~~~~~~~~~~~~~~~~~~ FACULTIES ~~~~~~~~~~~~~~~~~~~~ */
-/* CREATE TABLE faculty (
+CREATE TABLE faculty (
     id              VARCHAR(3) PRIMARY KEY,
     facultyName     VARCHAR(100)
-); */
+);
 
-INSERT INTO faculty (id, title) VALUES
+INSERT INTO faculty (id, facultyName) VALUES
 ('AG', 'Faculty of Agriculture'),
 ('A', 'Faculty of Arts'),
 ('D', 'Faculty of Dental Sciences'),
@@ -18,12 +17,12 @@ INSERT INTO faculty (id, title) VALUES
 ('MG', 'Faculty of Management');
 
 /* ~~~~~~~~~~~~~~~~~~~~ DISTRICTS ~~~~~~~~~~~~~~~~~~~~ */
-/* CREATE TABLE district (
+CREATE TABLE district (
     id              INT(2) PRIMARY KEY,
     districtName    VARCHAR(20)
-); */
+);
 
-INSERT INTO district (id, title) VALUES
+INSERT INTO district (id, districtName) VALUES
 (1, 'Ampara'),
 (2, 'Anuradhapura'),
 (3, 'Badulla'),
@@ -51,17 +50,13 @@ INSERT INTO district (id, title) VALUES
 (25, 'Vavuniya');
 
 /* ~~~~~~~~~~~~~~~~~~~~ ROLES ~~~~~~~~~~~~~~~~~~~~ */
-<<<<<<< HEAD
 
-/* CREATE TABLE role (
-=======
 CREATE TABLE role (
->>>>>>> 3d376d2 (redesign igv pages)
     id              VARCHAR(4) PRIMARY KEY,
     roleName        VARCHAR(50)
-); */
+);
 
-INSERT INTO role (title, id) VALUES
+INSERT INTO role (roleName, id) VALUES
 ("Local Committee President", "LCP"),
 ("Local Committee Vice President", "LCVP"),
 ("Manager", "MGR"),
@@ -71,10 +66,10 @@ INSERT INTO role (title, id) VALUES
 ("Coordinator", "CDN");
 
 /* ~~~~~~~~~~~~~~~~~~~~ FRONT OFFICES ~~~~~~~~~~~~~~~~~~~~ */
-/* CREATE TABLE front_office (
+CREATE TABLE front_office (
     id              VARCHAR(4) PRIMARY KEY,
     frontOfficeName VARCHAR(50)
-); */
+);
 
 INSERT INTO front_office (frontOfficeName, id) VALUES
 ("Local Committee President", "LCP"),
@@ -84,11 +79,11 @@ INSERT INTO front_office (frontOfficeName, id) VALUES
 ("outgoing Global Talent/Teacher", "oGT"),
 ("Back Office Vice President", "BOVP");
 
-/* ~~~~~~~~~~~~~~~~~~~~ BACK OFFICES ~~~~~~~~~~~~~~~~~~~~ *//* 
+/* ~~~~~~~~~~~~~~~~~~~~ BACK OFFICES ~~~~~~~~~~~~~~~~~~~~ */
 CREATE TABLE back_office (
     id              VARCHAR(4) PRIMARY KEY,
     backOfficeName  VARCHAR(50)
-); */
+);
 
 INSERT INTO back_office (backOfficeName, id) VALUES
 ("BRAND", "BND"),
@@ -100,10 +95,10 @@ INSERT INTO back_office (backOfficeName, id) VALUES
 ("Public Relations and Engage with AIESEC", "PnE");
 
 /* ~~~~~~~~~~~~~~~~~~~~ DEPARTMENTS ~~~~~~~~~~~~~~~~~~~~ */
-/* CREATE TABLE department (
+CREATE TABLE department (
     id              VARCHAR(4) PRIMARY KEY,
     departmentName  VARCHAR(25)
-); */
+);
 
 INSERT INTO department (departmentName, id) VALUES
 ("Local Committee President", "LCP"),
@@ -117,13 +112,13 @@ INSERT INTO department (departmentName, id) VALUES
 ("Customer Experience", "CXP");
 
 /* ~~~~~~~~~~~~~~~~~~~~ VALID FRONT OFFICES - DEPARTMENTS ~~~~~~~~~~~~~~~~~~~~ */
-/* CREATE TABLE front_valid_pair (
+CREATE TABLE front_valid_pair (
     officeId        VARCHAR(4),
     departmentId    VARCHAR(4),
 
     FOREIGN KEY (officeId)     REFERENCES front_office(id),
     FOREIGN KEY (departmentId) REFERENCES department(id)
-); */
+);
 
 INSERT INTO front_valid_pair (officeId, departmentId) VALUES
 ("LCP","LCP"),
@@ -133,7 +128,7 @@ INSERT INTO front_valid_pair (officeId, departmentId) VALUES
 ("oGT","VP"),("oGT","IR"),("oGT","B2B"),("oGT","MKT"),("oGT","B2C"),("oGT","CXP");
 
 /* ~~~~~~~~~~~~~~~~~~~~ MEMBERS ~~~~~~~~~~~~~~~~~~~~ */
-/* CREATE TABLE member ( 
+CREATE TABLE member ( 
 
     id                  INT(5) AUTO_INCREMENT PRIMARY KEY,
 
@@ -171,9 +166,8 @@ INSERT INTO front_valid_pair (officeId, departmentId) VALUES
     FOREIGN KEY (districtId)        REFERENCES district(id),
     FOREIGN KEY (roleId)            REFERENCES role(id)
 );
- */
-/* ~~~~~~~~~~~~~~~~~~~~ STORED PROCEDURES ~~~~~~~~~~~~~~~~~~~~ */
 
+/* ~~~~~~~~~~~~~~~~~~~~ STORED PROCEDURES ~~~~~~~~~~~~~~~~~~~~ */
 -- Get context data required to show member details
 CREATE PROCEDURE GetMemberContext()
 BEGIN
@@ -194,21 +188,27 @@ BEGIN
 SELECT 
     m.id,
     m.preferredName,
-    f.frontOfficeName,
-    b.backOfficeName,
-    d.departmentName,
-    r.roleName,
+    m.frontOfficeId,
+    m.backOfficeId,
+    m.departmentId,
+    m.roleId,
     m.photoLink,
-    m.aiesecEmail
+    m.aiesecEmail,
+    JSON_ARRAYAGG(b.image) as 'badges'
     FROM member AS m
-    LEFT JOIN front_office AS f
-    ON f.id = m.frontOfficeId
-    LEFT JOIN back_office AS b
-    ON b.id = m.backOfficeId
-    LEFT JOIN department AS d
-    ON d.id = m.departmentId
-    LEFT JOIN role as r
-    ON r.id = m.roleId;
+    -- LEFT JOIN front_office AS f
+    -- ON f.id = m.frontOfficeId
+    -- LEFT JOIN back_office AS b
+    -- ON b.id = m.backOfficeId
+    -- LEFT JOIN department AS d
+    -- ON d.id = m.departmentId
+    -- LEFT JOIN role as r
+    -- ON r.id = m.roleId
+    LEFT JOIN achievement as a
+    ON a.memberId = m.id
+    LEFT JOIN badge as b
+    ON a.badgeId = b.id
+GROUP BY m.id;
 END;
 
 CREATE PROCEDURE GetMember(IN id INT(5))

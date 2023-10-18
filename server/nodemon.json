@@ -1,4 +1,4 @@
 {
-  "ignore": ["database/meta.json"],
+  "ignore": ["database/meta.json", "public/*"],
   "ext": "*"
 }

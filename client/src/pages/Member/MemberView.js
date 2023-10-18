@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import axios from "../../api/axios";
+import { useQuery } from "../../api/reactQuery";
 import MemberProfile from "./MemberProfile";
 import {
   Box,
@@ -26,8 +26,10 @@ import Listing from "../../components/Listing";
 import MemberCard from "./MemberCard";
 import MemberCardSkeleton from "./MemberCardSkeleton";
 import SearchBar from "../../components/SearchBar";
+import MemberProfileMaster from "./MemberProfileMaster";
+import Loading from "../Loading";
 
-const MEMBERS_URL = "/member/";
+const url = "/member/";
 
 export default function MemberView() {
   // TODO: Handle adding token to request globally
@@ -39,7 +41,7 @@ export default function MemberView() {
 
   const [snackbarState, setSnackbarState] = useState(snackbarIdleState);
 
-  const [initialMembers, setInitialMembers] = useState([]);
+  const membersList = useQuery({ key: ["members"], url });
 
   const [members, setMembers] = useState([]);
 
@@ -49,28 +51,28 @@ export default function MemberView() {
   // member profile form visibility
   const [modalState, setModalState] = useState(modalIdleState);
 
-  const loadMembers = async (e) => {
-    setLoading(true);
-    try {
-      const response = await axios.get(MEMBERS_URL, {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
+  // const loadMembers = async (e) => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await axios.get(MEMBERS_URL, {
+  //       headers: {
+  //         Authorization: "Bearer " + token,
+  //       },
+  //     });
 
-      console.log(response);
+  //     console.log(response);
 
-      setInitialMembers(response.data);
-    } catch (err) {
-      // TODO: Better error handling
-      console.log(err);
-    }
-    setLoading(false);
-  };
+  //     setInitialMembers(response.data);
+  //   } catch (err) {
+  //     // TODO: Better error handling
+  //     console.log(err);
+  //   }
+  //   setLoading(false);
+  // };
 
-  useEffect(() => {
-    loadMembers();
-  }, []);
+  // useEffect(() => {
+  //   loadMembers();
+  // }, []);
 
   const handleRowClick = (id) => {
     console.log(id);
@@ -78,17 +80,20 @@ export default function MemberView() {
     setModalState({ open: true, mode: "admin-view" });
   };
 
+  if (membersList.isLoading) return <Loading />;
+
   return (
     <>
       <Box component="main">
         <Box component="header" sx={{ width: "100%", my: 1 }}>
-          {isLoading ? (
-            <Skeleton
-              variant="rectangular"
-              height={48}
-              sx={{ borderRadius: "10px" }}
-            />
-          ) : (
+          {
+            // membersList.isLoading ? (
+            //   <Skeleton
+            //     variant="rectangular"
+            //     height={48}
+            //     sx={{ borderRadius: "10px" }}
+            //   />
+            // ) :
             <Box
               component={Paper}
               sx={{
@@ -99,14 +104,14 @@ export default function MemberView() {
               }}
             >
               <SearchBar
-                initialData={initialMembers}
+                initialData={membersList?.data}
                 setFilteredData={setMembers}
                 searchProp="preferredName"
                 sx={{ flexGrow: 1 }}
               />
               <IconButton
                 onClick={() => {
-                  loadMembers();
+                  membersList.refetch();
                 }}
               >
                 <RefreshIcon />
@@ -119,7 +124,7 @@ export default function MemberView() {
                 New User
               </Button>
             </Box>
-          )}
+          }
         </Box>
         <Box component="section" sx={{ width: "100%", my: 2 }}>
           {/* <Listing
@@ -132,19 +137,20 @@ export default function MemberView() {
               isLoading={isLoading}
             /> */}
           <Grid container spacing={2}>
-            {isLoading ? (
-              <>
-                <MemberCardSkeleton />
-                <MemberCardSkeleton />
-                <MemberCardSkeleton />
-                <MemberCardSkeleton />
-                <MemberCardSkeleton />
-              </>
-            ) : (
+            {
+              // isLoading ? (
+              //   <>
+              //     <MemberCardSkeleton />
+              //     <MemberCardSkeleton />
+              //     <MemberCardSkeleton />
+              //     <MemberCardSkeleton />
+              //     <MemberCardSkeleton />
+              //   </>
+              // ) :
               members.map((member, i) => (
                 <MemberCard member={member} onClick={handleRowClick} key={i} />
               ))
-            )}
+            }
           </Grid>
           <Dialog open={modalState.open} fullWidth maxWidth="md">
             <DialogContent dividers>
@@ -168,12 +174,12 @@ export default function MemberView() {
                   </IconButton>
                 </Box>
               </Box>
-              <MemberProfile
+              <MemberProfileMaster
                 setSnackbarState={setSnackbarState}
                 formState={modalState}
                 setFormState={setModalState}
                 formIdleState={modalIdleState}
-                refreshParent={loadMembers}
+                refreshParent={membersList.refetch}
                 focusItemId={focusMemberId}
               />
             </DialogContent>

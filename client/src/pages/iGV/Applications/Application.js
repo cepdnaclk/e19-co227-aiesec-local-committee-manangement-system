@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   useQuery,
   usePostMutation,
@@ -48,11 +48,13 @@ export default function Application({ mode }) {
   const [currSlots, setCurrSlots] = useState([]);
   const setSlots = (currProjectKey) => {
     if (!opportunityList && !currProjectKey) return [];
-
-    const currProject = opportunityList.data.find((obj) => {
-      return obj.key === currProjectKey;
-    });
-    setCurrSlots(JSON.parse(currProject.slots) || []);
+    // TODO: there is a error here
+    if (opportunityList.data) {
+      const currProject = opportunityList.data.find((obj) => {
+        return obj.key === currProjectKey;
+      });
+      setCurrSlots(JSON.parse(currProject.slots) || []);
+    }
   };
   useEffect(() => {
     if (mode !== "new" && selectedApplication?.data?.projectExpaId)
@@ -183,7 +185,7 @@ export default function Application({ mode }) {
       approvedDate: yup.date().notRequired(),
       realizedDate: yup.date().notRequired(),
       paymentDate: yup.date().notRequired(),
-      amount: yup
+      paymentAmount: yup
         .string()
         .notRequired()
         .test("maxDecimalPlaces", "Maximum Two Decimal Places", (value) =>
@@ -274,7 +276,7 @@ export default function Application({ mode }) {
           <Form>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <pre>{JSON.stringify(values, null, 2)}</pre>
+                {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
               </Grid>
               <Grid item xs={6}>
                 <InputField name="epId" label="EP ID" {...fieldProps} />
@@ -409,7 +411,7 @@ export default function Application({ mode }) {
                 <InputField name="paymentDate" type="date" {...fieldProps} />
               </Grid>
               <Grid item xs={4}>
-                <InputField name="amount" {...fieldProps} />
+                <InputField name="paymentAmount" {...fieldProps} />
               </Grid>
               <Grid item xs={12}>
                 <InputField name="proofLink" {...fieldProps} />
@@ -458,7 +460,7 @@ const initialState = {
   approvedDate: "",
   realizedDate: "",
   paymentDate: "",
-  amount: "",
+  paymentAmount: "",
   proofLink: "",
   finishedDate: "",
   completedDate: "",

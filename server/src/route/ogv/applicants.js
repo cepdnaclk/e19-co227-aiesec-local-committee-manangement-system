@@ -5,14 +5,16 @@ const Mailgen = require("mailgen");
 const {
   requestBodyToFieldsAndValues,
   objectKeysSnakeToCamel,
-} = require("../utils/parse");
+} = require("../../utils/parse");
 
-const { connection, execQuery } = require("../database/database");
+const { connection, execQuery } = require("../../database/database");
 const {
   sendSystemEmail,
   sendUserEmail,
   replacePlaceholders,
-} = require("../utils/email_functions");
+} = require("../../utils/email_functions");
+
+const { getUserDataFromToken } = require("../../utils/helpers");
 
 ///////////////utility functions
 
@@ -28,32 +30,24 @@ const {
 
 ///////////////routes
 
-// get member details for 'select member' dropdown menu
-router.get(`/members`, (req, res, next) => {
-  execQuery(`
-    SELECT m.id as 'key', m.preferred_name as 'value' 
-    FROM member as m WHERE m.front_office_id = "oGV" AND m.department_id="CXP";`)
-    .then((rows) => {
-      res.status(200).json(rows);
-    })
-    .catch((err) => {
-      next(err);
-    });
-});
-
 // get details(selected) of all
-router.get(`/applicants`, (req, res, next) => {
-  execQuery("SELECT * FROM OGVApplicantDetailsInBrief")
-    .then((rows) => {
-      res.status(200).json(rows);
-    })
-    .catch((err) => {
-      next(err);
-    });
+router.get(`/all/:id`, (req, res, next) => {
+  if (req?.params?.id === "admin") {
+    const getIgvApplications = `SELECT * FROM OGVApplicantDetailsInBrief;`;
+    execQuery(getIgvApplications)
+      .then((rows) => res.status(200).json(rows))
+      .catch((err) => next(err));
+  } else {
+    const getIgvApplications = `SELECT * FROM OGVApplicantDetailsInBrief WHERE memberInChargeId='${req?.params?.id})';`;
+
+    execQuery(getIgvApplications)
+      .then((rows) => res.status(200).json(rows))
+      .catch((err) => next(err));
+  }
 });
 
 // get all details of one applicant
-router.get(`/applicants/:id`, (req, res, next) => {
+router.get(`/item/:id`, (req, res, next) => {
   execQuery(`CALL GetOGVApplicantDetailsInDetail(${req.params.id})`)
     .then((rows) => {
       res.status(200).json(rows[0][0]);
@@ -64,7 +58,7 @@ router.get(`/applicants/:id`, (req, res, next) => {
 });
 
 // new applicant
-router.post("/applicants", (req, res, next) => {
+router.post("/item", (req, res, next) => {
   try {
     const [fields, values] = [
       Object.keys(req.body),
@@ -92,7 +86,7 @@ router.post("/applicants", (req, res, next) => {
 });
 
 // update existing one
-router.put("/applicants/:id", (req, res, next) => {
+router.put("/item/:id", (req, res, next) => {
   try {
     const [fields, values] = [
       Object.keys(req.body),
@@ -125,7 +119,7 @@ router.put("/applicants/:id", (req, res, next) => {
 });
 
 //delete application
-router.delete("/applicants/:id", (req, res, next) => {
+router.delete("/item/:id", (req, res, next) => {
   const deleteQuery = `DELETE FROM ogv_applicants WHERE id=${req.params.id}`;
   execQuery(deleteQuery)
     .then((rows) => {
@@ -152,48 +146,11 @@ router.delete("/applicants/:id", (req, res, next) => {
 
 //});
 
-// for now testing only
-router.post("/send6weekChallengeMail", (req, res, next) => {
-  // below code only for testing
-  //// generate email
-  //let emailBody = {
-  //    body: {
-  //        name: 'User',
-  //        intro: 'Reminder',
-  //        action: {
-  //            instructions: 'This is a test email :',
-  //            button: {
-  //                color: 'green',
-  //                text: 'Check',
-  //                link: 'https://test.test'
-  //            }
-  //        }
-  //    }
-  //};
-  //// Using mailGenerator to generate the email body
-  //let generatedEmailBody = mailGenerator.generate(emailBody);
-  //// Process attachments
-  //let attachments = req.body.attachments ? req.body.attachments : [];
-  //sendSystemEmail(req.body.email, req.body.cc, req.body.bcc, req.body.subject, generatedemailbody, attachments)
-  //    .then((info) => {
-  //        res.status(201).json({
-  //            msg: "email sent",
-  //            info: info.messageid,
-  //            preview: nodemailer.gettestmessageurl(info)
-  //        });
-  //    })
-  //    .catch((err) => {
-  //        next(err)
-  //    });
-});
+// send mail template to client , placeholders replaced with req.data
+router.get("/mail/:id", (req, res, next) => {
+  let mailQuery = `SELECT * FROM email_template WHERE id = '${req.params.id}'`;
 
-router.post("/sendApprovedMail", (req, res) => {});
-
-// send ese mail template to client , placeholders replaced with req.data
-router.get("/sendESEMail", (req, res, next) => {
-  let eseMailQuery = "SELECT * FROM email_template WHERE name = 'ese'";
-
-  return execQuery(eseMailQuery)
+  return execQuery(mailQuery)
     .then((rows) => {
       let emailData = rows[0];
 
@@ -221,26 +178,41 @@ router.get("/sendESEMail", (req, res, next) => {
     });
 });
 
-// send ese email to req.receiver from req.userEmail and update db
-router.post("/sendESEMail", async (req, res, next) => {
+// send email to req.body.receiverId's email
+router.post("/mail/:id", async (req, res, next) => {
   try {
-    const { userEmail, attachments, receiver, cc, bcc, subject, body } =
-      req.body;
+    const userDetails = getUserDataFromToken(req);
+
+    const from = userDetails.email;
+    let to;
+    const { attachments, receiverId, cc, bcc, subject, body } = req.body;
+
+    const result = await new Promise((resolve, reject) => {
+      connection.query(
+        "SELECT email FROM ogv_applicants WHERE id = ?",
+        [receiverId],
+        (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        }
+      );
+    });
+
+    receiver = result[0].email;
 
     const response = await sendUserEmail(
-      userEmail,
+      from,
       attachments,
-      receiver,
+      to,
       cc,
       bcc,
       subject,
       body
     );
 
-    // Using a parameterized query to prevent SQL injection
-    await execQueryWithValues(
-      `UPDATE ogv_applicants SET isEseEmailSent = 1 WHERE email = ?`,
-      [receiver]
+    await execQuery(
+      `INSERT INTO email_to_ogv_applicants (applicantId,mailtemplateId) VALUES (?,?);`,
+      [receiverId, req.params.id]
     );
 
     res.send("Email sent: " + response);
@@ -250,6 +222,47 @@ router.post("/sendESEMail", async (req, res, next) => {
     } else {
       next(err);
     }
+  }
+});
+
+// get member details for 'select member' dropdown menu
+router.get(`/members`, (req, res, next) => {
+  execQuery(`
+      SELECT m.id as 'key', m.preferredName as 'value' 
+      FROM member as m WHERE m.frontOfficeId = "oGV" AND m.departmentId="CXP";`)
+    .then((rows) => {
+      res.status(200).json(rows);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+router.get("/claims", (req, res, next) => {
+  execQuery(
+    // `SELECT appId AS id, CONCAT('Application ID: ', appId, ' Amount: ', paymentAmount, ' $') AS label, claimStatus FROM igv_application;`
+    `SELECT id, CONCAT('Opportunity ID: ', opportunityId, ' Amount: ', paymentAmount, ' $') AS label, claimStatus FROM ogv_applicants;`
+  )
+    .then((rows) => res.status(200).json(rows))
+    .catch((err) => next(err));
+});
+
+router.post("/claims", async (req, res, next) => {
+  const id = req.body.id;
+  const value = req.body.value;
+
+  if (!id) {
+    res.status(400).json({ error: "Id is required" });
+    return;
+  }
+
+  const queryString = `UPDATE ogv_applicants SET claimStatus = ? WHERE id = ?`;
+
+  try {
+    const rows = await execQuery(queryString, [value, id]);
+    res.status(200).json({ message: "Updated successfully" });
+  } catch (err) {
+    next(err);
   }
 });
 
