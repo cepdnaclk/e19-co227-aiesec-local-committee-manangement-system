@@ -49,10 +49,12 @@ export default function Application({ mode }) {
   const setSlots = (currProjectKey) => {
     if (!opportunityList && !currProjectKey) return [];
     // TODO: there is a error here
-    const currProject = opportunityList.data.find((obj) => {
-      return obj.key === currProjectKey;
-    });
-    setCurrSlots(JSON.parse(currProject.slots) || []);
+    if (opportunityList.data) {
+      const currProject = opportunityList.data.find((obj) => {
+        return obj.key === currProjectKey;
+      });
+      setCurrSlots(JSON.parse(currProject.slots) || []);
+    }
   };
   useEffect(() => {
     if (mode !== "new" && selectedApplication?.data?.projectExpaId)

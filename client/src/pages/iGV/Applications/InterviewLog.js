@@ -37,7 +37,7 @@ const InterviewLog = () => {
   useEffect(() => {
     setLog(interviewLog.data);
     // if (interviewLog.data) logRef.current = interviewLog.data;
-  }, []);
+  }, [interviewLog.data]);
 
   const updateInterviewLog = usePutMutation({
     url,
@@ -121,6 +121,7 @@ const InterviewLog = () => {
             setIsLoading(true);
             updateInterviewLog.mutate(log, {
               onSuccess: () => {
+                interviewLog.refetch();
                 notifySuccess("Updated");
                 setIsLoading(false);
               },

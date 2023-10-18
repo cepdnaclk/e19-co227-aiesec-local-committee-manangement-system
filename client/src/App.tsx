@@ -41,7 +41,7 @@ import Home from "./pages/Home/Home";
 import DarkLogo from "./assets/White-Black-Logo.png";
 import LightLogo from "./assets/Black-Logo.png";
 import BlueLogo from "./assets/Blue-Logo.png";
-import MemberProfile from "./pages/Member/MemberProfile";
+import MemberProfileMaster from "./pages/Member/MemberProfileMaster";
 
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
@@ -336,7 +336,7 @@ function App() {
                 </IconButton>
               </Box>
             </Box>
-            <MemberProfile
+            <MemberProfileMaster
               setSnackbarState={setSnackbarState}
               formState={modalState}
               setFormState={setModalState}

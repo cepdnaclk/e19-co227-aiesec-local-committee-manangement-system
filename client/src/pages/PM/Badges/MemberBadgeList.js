@@ -27,7 +27,7 @@ export default function MemberBadgeList({ memberId }) {
   const badgeList = useQuery({
     key: ["badge-list"],
     url: "/pm/badges",
-    enabled: isPMAdmin,
+    // enabled: isPMAdmin,
   });
   const achievementList = useQuery({
     key: ["achievement-list", memberId],
