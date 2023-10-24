@@ -14,15 +14,15 @@ jobs:
     steps:
 
     - name: Pull docker image
-      run: sudo docker pull dinuka029/co227:latest
+      run: sudo docker compose pull dinuka029/co227:latest
 
     - name: Deleting old docker container
-      run: sudo docker rm -f co227-container || true
+      run: sudo docker compose rm -f co227-container || true
 
     # - name: Pull docker image
     #   run: sudo docker pull dinuka029/co227:latest
 
     - name: Run Docker container
-      run: sudo docker run -d -p 80:80 --name co227-container dinuka029/co227
+      run: sudo docker compose up -d -p 80:80 --name co227-container dinuka029/co227
       
 
