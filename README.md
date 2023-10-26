@@ -12,19 +12,39 @@
   - 8081: server app
   - 3000: client app
 
-- To build the images and run
+- To build/rebuild the image (do this initially and whenever new node modules are installed)
+
+Stop the containers if they are currently running
+
+```
+	docker-compose -f docker-compose.dev.yml down
+```
+
+```
+	docker-compose -f docker-compose.dev.yml build
+```
+
+- To run a container from the image built
 
 ```
 	docker-compose -f docker-compose.dev.yml up
-```
+``
 
+<!--
 - To rebuild and run (in case the compose file was edited) use --force-recreate flag
 
 ```
-	docker-compose -f docker-compose.dev.yml up --force-recreate
+
+    docker-compose -f docker-compose.dev.yml up --force-recreate
+
+```-->
+
+- Use Ctrl+C to stop all services or,
 ```
 
-- Use Ctrl+C to stop all services
+    docker-compose -f docker-compose.dev.yml stop
+
+``
 
 ### Problem ❓:
 
@@ -117,3 +137,7 @@ We're developing a new system focused on:
 ## Feedback
 
 If you have any feedback, please reach out to us at test@test.com
+
+```
+
+```

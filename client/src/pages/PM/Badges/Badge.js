@@ -72,6 +72,11 @@ export default function Badge({ mode, setMode, id, setId }) {
     size: "small",
     disabled: isSubmitting,
   };
+  const badgeList = useQuery({
+    key: ["badge-list"],
+    url: "/pm/badges",
+    // enabled: isPMAdmin,
+  });
 
   const onUpload = (e) => {
     // if (!file) {
@@ -86,10 +91,10 @@ export default function Badge({ mode, setMode, id, setId }) {
     setFile(e.target.files[0] || null);
   };
 
-  // useEffect(() => {
-  //   console.log(file);
-  //   if (file) setPreviewUrl(URL.createObjectURL(file));
-  // }, [file]);
+  useEffect(() => {
+    console.log(file);
+    if (file) setPreviewUrl(URL.createObjectURL(file));
+  }, [file]);
 
   const handleSubmit = async () => {
     if (!name || (mode === "new" && !file)) {
@@ -104,6 +109,7 @@ export default function Badge({ mode, setMode, id, setId }) {
       formData.append("file", file);
       await addBadge.mutate(formData, {
         onSuccess: () => {
+          badgeList.refetch();
           notifySuccess("Added succesfully");
         },
         onError: (err) => {
