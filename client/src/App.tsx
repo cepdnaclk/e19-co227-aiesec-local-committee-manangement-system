@@ -30,8 +30,9 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import { IGVMenu, IGVPanel } from "./pages/iGV";
-import { PMMenu, PMPanel } from "./pages/PM";
 import { OGVMenu, OGVPanel } from "./pages/oGV";
+import { OGTMenu, OGTPanel } from "./pages/oGT";
+import { PMMenu, PMPanel } from "./pages/PM";
 import { FNLMenu, FNLPanel } from "./pages/FNL";
 import NotFound from "./pages/NotFound";
 import AdminRoutes from "./utils/AdminRoutes";
@@ -142,7 +143,7 @@ function App() {
     [prefersDarkMode]
   );
 
-  return <div>Hello</div>;
+  // return <div>Hello</div>;
 
   return (
     <ThemeProvider theme={theme}>
@@ -175,6 +176,7 @@ function App() {
               <Stack direction="row" spacing={2}>
                 <IGVMenu />
                 <OGVMenu />
+                <OGTMenu />
                 <PMMenu />
                 <FNLMenu />
                 {user ? (
@@ -301,6 +303,7 @@ function App() {
             <Route path="/igv/*" element={<IGVPanel />} />
             <Route path="/pm/*" element={<PMPanel />} />
             <Route path="/ogv/*" element={<OGVPanel />} />
+            <Route path="/ogt/*" element={<OGTPanel />} />
             <Route path="/fnl/*" element={<FNLPanel />} />
             <Route element={<ProtectedRoutes />}>
               <Route path="/" element={<Home />} />

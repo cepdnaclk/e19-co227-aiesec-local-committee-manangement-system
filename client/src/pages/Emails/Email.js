@@ -40,7 +40,7 @@ export default function Email({ officeId, mode }) {
   const keyField = "id";
 
   const selectedEmail = useQuery({
-    key: ["igv-selected-email", id],
+    key: ["selected-email", officeId, id],
     url: `${url}/${id}`,
     enabled: mode !== "new",
   });
@@ -52,19 +52,19 @@ export default function Email({ officeId, mode }) {
     url: `${url}/${id}`,
     updateQueryKey,
     keyField,
-    removeQueryKeys: [["igv-selected-email", id]],
+    removeQueryKeys: [["selected-email", officeId, id]],
   });
   const deleteEmail = useDeleteMutation({
     url: `${url}/${id}`,
     updateQueryKey,
     keyField,
-    removeQueryKeys: [["igv-selected-email", id]],
+    removeQueryKeys: [["selected-email", officeId, id]],
   });
 
   // ~~~~~~~~~~ Form Utilities ~~~~~~~~~~
 
   const handleSubmit = (formData, { setSubmitting }) => {
-    console.log("I was invoked with mode: ", mode);
+    // console.log("I was invoked with mode: ", mode);
     const submitData = { officeId, ...formData };
     const handleError = (err) => {
       notifyError(err?.response?.data);
@@ -140,238 +140,6 @@ export default function Email({ officeId, mode }) {
         handleSubmit={handleSubmit}
         mode={mode}
       />
-      {/* <Formik
-        initialValues={mode === "new" ? initialState : selectedEmail.data}
-        onSubmit={handleSubmit}
-        validationSchema={yup.object().shape({
-          name: yup
-            .string()
-            .required("Required")
-            .max(255, "Cannot exceed 255 characters"),
-          cc: yup.array().of(yup.string().email()),
-          bcc: yup.array().of(yup.string().email()),
-          subject: yup
-            .string()
-            .required("Required")
-            .max(255, "Cannot exceed 255 characters"),
-          body: yup.string().required("Required"),
-        })}
-        validateOnChange
-        enableReinitialize
-        validateOnMount
-      >
-        {({ values, touched, errors, handleChange }) => (
-          <Form>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <InputField name="name" disabled={isFormDisabled} />
-              </Grid>
-              <Grid item xs={12}>
-                <InputField name="subject" disabled={isFormDisabled} />
-              </Grid>
-              <Grid itex xs={12}>
-                <FieldArray
-                  name="cc"
-                  render={(arrayHelpers) => (
-                    <>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                        }}
-                      >
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            mx: 3.5,
-                            textAlign: "left",
-                            alignSelf: "center",
-                            flexGrow: 1,
-                          }}
-                        >
-                          CC
-                        </Typography>
-                        <IconButton
-                          onClick={() => arrayHelpers.push("")}
-                          disabled={isFormDisabled}
-                        >
-                          <AddIcon />
-                        </IconButton>
-                      </Box>
-                      {values.cc?.map((cc, index) => (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                          }}
-                          key={index}
-                        >
-                          <InputField
-                            name={`cc.${index}`}
-                            label={`${index + 1}`}
-                            sx={{
-                              ml: 2.5,
-                              flexGrow: 1,
-                            }}
-                            disabled={isFormDisabled}
-                          />
-                          <IconButton
-                            onClick={() => arrayHelpers.remove(index)}
-                            disabled={isFormDisabled}
-                          >
-                            <ClearIcon />
-                          </IconButton>
-                        </Box>
-                      ))}
-                    </>
-                  )}
-                />
-              </Grid>
-              <Grid itex xs={12}>
-                <FieldArray
-                  name="bcc"
-                  render={(arrayHelpers) => (
-                    <>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                        }}
-                      >
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            mx: 3.5,
-                            textAlign: "left",
-                            alignSelf: "center",
-                            flexGrow: 1,
-                          }}
-                        >
-                          BCC
-                        </Typography>
-                        <IconButton
-                          onClick={() => arrayHelpers.push("")}
-                          disabled={isFormDisabled}
-                        >
-                          <AddIcon />
-                        </IconButton>
-                      </Box>
-                      {values.bcc?.map((bcc, index) => (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                          }}
-                          key={index}
-                        >
-                          <InputField
-                            name={`bcc.${index}`}
-                            label={`${index + 1}`}
-                            sx={{
-                              ml: 2.5,
-                              flexGrow: 1,
-                            }}
-                            disabled={isFormDisabled}
-                          />
-                          <IconButton
-                            onClick={() => arrayHelpers.remove(index)}
-                            disabled={isFormDisabled}
-                          >
-                            <ClearIcon />
-                          </IconButton>
-                        </Box>
-                      ))}
-                    </>
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <Editor
-                  value={values.body}
-                  onEditorChange={(e) => {
-                    handleChange({ target: { name: "body", value: e } });
-                  }}
-                  init={{
-                    height: 500,
-                    menubar: false,
-                    plugins: ["image"],
-                    toolbar: "image",
-                    content_style:
-                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography sx={{ pl: 2 }} variant="body2" color="error">
-                  {touched.body && errors.body}
-                </Typography>
-              </Grid>
-              <Grid itex xs={12}>
-                <FieldArray
-                  name="attachments"
-                  render={(arrayHelpers) => (
-                    <>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                        }}
-                      >
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            mx: 3.5,
-                            textAlign: "left",
-                            alignSelf: "center",
-                            flexGrow: 1,
-                          }}
-                        >
-                          Attachments
-                        </Typography>
-                        <IconButton
-                          onClick={() => arrayHelpers.push("")}
-                          disabled={isFormDisabled}
-                        >
-                          <AddIcon />
-                        </IconButton>
-                      </Box>
-                      {values.attachments?.map((attachment, index) => (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                          }}
-                          key={index}
-                        >
-                          <InputField
-                            name={`attachments.${index}`}
-                            label={`${index + 1}`}
-                            sx={{
-                              ml: 2.5,
-                              flexGrow: 1,
-                            }}
-                            disabled={isFormDisabled}
-                          />
-                          <IconButton
-                            onClick={() => arrayHelpers.remove(index)}
-                            disabled={isFormDisabled}
-                          >
-                            <ClearIcon />
-                          </IconButton>
-                        </Box>
-                      ))}
-                    </>
-                  )}
-                />
-              </Grid>
-            </Grid>
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <FormSubmitButton mode={mode} />
-            </Box>
-          </Form>
-        )}
-      </Formik> */}
       <GuidelineAccordian officeId={officeId} />
     </>
   );

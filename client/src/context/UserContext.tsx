@@ -32,6 +32,8 @@ interface PrivilegesType {
   isPMUser: boolean;
   isOGVAdmin: boolean;
   isOGVUser: boolean;
+  isOGTAdmin: boolean;
+  isOGTUser: boolean;
   isFNLAdmin: boolean;
   isFNLUser: boolean;
 }
@@ -44,6 +46,8 @@ const defaultPrivileges: PrivilegesType = {
   isPMUser: false,
   isOGVAdmin: false,
   isOGVUser: false,
+  isOGTAdmin: false,
+  isOGTUser: false,
   isFNLAdmin: false,
   isFNLUser: false,
 };
@@ -94,6 +98,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         user?.roleId === "LCP" ||
         (user?.frontOfficeId === "oGV" && user?.roleId === "LCVP"),
       isOGVUser: user?.frontOfficeId === "LCP" || user?.frontOfficeId === "oGV",
+      isOGTAdmin:
+        user?.roleId === "LCP" ||
+        (user?.frontOfficeId === "oGT" && user?.roleId === "LCVP"),
+      isOGTUser: user?.frontOfficeId === "LCP" || user?.frontOfficeId === "oGT",
       isFNLAdmin:
         user?.roleId === "LCP" ||
         (user?.backOfficeId === "FnL" && user?.roleId === "LCVP"),

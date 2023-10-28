@@ -48,11 +48,10 @@ export default function Application({ mode }) {
   const [currSlots, setCurrSlots] = useState([]);
   const setSlots = (currProjectKey) => {
     if (!opportunityList && !currProjectKey) return [];
-    // TODO: there is a error here
-    if (opportunityList.data) {
-      const currProject = opportunityList.data.find((obj) => {
-        return obj.key === currProjectKey;
-      });
+    const currProject = opportunityList?.data?.find((obj) => {
+      return obj.key === currProjectKey;
+    });
+    if (currProject && opportunityList.data) {
       setCurrSlots(JSON.parse(currProject.slots) || []);
     }
   };

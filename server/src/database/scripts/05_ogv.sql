@@ -90,7 +90,7 @@ LEFT JOIN
 WHERE
     o.status = 'Pre-Signup';
 
-    CREATE PROCEDURE GetOGVApplicantDetailsInDetail(IN applicant_id INT)
+CREATE PROCEDURE GetOGVApplicantDetailsInDetail(IN applicant_id INT)
 BEGIN
     SELECT 
         status,
