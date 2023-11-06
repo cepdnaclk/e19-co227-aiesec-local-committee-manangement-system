@@ -14,20 +14,20 @@ services:
     restart: always
     
 
-  # server:
-  #   container_name: server
-  #   build:
-  #     context: ./server
-  #     target: build
+  server:
+    container_name: server
+    build:
+      context: ./server
+      target: build
     
-  #   image: dinuka029/co227
+    image: dinuka029/co227
     
-  #   ports:
-  #     - 8081:8081
-  #   environment:
-  #     - DATABASE_HOST=lckandy-test.clmtqbwd31v1.ap-south-1.rds.amazonaws.com
-  #     - DATABASE_USER=lckandyadmin
-  #     - DATABASE_PASSWORD=lckandyadmin
-  #     - DATABASE_DB=LC_KANDY
-  #     - DATABASE_PORT=3306
-  #   restart: always
+    ports:
+      - 8081:8081
+    environment:
+      - DATABASE_HOST=lckandy-test.clmtqbwd31v1.ap-south-1.rds.amazonaws.com
+      - DATABASE_USER=lckandyadmin
+      - DATABASE_PASSWORD=lckandyadmin
+      - DATABASE_DB=LC_KANDY
+      - DATABASE_PORT=3306
+    restart: always
