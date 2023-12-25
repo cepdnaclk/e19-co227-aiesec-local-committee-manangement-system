@@ -25,8 +25,8 @@ services:
     ports:
       - 8081:8081
     environment:
-      - DATABASE_HOST=lckandy-test.clmtqbwd31v1.ap-south-1.rds.amazonaws.com
-      - DATABASE_USER=lckandyadmin
+      - DATABASE_HOST=lckandy.clmtqbwd31v1.ap-south-1.rds.amazonaws.com
+      - DATABASE_USER=admin
       - DATABASE_PASSWORD=lckandyadmin
       - DATABASE_DB=LC_KANDY
       - DATABASE_PORT=3306
