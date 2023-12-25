@@ -39,7 +39,7 @@ const executeScriptFromFile = async (filePath, operationName) => {
   console.log(`${operationName} completed.`);
 };
 
-const initDatabase = async () => {
+/*const initDatabase = async () => {
   try {
 
     await connectToDB();
@@ -57,7 +57,7 @@ const initDatabase = async () => {
 
     const viewPath = path.join(__dirname, "view.sql");
     await executeScriptFromFile(viewPath, "Views Addition");
-    */
+    
     // Read and sort the SQL script files in the folder
     const scriptFolder = path.join(__dirname, "scripts");
     const scriptFiles = await fs.readdir(scriptFolder);
@@ -82,7 +82,7 @@ const initDatabase = async () => {
     console.error(err);
     process.exit(1);
   }
-};
+};*/
 
 const execQuery = (query, values = []) => {
     return new Promise((resolve, reject) => {

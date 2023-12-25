@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "ec2-13-201-1-138.ap-south-1.compute.amazonaws.com",
+            "port": 22,
+            "driver": "MySQL",
+            "name": "lckandy-dbtest1",
+            "database": "lckandy",
+            "username": "lckandyadmin"
+        }
+    ]
+}
