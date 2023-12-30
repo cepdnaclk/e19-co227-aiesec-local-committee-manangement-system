@@ -39,12 +39,12 @@ const executeScriptFromFile = async (filePath, operationName) => {
   console.log(`${operationName} completed.`);
 };
 
-/*const initDatabase = async () => {
+const initDatabase = async () => {
   try {
 
     await connectToDB();
 
-    /*
+
     const schemaPath = path.join(__dirname, "schema.sql");
     await logFileModificationTime(schemaPath);
     await executeScriptFromFile(schemaPath, "DB Schema Creation");
@@ -82,7 +82,7 @@ const executeScriptFromFile = async (filePath, operationName) => {
     console.error(err);
     process.exit(1);
   }
-};*/
+};
 
 const execQuery = (query, values = []) => {
     return new Promise((resolve, reject) => {
