@@ -30,7 +30,7 @@ app.use("/user", require("./src/route/user"));
 
 // jwt authentication
 const { authenticateToken } = require("./src/middleware/auth");
-//app.use(authenticateToken);
+app.use(authenticateToken);
 
 // protected endpoints
 // routing
