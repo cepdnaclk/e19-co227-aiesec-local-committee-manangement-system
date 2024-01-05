@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
   res.render("./welcome");
 });
 // user authentication
-app.use("/user/login", require("./src/route/user"));
+app.use("/login", require("./src/route/user"));
 
 // jwt authentication
 const { authenticateToken } = require("./src/middleware/auth");
