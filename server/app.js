@@ -1,5 +1,15 @@
 // Load environment variables
-require("dotenv").config();
+const dotenv = require('dotenv');
+
+// Determine the environment
+const environment = process.env.NODE_ENV || 'development';
+
+// Load environment variables based on the environment
+if (environment === 'production') {
+  dotenv.config({ path: '.env.production' });
+} else {
+  dotenv.config({ path: '.env.development' });
+}
 
 // External libraries
 const express = require("express");

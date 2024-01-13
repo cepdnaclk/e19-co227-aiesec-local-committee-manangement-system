@@ -2,12 +2,14 @@ const mysql = require("mysql");
 const fs = require("fs").promises; // Promises-based version of 'fs' module
 const path = require("path");
 
+console.log(process.env.DATABASE_USER);
+
 const connection = mysql.createConnection({
-  host: process.env.DATABASE_HOST || "lckandy-test.clmtqbwd31v1.ap-south-1.rds.amazonaws.com",
-  user: process.env.DATABASE_USER || "lckandyadmin",
-  password: process.env.DATABASE_PASSWORD || "lckandyadmin",
-  database: process.env.DATABASE_DB || "LC_KANDY",
-  port: process.env.DATABASE_PORT || 3306,
+  host: process.env.DATABASE_HOST,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_DB,
+  port: process.env.DATABASE_PORT,
   charset: 'utf8mb4',
   multipleStatements: true,
   dateStrings: true, // automatically formats dates into yyyy-mm-dd
@@ -44,7 +46,7 @@ const initDatabase = async () => {
 
     await connectToDB();
 
-
+    /*
     const schemaPath = path.join(__dirname, "schema.sql");
     await logFileModificationTime(schemaPath);
     await executeScriptFromFile(schemaPath, "DB Schema Creation");
@@ -57,7 +59,8 @@ const initDatabase = async () => {
 
     const viewPath = path.join(__dirname, "view.sql");
     await executeScriptFromFile(viewPath, "Views Addition");
-    
+    */
+
     // Read and sort the SQL script files in the folder
     const scriptFolder = path.join(__dirname, "scripts");
     const scriptFiles = await fs.readdir(scriptFolder);

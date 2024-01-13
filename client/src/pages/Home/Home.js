@@ -8,7 +8,9 @@ import EventsCarousel from "../CMS/EventsCarousel";
 const Home = () => {
   const { user } = useContext(UserContext);
 
-  return <EventsCarousel />;
+  return (
+    <></>
+  )
 };
 
 export default Home;
