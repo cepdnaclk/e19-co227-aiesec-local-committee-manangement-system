@@ -99,7 +99,6 @@ const execQuery = (query, values = []) => {
     });
 };
 
-
-if ((process.env.NODE_ENV = "development")) initDatabase();
+if ((process.env.NODE_ENV == "development")) initDatabase();
 
 module.exports = { connection, execQuery };
