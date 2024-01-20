@@ -2,7 +2,7 @@ const mysql = require("mysql");
 const fs = require("fs").promises; // Promises-based version of 'fs' module
 const path = require("path");
 
-console.log(process.env.DATABASE_USER);
+// console.log(process.env.DATABASE_USER);
 
 const connection = mysql.createConnection({
   host: process.env.DATABASE_HOST,

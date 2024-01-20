@@ -57,9 +57,27 @@ router.post("/", (req, res, next) => {
     // const [fields, values] = requestBodyToFieldsAndValues(req.body);
     delete req.body["id"];
     const [fields, values] = [Object.keys(req.body), Object.values(req.body)];
-    const memberRegistrationQuery = `INSERT INTO member (${fields.toString()}) VALUES (${values.toString()})`;
+    let memberRegistrationQuery = `INSERT INTO member (${fields.toString()}) VALUES (`;
+    for(i=0; i<values.length; i++){
+      memberRegistrationQuery += '?,';
+    }
+    memberRegistrationQuery = memberRegistrationQuery.substring(0, memberRegistrationQuery.length - 1);
+    memberRegistrationQuery += `)`;
+    console.log(memberRegistrationQuery);
+    // const memberRegistrationQuery = `INSERT INTO member (${fields.toString()}) VALUES (${values.toString()})`;
+    // let memberRegistrationQuery = `INSERT INTO member (${fields.toString()}) VALUES (`;
+    // try{
+    //   // memberRegistrationQuery += values.map((value) => (value ? `${value},`: `NULL,`));
+    //   memberRegistrationQuery += values.map((value) => (value ? `?,`: `NULL,`)).toString();
+    //   console.log(memberRegistrationQuery);
+    //   memberRegistrationQuery = memberRegistrationQuery.substring(0, memberRegistrationQuery.length - 1);
+    //   memberRegistrationQuery += `)`;
+    // } catch (err) {
+    //   console.log(err);
+    // }
 
-    execQuery(memberRegistrationQuery)
+    console.log(memberRegistrationQuery);
+    execQuery(memberRegistrationQuery, values)
       .then((rows) => {
         res.status(200).json({ message: "New Member created successfully" });
       })

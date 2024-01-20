@@ -195,7 +195,7 @@ export default function MemberProfile(props) {
     preferredName: yup.string(),
     frontOfficeId: yup.string().required("Front office required"),
     departmentId: yup.string().required("Department required"),
-    backOfficeId: yup.string().notRequired(),
+    backOfficeId: yup.string().required("Back office required"),
     joinedDate: yup.date().required("Joined Date"),
     roleId: yup.string().required("Role required"),
     contactNo: yup.string(),
