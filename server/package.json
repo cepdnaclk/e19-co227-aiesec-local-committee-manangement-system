@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js --legacy-watch",
-    "prod": "node app.js",
+    "dev": "set NODE_ENV=development && nodemon app.js --legacy-watch",
+    "prod": "set NODE_ENV=production node app.js",
     "test": "jest"
   },
   "author": "",
