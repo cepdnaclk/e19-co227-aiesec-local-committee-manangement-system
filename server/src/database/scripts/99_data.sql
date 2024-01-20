@@ -1,3 +1,4 @@
+-- Active: 1703448188547@@lckandy.clmtqbwd31v1.ap-south-1.rds.amazonaws.com@3306@LC_KANDY
 USE LC_KANDY;
 
 
@@ -31,31 +32,31 @@ INSERT INTO member
 )
 VALUES 
 (
-    "astromp01@gmail.com", 
-    123,
-    "John Doe",
-    "John",
+    "shashi.ama.u@gmail.com", 
+    "shashini123",
+    "Shashini Ama Amarasooriya",
+    "Shashini",
     "LCP",
     "LCP",
     "BND",
-    "2019-01-01",
+    "2022-02-01",
     "LCP",
+    "0712757971",
+    "shashini.amarasooriya@aiesec.net",
+    "F",
     "1234567890",
-    "john@example.com",
-    "M",
-    "1234567890",
-    "2002-01-01",
+    "2001-11-06",
     "john@facebook.com",
     "john@linkedin.com",
     "john@instagram.com",
-    "E/02/002",
+    "E/20/002",
     "School",
     "No.2 Kings Street, Kandy",
     "1234567890",
     "1",
     "https://drive.google.com/file/d/1ADL_F1F12M-f9DwB416OzOysLWP-BigE/view?usp=sharing",
     "No.3 Kings Street, Kandy"
-)
+);
 ,(
     'sankapeeris360@gmail.com',
     '123',

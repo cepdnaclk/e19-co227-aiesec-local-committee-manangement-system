@@ -43,7 +43,7 @@ router.get(`/members`, (req, res, next) => {
 
 // get details(selected) of all
 router.get(`/applicants`, (req, res, next) => {
-  execQuery("SELECT * FROM OGTApplicantDetailsInBrief")
+  execQuery("SELECT * FROM ogtApplicantDetailsInBrief")
     .then((rows) => {
       res.status(200).json(rows);
     })
@@ -54,7 +54,7 @@ router.get(`/applicants`, (req, res, next) => {
 
 // get all details of one applicant
 router.get(`/applicants/:id`, (req, res, next) => {
-  execQuery(`CALL GetOGTApplicantDetailsInDetail(${req.params.id})`)
+  execQuery(`CALL GetogtApplicantDetailsInDetail(${req.params.id})`)
     .then((rows) => {
       res.status(200).json(rows[0][0]);
     })
@@ -75,7 +75,7 @@ router.post("/applicants", (req, res, next) => {
     execQuery(insertQuery).then((rows) => {
       // console.log(rows.insertId);
       // retrieve and send the newly added record in response for client side updates
-      const selectQuery = `CALL OGTApplicantDetailsInBrief('${rows.insertId}')`;
+      const selectQuery = `CALL ogtApplicantDetailsInBrief('${rows.insertId}')`;
       execQuery(selectQuery)
         .then((rows) => {
           res.status(200).json(rows[0][0]);
@@ -110,7 +110,7 @@ router.put("/applicants/:id", (req, res, next) => {
     // remove last trailling ", "
     updateString = updateString.substring(0, updateString.length - 2);
 
-    const query = `UPDATE ogt_applicants SET ${updateString} WHERE id='${req.params.id}'; CALL OGTApplicantDetailsInBrief('${req.params.id}');`;
+    const query = `UPDATE ogt_applicants SET ${updateString} WHERE id='${req.params.id}'; CALL ogtApplicantDetailsInBrief('${req.params.id}');`;
     execQuery(query)
       .then((rows) => {
         console.log(rows);
