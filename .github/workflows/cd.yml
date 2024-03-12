@@ -25,7 +25,7 @@ jobs:
         run: npm i
 
       - name: Copy the build folder to nginx
-        run: sudo cp -r build/ /usr/share/nginx/html/
+        run: sudo cp -r build /usr/share/nginx/html/
 
       - name: Go back
         run: cd ..
