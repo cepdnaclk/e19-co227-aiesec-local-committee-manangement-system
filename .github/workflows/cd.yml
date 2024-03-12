@@ -14,10 +14,15 @@ jobs:
     steps:
       # - name: Go to the project folder
       #   run: cd local-deploy
-      - name: exit temp file
-        run: cd ..
+      # - name: exit temp file
+      #   run: cd ..
+      - name: work folder
+        run: cd _work
 
       - name: Go to the project folder
+        run: cd e19-co227-aiesec-local-committee-manangement-system
+
+      - name: Go to the project folder2
         run: cd e19-co227-aiesec-local-committee-manangement-system
 
       - name: Go to client folder
