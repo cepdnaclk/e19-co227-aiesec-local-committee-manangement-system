@@ -27,7 +27,7 @@ jobs:
       - name: Copy the build folder to nginx
         run: sudo cp -r build /usr/share/nginx/html/
 
-      - name: Go back
+      - name: Go back e
         run: cd ..
 
       - name: Go to server folder
