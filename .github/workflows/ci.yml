@@ -16,7 +16,10 @@ jobs:
     # - uses: actions/checkout@v3
 
     - name: Go to Local Deploy Folder
-      run: cd repo
+      run: cd /.
+
+    - name: Go to Local Deploy Folder
+      run: cd /home/ubuntu/local_deploy/repo
 
     - name: Pull the latest changes
       run: git pull

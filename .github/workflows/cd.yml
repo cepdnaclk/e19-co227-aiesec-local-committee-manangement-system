@@ -17,13 +17,16 @@ jobs:
       # - name: exit temp file
       #   run: cd ..
       - name: work folder
-        run: cd _work
+        run: cd /.
 
-      - name: Go to the project folder
-        run: cd e19-co227-aiesec-local-committee-manangement-system
+      # - name: Go to the project folder
+      #   run: cd e19-co227-aiesec-local-committee-manangement-system
+
+      # - name: Go to the project folder2
+      #   run: cd e19-co227-aiesec-local-committee-manangement-system
 
       - name: Go to the project folder2
-        run: cd e19-co227-aiesec-local-committee-manangement-system
+        run: cd /home/ubuntu/local-deploy/repo/
 
       - name: Go to client folder
         run: cd client
