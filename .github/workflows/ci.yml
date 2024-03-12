@@ -7,35 +7,44 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+
+    runs-on: self-hosted
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Cloning to the repository
+      run: git clone https://github.com/cepdnaclk/e19-co227-aiesec-local-committee-manangement-system.git
 
-    #- name: Set up Docker Buildx
-    #  uses: docker/setup-buildx-action@v3
 
-    - name: Logging into Dockerhub
-      env:
-        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
-        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      
+    # runs-on: ubuntu-latest
+
+    # steps:
+    # - uses: actions/checkout@v3
+
+    # #- name: Set up Docker Buildx
+    # #  uses: docker/setup-buildx-action@v3
+
+    # - name: Logging into Dockerhub
+    #   env:
+        # DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}
+        # DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}
+    #   run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     
-    #- name: Build and Push Docker image
-      #run: docker-compose build --push -t dinuka029/co227:latest  .
-      #run: docker buildx build --file docker-compose.yml --push -t dinuka029/co227:latest  .
-      #run: docker buildx build --push -t dinuka029/co227:latest  .
-      #run: docker buildx build --file docker-compose.yml --service web --push -t dinuka029/co227:latest .
+    # #- name: Build and Push Docker image
+    #   #run: docker-compose build --push -t dinuka029/co227:latest  .
+    #   #run: docker buildx build --file docker-compose.yml --push -t dinuka029/co227:latest  .
+    #   #run: docker buildx build --push -t dinuka029/co227:latest  .
+    #   #run: docker buildx build --file docker-compose.yml --service web --push -t dinuka029/co227:latest .
 
 
-    - name: Build Docker compose
-      run: docker compose build #--push
+    # - name: Build Docker compose
+    #   run: docker compose build #--push
 
-    - name: Push docker compose
-      run: docker compose push
+    # - name: Push docker compose
+    #   run: docker compose push
 
-    #- name: Build docker compose file
-     # run: docker buildx build -f docker-compose.yml .
+    # #- name: Build docker compose file
+    #  # run: docker buildx build -f docker-compose.yml .
 
-    #- name: Push to Docker hub
-    #  run: docker push dinuka029/co227:latest  .
+    # #- name: Push to Docker hub
+    # #  run: docker push dinuka029/co227:latest  .

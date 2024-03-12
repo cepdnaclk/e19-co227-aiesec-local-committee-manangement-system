@@ -1,4 +1,5 @@
 const express = require("express");
+// const bcrypt = require("bcrypt");
 const router = express.Router();
 
 const {
@@ -56,11 +57,15 @@ router.post("/", (req, res, next) => {
   try {
     // const [fields, values] = requestBodyToFieldsAndValues(req.body);
     delete req.body["id"];
+
     const [fields, values] = [Object.keys(req.body), Object.values(req.body)];
+
     let memberRegistrationQuery = `INSERT INTO member (${fields.toString()}) VALUES (`;
+
     for(i=0; i<values.length; i++){
       memberRegistrationQuery += '?,';
     }
+
     memberRegistrationQuery = memberRegistrationQuery.substring(0, memberRegistrationQuery.length - 1);
     memberRegistrationQuery += `)`;
     console.log(memberRegistrationQuery);
@@ -76,7 +81,6 @@ router.post("/", (req, res, next) => {
     //   console.log(err);
     // }
 
-    console.log(memberRegistrationQuery);
     execQuery(memberRegistrationQuery, values)
       .then((rows) => {
         res.status(200).json({ message: "New Member created successfully" });

@@ -83,6 +83,7 @@ router.post("/token", (req, res, next) => {
 router.delete("/logout", (req, res) => {
   refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
   res.sendStatus(204);
+  res.redirect("/login") //changed -> redirect to the login screen after logout
 });
 
 module.exports = router;
