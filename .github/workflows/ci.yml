@@ -15,12 +15,17 @@ jobs:
       #remove if not working
     # - uses: actions/checkout@v3
 
-    # - name: Go to Local Deploy Folder
-    #   run: cd local_deploy
+    - name: Go to Local Deploy Folder
+      run: cd repo
+
+    - name: Pull the latest changes
+      run: git pull
 
       #cloned into the folder called "repo" in the local_deploy folder
-    - name: Cloning to the repository
-      run: git clone https://github.com/cepdnaclk/e19-co227-aiesec-local-committee-manangement-system.git repo
+
+    
+    # - name: Cloning to the repository - for first time running
+    #   run: git clone https://github.com/cepdnaclk/e19-co227-aiesec-local-committee-manangement-system.git repo
 
 
       
