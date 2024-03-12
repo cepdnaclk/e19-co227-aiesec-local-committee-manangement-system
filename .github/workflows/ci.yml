@@ -15,8 +15,8 @@ jobs:
       #remove if not working
     # - uses: actions/checkout@v3
 
-    - name: Go to Local Deploy Folder
-      run: cd local_deploy
+    # - name: Go to Local Deploy Folder
+    #   run: cd local_deploy
 
       #cloned into the folder called "repo" in the local_deploy folder
     - name: Cloning to the repository

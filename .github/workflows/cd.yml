@@ -12,8 +12,8 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Go to the project folder
-        run: cd local-deploy
+      # - name: Go to the project folder
+      #   run: cd local-deploy
 
       - name: Go to the project folder
         run: cd repo
