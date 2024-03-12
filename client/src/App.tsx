@@ -32,6 +32,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { IGVMenu, IGVPanel } from "./pages/iGV";
 import { PMMenu, PMPanel } from "./pages/PM";
 import { OGVMenu, OGVPanel } from "./pages/oGV";
+import { OGTMenu, OGTPanel } from "./pages/oGT";
+import { IGTMenu, IGTPanel } from "./pages/iGT";
 import { FNLMenu, FNLPanel } from "./pages/FNL";
 import NotFound from "./pages/NotFound";
 import AdminRoutes from "./utils/AdminRoutes";
@@ -177,6 +179,8 @@ function App() {
                 <OGVMenu />
                 <PMMenu />
                 <FNLMenu />
+                <OGTMenu />
+                <IGTMenu />
                 {user ? (
                   <>
                     <NavbarButton href="/" label="Home" />
@@ -301,6 +305,8 @@ function App() {
             <Route path="/igv/*" element={<IGVPanel />} />
             <Route path="/pm/*" element={<PMPanel />} />
             <Route path="/ogv/*" element={<OGVPanel />} />
+            <Route path="/ogt/*" element={<OGTPanel />} />
+            <Route path="/igt/*" element={<IGTPanel />} />
             <Route path="/fnl/*" element={<FNLPanel />} />
             <Route element={<ProtectedRoutes />}>
               <Route path="/" element={<Home />} />

@@ -56,7 +56,7 @@ VALUES
     "1",
     "https://drive.google.com/file/d/1ADL_F1F12M-f9DwB416OzOysLWP-BigE/view?usp=sharing",
     "No.3 Kings Street, Kandy"
-);
+)
 ,(
     'sankapeeris360@gmail.com',
     '123',
@@ -65,7 +65,7 @@ VALUES
     "LCP", 
     "LCP", 
     "BND", 
-    '2022-08-20', 
+    '2022-08-20',
     "LCP", 
     '555-123-4567', 
     'jane.smith@aiesec.org', 
