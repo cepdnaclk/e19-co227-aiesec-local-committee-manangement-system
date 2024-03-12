@@ -11,8 +11,16 @@ jobs:
     runs-on: self-hosted
 
     steps:
+
+      #remove if not working
+    - uses: actions/checkout@v3
+
+    - name: Go to Local Deploy Folder
+      run: cd local_deploy
+
+      #cloned into the folder called "repo" in the local_deploy folder
     - name: Cloning to the repository
-      run: git clone https://github.com/cepdnaclk/e19-co227-aiesec-local-committee-manangement-system.git
+      run: git clone https://github.com/cepdnaclk/e19-co227-aiesec-local-committee-manangement-system.git repo
 
 
       

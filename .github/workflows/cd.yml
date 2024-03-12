@@ -11,14 +11,12 @@ jobs:
   build:
     runs-on: self-hosted
 
-
-
     steps:
       - name: Go to the project folder
-        run: cd e19-co227-aiesec-local-committee-manangement-system
+        run: cd local-deploy
 
-      - name: Cloning to the repository
-        run: git clone https://github.com/cepdnaclk/e19-co227-aiesec-local-committee-manangement-system.git 
+      - name: Go to the project folder
+        run: cd repo
 
       - name: Go to client folder
         run: cd client
