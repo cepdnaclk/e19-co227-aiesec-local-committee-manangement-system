@@ -58,18 +58,18 @@ const IGTMenu = () => {
         onClose={handleMenuClose}
         aria-labelledby="iGT-menu-button"
       >
-        <MenuItem onClick={handleMenuClose} component={Link} to="/ogv/">
+        <MenuItem onClick={handleMenuClose} component={Link} to="/igt/">
           Dashboard
         </MenuItem>
         <MenuItem
           onClick={handleMenuClose}
           component={Link}
-          to="/ogv/applicants"
+          to="/igt/applicants"
         >
           Applicants
         </MenuItem>
         {isIGTAdmin ? (
-          <MenuItem onClick={handleMenuClose} component={Link} to="/ogv/emails">
+          <MenuItem onClick={handleMenuClose} component={Link} to="/igt/emails">
             Emails
           </MenuItem>
         ) : null}
@@ -144,7 +144,7 @@ const ApplicantPanel = () => {
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <IconButton
           onClick={() => {
-            navigate(`/ogv/applicants`);
+            navigate(`/igt/applicants`);
           }}
         >
           <CloseIcon />
@@ -152,9 +152,9 @@ const ApplicantPanel = () => {
       </Box>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
-          // path: /ogv/applicants/view/:appId/<applicant | emails>/...
+          // path: /igt/applicants/view/:appId/<applicant | emails>/...
           value={location.pathname.split("/")[5]}
-          aria-label="ogv-applicant-tabs"
+          aria-label="igt-applicant-tabs"
         >
           <Tab
             id="applicant-tab"

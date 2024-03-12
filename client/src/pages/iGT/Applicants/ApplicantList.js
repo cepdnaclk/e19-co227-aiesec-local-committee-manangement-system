@@ -18,9 +18,9 @@ export default function Applicants() {
   const { isOGVAdmin } = privileges;
 
   const url = isOGVAdmin
-    ? `/ogv/applicants/all/admin`
-    : `/ogv/applicants/all/${user.id}`;
-  const applicantList = useQuery({ key: ["ogv-applicant-list"], url });
+    ? `/igt/applicants/all/admin`
+    : `/igt/applicants/all/${user.id}`;
+  const applicantList = useQuery({ key: ["igt-applicant-list"], url });
 
   const [filteredData, setFilteredData] = useState();
   const [groupedData, setGroupedData] = useState();

@@ -30,18 +30,18 @@ export default function Applicant({ mode }) {
   const { notifySuccess, notifyError } = useNotify();
 
   // ~~~~~~~~~~ HTTP Utilities ~~~~~~~~~~
-  const url = "/ogv/applicants";
-  const updateQueryKey = ["ogv-applicant-list"];
-  const removeQueryKeys = [["ogv-selected-applicant", id]];
+  const url = "/igt/applicants";
+  const updateQueryKey = ["igt-applicant-list"];
+  const removeQueryKeys = [["igt-selected-applicant", id]];
   const keyField = "id";
   const applicantSelected = useQuery({
-    key: ["ogv-selected-applicant", id],
+    key: ["igt-selected-applicant", id],
     url: `${url}/item/${id}`,
     enabled: mode !== "new",
   });
 
   const inChargeMemberList = useQuery({
-    key: ["ogv-cxp-member-list"],
+    key: ["igt-cxp-member-list"],
     url: `${url}/members`,
   });
 

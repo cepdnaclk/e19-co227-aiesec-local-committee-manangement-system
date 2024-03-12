@@ -58,18 +58,18 @@ const OGTMenu = () => {
         onClose={handleMenuClose}
         aria-labelledby="oGT-menu-button"
       >
-        <MenuItem onClick={handleMenuClose} component={Link} to="/ogv/">
+        <MenuItem onClick={handleMenuClose} component={Link} to="/ogt/">
           Dashboard
         </MenuItem>
         <MenuItem
           onClick={handleMenuClose}
           component={Link}
-          to="/ogv/applicants"
+          to="/ogt/applicants"
         >
           Applicants
         </MenuItem>
         {isOGTAdmin ? (
-          <MenuItem onClick={handleMenuClose} component={Link} to="/ogv/emails">
+          <MenuItem onClick={handleMenuClose} component={Link} to="/ogt/emails">
             Emails
           </MenuItem>
         ) : null}
@@ -144,7 +144,7 @@ const ApplicantPanel = () => {
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <IconButton
           onClick={() => {
-            navigate(`/ogv/applicants`);
+            navigate(`/ogt/applicants`);
           }}
         >
           <CloseIcon />
@@ -152,9 +152,9 @@ const ApplicantPanel = () => {
       </Box>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
-          // path: /ogv/applicants/view/:appId/<applicant | emails>/...
+          // path: /ogt/applicants/view/:appId/<applicant | emails>/...
           value={location.pathname.split("/")[5]}
-          aria-label="ogv-applicant-tabs"
+          aria-label="ogt-applicant-tabs"
         >
           <Tab
             id="applicant-tab"

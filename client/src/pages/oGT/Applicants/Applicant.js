@@ -24,24 +24,24 @@ import { useNotify } from "../../../context/NotificationContext";
 
 export default function Applicant({ mode }) {
   const { user, privileges } = useContext(UserContext);
-  const { isOGVAdmin } = privileges;
+  const { isOGTAdmin } = privileges;
   const { id } = useParams();
   const navigate = useNavigate();
   const { notifySuccess, notifyError } = useNotify();
 
   // ~~~~~~~~~~ HTTP Utilities ~~~~~~~~~~
-  const url = "/ogv/applicants";
-  const updateQueryKey = ["ogv-applicant-list"];
-  const removeQueryKeys = [["ogv-selected-applicant", id]];
+  const url = "/ogt/applicants";
+  const updateQueryKey = ["ogt-applicant-list"];
+  const removeQueryKeys = [["ogt-selected-applicant", id]];
   const keyField = "id";
   const applicantSelected = useQuery({
-    key: ["ogv-selected-applicant", id],
+    key: ["ogt-selected-applicant", id],
     url: `${url}/item/${id}`,
     enabled: mode !== "new",
   });
 
   const inChargeMemberList = useQuery({
-    key: ["ogv-cxp-member-list"],
+    key: ["ogt-cxp-member-list"],
     url: `${url}/members`,
   });
 
@@ -116,7 +116,7 @@ export default function Applicant({ mode }) {
   const isEditable = user.id === applicantSelected.memberInChargeId;
 
   const fieldProps = {
-    disabled: mode === "view" || (!isOGVAdmin && !isEditable),
+    disabled: mode === "view" || (!isOGTAdmin && !isEditable),
   };
 
   return (
@@ -129,7 +129,7 @@ export default function Applicant({ mode }) {
                 onClick={() => {
                   navigate(`../../edit/${id}`);
                 }}
-                disabled={!isOGVAdmin && !isEditable}
+                disabled={!isOGTAdmin && !isEditable}
               >
                 <EditIcon />
               </IconButton>
