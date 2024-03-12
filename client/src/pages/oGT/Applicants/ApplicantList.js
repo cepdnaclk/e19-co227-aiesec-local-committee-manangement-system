@@ -15,12 +15,12 @@ import Table from "../../../components/Table";
 export default function Applicants() {
   const navigate = useNavigate();
   const { user, privileges } = useContext(UserContext);
-  const { isOGVAdmin } = privileges;
+  const { isOGTAdmin } = privileges;
 
-  const url = isOGVAdmin
-    ? `/ogv/applicants/all/admin`
-    : `/ogv/applicants/all/${user.id}`;
-  const applicantList = useQuery({ key: ["ogv-applicant-list"], url });
+  const url = isOGTAdmin
+    ? `/ogt/applicants/all/admin`
+    : `/ogt/applicants/all/${user.id}`;
+  const applicantList = useQuery({ key: ["ogt-applicant-list"], url });
 
   const [filteredData, setFilteredData] = useState();
   const [groupedData, setGroupedData] = useState();
@@ -49,7 +49,7 @@ export default function Applicants() {
           onClick={() => {
             navigate("new");
           }}
-          disabled={!isOGVAdmin}
+          disabled={!isOGTAdmin}
         >
           <AddIcon />
         </IconButton>
