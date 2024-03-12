@@ -1,2 +1,3 @@
 static-pages/
 /.vs/
+node_modules/

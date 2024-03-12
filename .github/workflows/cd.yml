@@ -1,27 +1,74 @@
 name : CD pipeline
 
 on:
-  workflow_run:
-    workflows: [ "CI Pipeline" ] 
-    Types:
-      - completed 
+    workflow_run:
+      workflows: [ "CI Pipeline" ] 
+      types:
+        - completed 
 
 jobs:
 
   build:
     runs-on: self-hosted
 
+
+
     steps:
+      - name: Go to the project folder
+        run: cd e19-co227-aiesec-local-committee-manangement-system
 
-    - name: Pull docker image
-      run: sudo docker pull dinuka029/co227:latest
+      - name: Cloning to the repository
+        run: git clone https://github.com/cepdnaclk/e19-co227-aiesec-local-committee-manangement-system.git 
 
-    - name: Deleting old docker container
-      run: sudo docker rm -f co227-container || true
+      - name: Go to client folder
+        run: cd client
 
-    - name: Run Docker container
-      # run: sudo docker compose up -d -p 80:80 --name co227-container dinuka029/co227
-      #run: sudo docker compose up -d -p 80:80 --name co227-container dinuka029/co227
-      run: sudo docker run -d -p 80:80 --name co227-container dinuka029/co227
+      - name: Install dependencies
+        run: npm i
+
+      - name: Copy the build folder to nginx
+        run: sudo cp -r build/ /usr/share/nginx/html/
+
+      - name: Go back
+        run: cd ..
+
+      - name: Go to server folder
+        run: cd server
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Install pm2
+        run: sudo npm install pm2@latest -g
+      
+      - name: Start the server
+        run: pm2 start "npm run prod" --name aiesec-server
+      
+
+
+
+# on:
+#   workflow_run:
+#     workflows: [ "CI Pipeline" ] 
+#     Types:
+#       - completed 
+
+# jobs:
+
+#   build:
+#     runs-on: self-hosted
+
+#     steps:
+
+#     - name: Pull docker image
+#       run: sudo docker pull dinuka029/co227:latest
+
+#     - name: Deleting old docker container
+#       run: sudo docker rm -f co227-container || true
+
+#     - name: Run Docker container
+#       # run: sudo docker compose up -d -p 80:80 --name co227-container dinuka029/co227
+#       #run: sudo docker compose up -d -p 80:80 --name co227-container dinuka029/co227
+#       run: sudo docker run -d -p 80:80 --name co227-container dinuka029/co227
       
 

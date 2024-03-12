@@ -1,4 +1,3 @@
--- Active: 1703448188547@@lckandy.clmtqbwd31v1.ap-south-1.rds.amazonaws.com@3306@LC_KANDY
 USE LC_KANDY;
 
 
