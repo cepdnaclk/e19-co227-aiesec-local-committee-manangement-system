@@ -1,3 +1,4 @@
 static-pages/
 /.vs/
 node_modules/
+temp/
